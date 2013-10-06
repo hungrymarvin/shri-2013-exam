@@ -9,6 +9,19 @@ Shri.Router.map(function() {
     });
 });
 
+Shri.ApplicationRoute = Ember.Route.extend({
+    model: function() {
+        var store = this.get('store');
+        $.getJSON('js/data/students.json').then(function(data){
+            $(data.students).each(function(i){
+                var student = store.createRecord('student', this);
+                student.id = i+1;
+                student.save();
+            })
+        })
+    }
+});
+
 Shri.StudentsRoute = Ember.Route.extend({
     model: function() {
         return this.store.find('student');

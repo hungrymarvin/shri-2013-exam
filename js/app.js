@@ -7,4 +7,6 @@ Shri = Ember.Application.create({
     debugMode: true
 });
 
-Shri.ApplicationAdapter = DS.FixtureAdapter.extend();
+Shri.ApplicationAdapter = DS.LSAdapter.extend({
+    namespace: 'shri'
+});
