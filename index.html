@@ -19,7 +19,7 @@
 <script type="text/x-handlebars" data-template-name="students">
     <ul>
         {{#each item in model}}
-        <li>{{#link-to 'student' item}}{{item.id}} {{item.name}} {{item.lastName}}{{/link-to}}</li>
+        <li>{{#link-to 'student' item}}{{item.id}} {{item.first_name}} {{item.last_name}} {{item.city}} {{/link-to}}</li>
         {{/each}}
     </ul>
     {{outlet}}
@@ -27,7 +27,7 @@
 
 <script type="text/x-handlebars" data-template-name="student">
     Один студент
-    {{id}} {{name}} {{lastName}}
+    {{id}} {{first_name}} {{last_name}} {{city}}
 </script>
 
 <script type="text/x-handlebars" data-template-name="lessons">
