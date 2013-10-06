@@ -29,6 +29,18 @@
 <script type="text/x-handlebars" data-template-name="student">
     Один студент
     {{id}} {{first_name}} {{last_name}} {{city}}
+    {{#if isEditing}}
+    {{partial 'student/edit'}}
+    <button {{action 'doneEditing'}}>Done</button>
+    {{else}}
+    <button {{action 'edit'}}>Edit</button>
+    {{/if}}
+</script>
+
+<script type="text/x-handlebars" id="student/_edit">
+    <p>{{input type="text" value=first_name}}</p>
+    <p>{{input type="text" value=last_name}}</p>
+    <p>{{input type="text" value=city}}</p>
 </script>
 
 <script type="text/x-handlebars" data-template-name="lessons">
@@ -55,5 +67,6 @@
 <script src="js/models/student.js"></script>
 <script src="js/models/lesson.js"></script>
 <script src="js/controllers/students_controller.js"></script>
+<script src="js/controllers/student_controller.js"></script>
 </body>
 </html>
