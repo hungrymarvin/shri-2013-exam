@@ -1,8 +1,7 @@
-{
-    "time": "123",
-    "students":[
-    {
+[
 
+    {
+        "id": 1,
         "first_name": "Никита",
         "last_name": "Попов",
         "city": "Санкт-Петербург",
@@ -14,7 +13,7 @@
         "link_yaru": "losnikitos123.ya.ru"
     },
     {
-
+        "id": 2,
         "first_name": "Роман",
         "last_name": "Орловский",
         "city": "Нижний Новгород",
@@ -26,7 +25,7 @@
         "link_yaru": "http://ctuxu-r.ya.ru/"
     },
     {
-
+        "id": 3,
         "first_name": "Андрей",
         "last_name": "Морозов",
         "city": "Ставрополь",
@@ -38,7 +37,7 @@
         "link_yaru": "http://luckytrue.ya.ru/"
     },
     {
-
+        "id": 4,
         "first_name": "Максим",
         "last_name": "Попков",
         "city": "Балашиха",
@@ -50,7 +49,7 @@
         "link_yaru": "dales3d.ya.ru/"
     },
     {
-
+        "id": 5,
         "first_name": "Алексей",
         "last_name": "Кондратов",
         "city": "Москва",
@@ -62,7 +61,7 @@
         "link_yaru": "http://alex-ololo.ya.ru/"
     },
     {
-
+        "id": 6,
         "first_name": "Михаил",
         "last_name": "Шустов",
         "city": "Санкт-Петербург",
@@ -74,7 +73,7 @@
         "link_yaru": "http://restrry.ya.ru/"
     },
     {
-
+        "id": 7,
         "first_name": "Михаил",
         "last_name": "Коциевский",
         "city": "Одесса",
@@ -86,7 +85,7 @@
         "link_yaru": "http://m-kocijevsky.ya.ru/"
     },
     {
-
+        "id": 8,
         "first_name": "Мария",
         "last_name": "Метелёва",
         "city": "Киров",
@@ -98,7 +97,7 @@
         "link_yaru": "http://kotia292007.ya.ru/"
     },
     {
-
+        "id": 9,
         "first_name": "Сергей ",
         "last_name": "Максимов",
         "city": "Москва",
@@ -110,7 +109,7 @@
         "link_yaru": "http://hakerxnet.ya.ru/"
     },
     {
-
+        "id": 10,
         "first_name": "София",
         "last_name": "Павленко",
         "city": "Москва",
@@ -122,7 +121,7 @@
         "link_yaru": "http://artsonja.ya.ru/"
     },
     {
-
+        "id": 11,
         "first_name": "Наталия",
         "last_name": "Смирнова",
         "city": "Иркутск",
@@ -134,7 +133,7 @@
         "link_yaru": "http://indra-uolles.ya.ru/"
     },
     {
-
+        "id": 12,
         "first_name": "Павел",
         "last_name": "Мягков",
         "city": "Москва",
@@ -146,7 +145,7 @@
         "link_yaru": "http://p-a-myagkov.ya.ru/"
     },
     {
-
+        "id": 13,
         "first_name": "Сергей",
         "last_name": "Борончиев",
         "city": "Санкт-Петербург",
@@ -158,7 +157,7 @@
         "link_yaru": ""
     },
     {
-
+        "id": 14,
         "first_name": "Александр",
         "last_name": "Нефедов",
         "city": "Ярославль",
@@ -170,7 +169,7 @@
         "link_yaru": "garret-rus.ya.ru/"
     },
     {
-
+        "id": 15,
         "first_name": "Дмитрий",
         "last_name": "Душкин",
         "city": "Электросталь",
@@ -182,7 +181,7 @@
         "link_yaru": "http://legato-di.ya.ru/"
     },
     {
-
+        "id": 16,
         "first_name": "Анна",
         "last_name": "Минаева",
         "city": "Москва",
@@ -194,7 +193,7 @@
         "link_yaru": "http://rainybowl.ya.ru/"
     },
     {
-
+        "id": 17,
         "first_name": "Евгения",
         "last_name": "Костенко",
         "city": "Москва",
@@ -206,7 +205,7 @@
         "link_yaru": "http://eugeshko.ya.ru/"
     },
     {
-
+        "id": 18,
         "first_name": "Марина",
         "last_name": "Акимова",
         "city": "Москва",
@@ -218,7 +217,7 @@
         "link_yaru": "http://akimovamp.ya.ru/"
     },
     {
-
+        "id": 19,
         "first_name": "Асхат",
         "last_name": "Нуриддинов",
         "city": "Москва",
@@ -230,7 +229,7 @@
         "link_yaru": "http://geromond.ya.ru/"
     },
     {
-
+        "id": 20,
         "first_name": "Иван",
         "last_name": "Полюхович",
         "city": "Ярославль",
@@ -242,7 +241,7 @@
         "link_yaru": "http://iamfoont.ya.ru/"
     },
     {
-
+        "id": 21,
         "first_name": "Яна",
         "last_name": "Манухина",
         "city": "Москва",
@@ -254,7 +253,7 @@
         "link_yaru": "http://yanenok.ya.ru/"
     },
     {
-
+        "id": 22,
         "first_name": "Максим",
         "last_name": "Мялин",
         "city": "Зеленоград",
@@ -266,7 +265,7 @@
         "link_yaru": "http://maximmyalin.ya.ru/"
     },
     {
-
+        "id": 23,
         "first_name": "Сергей",
         "last_name": "Попов",
         "city": "Москва",
@@ -278,7 +277,7 @@
         "link_yaru": "http://popitch.ya.ru/"
     },
     {
-
+        "id": 24,
         "first_name": "Василий",
         "last_name": "Логиневский",
         "city": "Москва",
@@ -290,7 +289,7 @@
         "link_yaru": "http://my.yandex.ru/Yeti-or/"
     },
     {
-
+        "id": 25,
         "first_name": "Дмитрий",
         "last_name": "Старостин",
         "city": "Железнодорожный, Московская Область",
@@ -302,7 +301,7 @@
         "link_yaru": "http://dee-starostin.ya.ru/"
     },
     {
-
+        "id": 26,
         "first_name": "Василий",
         "last_name": "Стяжкин",
         "city": "Москва",
@@ -314,7 +313,7 @@
         "link_yaru": "http://vasilyator9000.ya.ru/"
     },
     {
-
+        "id": 27,
         "first_name": "Арменуи",
         "last_name": "Паглеванян",
         "city": "Пенза",
@@ -326,7 +325,7 @@
         "link_yaru": "http://paglevanian.ya.ru/"
     },
     {
-
+        "id": 28,
         "first_name": "Антон",
         "last_name": "Кузнецов",
         "city": "Иваново",
@@ -338,4 +337,3 @@
         "link_yaru": "http://isnifer.ya.ru/"
     }
 ]
-}

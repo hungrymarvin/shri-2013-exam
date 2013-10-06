@@ -10,15 +10,23 @@ Shri.Router.map(function() {
 });
 
 Shri.ApplicationRoute = Ember.Route.extend({
-    model: function() {
+    model: function () {
         var store = this.get('store');
-        $.getJSON('js/data/students.json').then(function(data){
-            $(data.students).each(function(i){
-                var student = store.createRecord('student', this);
-                student.id = i+1;
-                student.save();
+
+            $.getJSON('js/data/students.json').then(function (data) {
+                $(data).each(function(){
+                    var student = store.createRecord('student', this);
+                    student.save();
+                })
             })
-        })
+
+            $.getJSON('js/data/lessons.json').then(function (data) {
+                $(data).each(function(){
+                    var lesson = store.createRecord('lesson', this);
+                    lesson.save();
+                })
+            })
+
     }
 });
 
