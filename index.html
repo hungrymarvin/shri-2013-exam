@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/header.css"/>
+    <link rel="stylesheet" href="css/navigation.css"/>
     <link rel="stylesheet" href="css/student.css"/>
     <link rel="stylesheet" href="css/student-list.css"/>
 
@@ -22,9 +23,17 @@
                 как это было и почему это было круто
             </div>
         </div>
+        <div class="navigation">
+            <ul class="navigation__menu">
+                <li class="menu__item">
+                    {{#link-to 'students'}}Студенты{{/link-to}}
+                </li>
+                <li class="menu__item">
+                    {{#link-to 'lessons'}}Лекции{{/link-to}}
+                </li>
 
-        {{#link-to 'students'}}Студенты{{/link-to}}
-        {{#link-to 'lessons'}}Лекции{{/link-to}}
+            </ul>
+        </div>
         {{outlet}}
     </div>
 </script>
