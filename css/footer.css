@@ -1,0 +1,9 @@
+.footer {
+    padding: 0;
+    margin: 0;
+    text-align: right;
+    font-size: 14px;
+}
+.footer__line {
+    display: block;
+}
