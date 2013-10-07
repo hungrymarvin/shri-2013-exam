@@ -7,6 +7,8 @@ Shri.Router.map(function () {
     this.resource("lessons", function () {
         this.resource("lesson", { path: ':lesson_id' });
     });
+
+    this.resource("about");
 });
 
 Shri.ApplicationRoute = Ember.Route.extend({
