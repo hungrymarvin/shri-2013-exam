@@ -2,12 +2,23 @@
     list-style: none;
     padding: 0;
 }
+.menu__item:after
+{
+    content: "|";
+}
+.menu__item:last-child:after
+{
+    content: "";
+}
 .menu__item {
     display: inline-block;
 }
 .menu__item a {
     color: black;
     text-decoration: none;
+}
+.menu__item a:hover {
+    color:red;
 }
 .navigation {
     text-align: center;
