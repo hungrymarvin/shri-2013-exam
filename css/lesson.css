@@ -1,0 +1,27 @@
+.lesson
+{
+    padding: 5px;
+    border: 1px solid #c0c0c0;
+    height: 50px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.lesson_lesson-expand
+{
+    height: auto;
+}
+
+.lesson__location
+{
+    color: #dedede;
+    display: block;
+    font-size: 12px;
+}
+
+.lesson__info
+{
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 5px;
+}

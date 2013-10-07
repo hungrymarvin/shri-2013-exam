@@ -64,7 +64,7 @@ Shri.LessonsRoute = Ember.Route.extend({
         return this.store.find('lesson');
     },
     renderTemplate: function () {
-        this.render({ outlet:'content'});
+        this.render({ outlet:'sidebar'});
     }
 
 });
@@ -72,5 +72,8 @@ Shri.LessonsRoute = Ember.Route.extend({
 Shri.LessonRoute = Ember.Route.extend({
     model: function (params) {
         return this.store.find('lesson', params.lesson_id);
+    },
+    renderTemplate: function () {
+        this.render('lesson_profile',{ outlet:'content'});
     }
 });
