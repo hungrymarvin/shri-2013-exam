@@ -1,4 +1,8 @@
-/* Put your CSS here */
 html, body {
     margin: 20px;
+    font-family: 'Roboto Slab', serif;
+}
+.container {
+    max-width: 760px;
+    margin: 0 auto;
 }

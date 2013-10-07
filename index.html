@@ -5,6 +5,7 @@
     <title>ШРИ 2013</title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/header.css"/>
     <link rel="stylesheet" href="css/student.css"/>
     <link rel="stylesheet" href="css/student-list.css"/>
 
@@ -12,11 +13,20 @@
 <body>
 
 <script type="text/x-handlebars">
-    <h2>ШРИ 2013</h2>
-    <h5>как это было и почему это было круто</h5>
-    {{#link-to 'students'}}Студенты{{/link-to}}
-    {{#link-to 'lessons'}}Лекции{{/link-to}}
-    {{outlet}}
+    <div class="container">
+        <div class="header">
+            <div class="header__text">
+                ШРИ 2013
+            </div>
+            <div class="header__annotation">
+                как это было и почему это было круто
+            </div>
+        </div>
+
+        {{#link-to 'students'}}Студенты{{/link-to}}
+        {{#link-to 'lessons'}}Лекции{{/link-to}}
+        {{outlet}}
+    </div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="students">
@@ -24,7 +34,7 @@
     <ul class="student-list">
         {{#each}}
         <li>
-        {{render "student" this}}
+            {{render "student" this}}
         </li>
         {{/each}}
     </ul>
@@ -84,6 +94,8 @@
     Одна лекция
     {{id}} {{name}} {{link}}
 </script>
+
+<link href='http://fonts.googleapis.com/css?family=Roboto+Slab&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
 <script src="js/libs/jquery-1.9.1.js"></script>
 <script src="js/libs/handlebars-1.0.0.js"></script>
