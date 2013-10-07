@@ -4,6 +4,7 @@
     border: 1px solid #c0c0c0;
     height: 50px;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .student__student-expand

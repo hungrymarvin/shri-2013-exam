@@ -9,10 +9,8 @@ html, body {
 }
 
 .sidebar {
-    width: 350px;
-    padding-right: 20px;
-    display: inline-block;
-    box-sizing: border-box;
+    float: left;
+    width: 30%;
 }
 
 .wrapper:after {
@@ -24,8 +22,8 @@ html, body {
 }
 
 .content {
-    display: inline-block;
-    vertical-align: top;
-    width: 590px;
+    float: left;
+    padding-left: 20px;
+    width: 70%;
     box-sizing: border-box;
 }
