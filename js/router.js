@@ -32,7 +32,17 @@ Shri.ApplicationRoute = Ember.Route.extend({
     }
 });
 
+Shri.AboutRoute = Ember.Route.extend({
+    renderTemplate: function(){
+        this.render({outlet:'content'});
+
+    }
+})
+
 Shri.StudentsRoute = Ember.Route.extend({
+    renderTemplate: function() {
+        this.render({ outlet: 'sidebar' });
+    },
     model: function () {
         return this.store.find('student');
     }
@@ -43,7 +53,7 @@ Shri.StudentRoute = Ember.Route.extend({
         return this.store.find('student', params.student_id);
     },
     renderTemplate: function () {
-        this.render('student_profile');
+        this.render('student_profile',{ outlet:'content'});
     }
 
 });
@@ -51,7 +61,11 @@ Shri.StudentRoute = Ember.Route.extend({
 Shri.LessonsRoute = Ember.Route.extend({
     model: function () {
         return this.store.find('lesson');
+    },
+    renderTemplate: function () {
+        this.render({ outlet:'content'});
     }
+
 });
 
 Shri.LessonRoute = Ember.Route.extend({

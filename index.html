@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/header.css"/>
+    <link rel="stylesheet" href="css/footer.css"/>
     <link rel="stylesheet" href="css/navigation.css"/>
     <link rel="stylesheet" href="css/student.css"/>
     <link rel="stylesheet" href="css/student-list.css"/>
@@ -37,7 +38,20 @@
 
             </ul>
         </div>
-        {{outlet}}
+        <div class="wrapper">
+            <div class="sidebar">
+                {{outlet sidebar}}
+            </div>
+            <div class="content">
+                {{outlet content}}
+            </div>
+        </div>
+        <div class="footer">
+            <hr>
+
+            <span class="footer__line">Maxim M.</span>
+            <span class="footer__line">2013</span>
+        </div>
     </div>
 </script>
 
@@ -176,6 +190,7 @@
 <script src="js/controllers/student_controller.js"></script>
 <script src="js/views/student_view.js"></script>
 <script src="js/views/students_view.js"></script>
+<script src="js/views/about_view.js"></script>
 
 
 </body>

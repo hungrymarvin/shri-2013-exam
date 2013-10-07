@@ -2,7 +2,30 @@ html, body {
     margin: 20px;
     font-family: 'Roboto Slab', serif;
 }
+
 .container {
-    max-width: 760px;
+    max-width: 960px;
     margin: 0 auto;
+}
+
+.sidebar {
+    width: 350px;
+    padding-right: 20px;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.wrapper:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.content {
+    display: inline-block;
+    vertical-align: top;
+    width: 590px;
+    box-sizing: border-box;
 }
