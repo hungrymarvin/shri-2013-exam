@@ -2,9 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Ember Starter Kit</title>
+    <title>ШРИ 2013</title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/student.css"/>
+    <link rel="stylesheet" href="css/student-list.css"/>
+
 </head>
 <body>
 
@@ -17,29 +20,54 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="students">
-    <ul>
+    {{outlet}}
+    <ul class="student-list">
         {{#each}}
-        <li>{{#link-to 'student' this}}{{id}} {{first_name}} {{last_name}} {{city}} {{/link-to}}
+        <li>
+        {{render "student" this}}
         </li>
         {{/each}}
     </ul>
-    {{outlet}}
+
 </script>
 
 <script type="text/x-handlebars" data-template-name="student">
-    Один студент
-    {{id}} {{first_name}} {{last_name}} {{city}}
+    <div class='student'>
+        <div class="student__photo">
+            <img {{bind-attr src="link_photo" alt="first_name last_name"}}></img>
+        </div>
+        <div class="student__info">
+            <span class="student__name">{{first_name}} {{last_name}}</span>
+            <span class="student__location">{{city}}</span>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="student_profile">
+    <div class='student'>
+        <div class="student__photo">
+            <img {{bind-attr src="link_photo" alt="first_name last_name"}}></img>
+        </div>
+        <div class="student__info">
+            <span class="student__name">{{first_name}} {{last_name}}</span>
+            <span class="student__location">{{city}}</span>
+        </div>
+    </div>
     {{#if isEditing}}
     {{partial 'student/edit'}}
-    <button {{action 'doneEditing'}}>Done</button>
+    <button
+    {{action 'doneEditing'}}>Done</button>
     {{else}}
-    <button {{action 'edit'}}>Edit</button>
+    <button
+    {{action 'edit'}}>Edit</button>
     {{/if}}
 </script>
 
 <script type="text/x-handlebars" id="student/_edit">
     <p>{{input type="text" value=first_name}}</p>
+
     <p>{{input type="text" value=last_name}}</p>
+
     <p>{{input type="text" value=city}}</p>
 </script>
 
@@ -68,5 +96,9 @@
 <script src="js/models/lesson.js"></script>
 <script src="js/controllers/students_controller.js"></script>
 <script src="js/controllers/student_controller.js"></script>
+<script src="js/views/student_view.js"></script>
+<script src="js/views/students_view.js"></script>
+
+
 </body>
 </html>

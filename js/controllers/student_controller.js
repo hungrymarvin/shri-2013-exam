@@ -8,6 +8,10 @@ Shri.StudentController = Ember.ObjectController.extend({
         doneEditing: function () {
             this.set('isEditing', false);
             this.get('model').save();
+        },
+        select: function() {
+            var student = this.get('model');
+            this.transitionToRoute('student', student);
         }
     }
 });
