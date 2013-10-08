@@ -1,11 +1,12 @@
-App = Ember.Application.create();
-
-App.Router.map(function() {
-  // put your routes here
+Shri = Ember.Application.create({
+    LOG_TRANSITIONS: true,
+    LOG_BINDINGS: true,
+    LOG_VIEW_LOOKUPS: true,
+    LOG_STACKTRACE_ON_DEPRECATION: true,
+    LOG_VERSION: true,
+    debugMode: true
 });
 
-App.IndexRoute = Ember.Route.extend({
-  model: function() {
-    return ['red', 'yellow', 'blue'];
-  }
+Shri.ApplicationAdapter = DS.LSAdapter.extend({
+    namespace: 'shri'
 });

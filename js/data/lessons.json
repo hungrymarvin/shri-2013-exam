@@ -1,0 +1,146 @@
+[
+    {
+        "id":593,
+        "name":"HTTP-протокол",
+        "lector_id":181,
+        "url":"http://tech.yandex.ru/events/shri/msk-2012/talks/537/"
+    },
+    {
+        "id":594,
+        "name":"jQuery",
+        "lector_id":181,
+        "url":"http://tech.yandex.ru/events/shri/msk-2012/talks/543/"
+    },
+    {
+        "id":595,
+        "name":"http-протокол",
+        "lector_id":181,
+        "url":"http://tech.yandex.ru/events/shri/simf-2013/talks/678/"
+    },
+    {
+        "id":596,
+        "name":"http-протокол",
+        "lector_id":181,
+        "url":"http://tech.yandex.ru/events/shri/msk-2013/talks/1328/"
+    },
+    {
+        "id":597,
+        "name":"Регулярные выражения ",
+        "lector_id":181,
+        "url":"http://tech.yandex.ru/events/shri/msk-2013/talks/1344/"
+    },
+    {
+        "id":598,
+        "name":"Вводная по ШРИ",
+        "lector_id":182,
+        "url":"http://tech.yandex.ru/events/shri/msk-2013/talks/1286/"
+    },
+    {
+        "id":599,
+        "name":"Операционные системы",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/1/talks/645/"
+    },
+    {
+        "id":600,
+        "name":"Архитектура ЭВМ",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/1/talks/646/"
+    },
+    {
+        "id":601,
+        "name":"Операционная система GNU/Linux: устройство и функционирование",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/1/talks/647/"
+    },
+    {
+        "id":602,
+        "name":"Файловые системы",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/1/talks/649/"
+    },
+    {
+        "id":603,
+        "name":"Сети и протоколы",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/1/talks/650/"
+    },
+    {
+        "id":604,
+        "name":"Сети и протоколы. Виртуализация",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/1/talks/651/"
+    },
+    {
+        "id":605,
+        "name":"Безопасность информационных систем",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/1/talks/652/"
+    },
+    {
+        "id":606,
+        "name":"Системы хранения данных",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/1/talks/648/"
+    },
+    {
+        "id":607,
+        "name":"Операционные системы",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/2/talks/590/"
+    },
+    {
+        "id":608,
+        "name":"Архитектура ЭВМ",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/2/talks/591/"
+    },
+    {
+        "id":609,
+        "name":"Популярный Linux",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/2/talks/592/"
+    },
+    {
+        "id":610,
+        "name":"Системы хранения данных",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/2/talks/593/"
+    },
+    {
+        "id":611,
+        "name":"Файловые системы",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/2/talks/595/"
+    },
+    {
+        "id":612,
+        "name":"Командная строка Unix",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/shri/msk-2012/talks/531/"
+    },
+    {
+        "id":613,
+        "name":"Профессии в мире информационных технологий",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/3/talks/520/"
+    },
+    {
+        "id":614,
+        "name":"Инструментарий системного инженера",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/3/talks/521/"
+    },
+    {
+        "id":615,
+        "name":"Архитектура операционной системы",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/kit/3/talks/522/"
+    },
+    {
+        "id":616,
+        "name":"Командная строка Unix",
+        "lector_id":183,
+        "url":"http://tech.yandex.ru/events/shri/msk-2013/talks/1292/"
+    }
+]

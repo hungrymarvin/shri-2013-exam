@@ -1,4 +1,29 @@
-/* Put your CSS here */
 html, body {
     margin: 20px;
+    font-family: 'Roboto Slab', serif;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.sidebar {
+    float: left;
+    width: 30%;
+}
+
+.wrapper:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.content {
+    float: left;
+    padding-left: 20px;
+    width: 70%;
+    box-sizing: border-box;
 }

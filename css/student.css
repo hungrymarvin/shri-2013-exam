@@ -1,0 +1,40 @@
+.student
+{
+    padding: 5px;
+    border: 1px solid #c0c0c0;
+    height: 50px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.student__student-expand
+{
+    height: auto;
+}
+
+.student__location
+{
+    color: #dedede;
+    display: block;
+    font-size: 12px;
+}
+
+.student__photo
+{
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+}
+
+.student__photo img
+{
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.student__info
+{
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 5px;
+}
