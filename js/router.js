@@ -32,6 +32,12 @@ Shri.ApplicationRoute = Ember.Route.extend({
     }
 });
 
+Shri.IndexRoute = Ember.Route.extend({
+    redirect: function() {
+        this.transitionTo('about');
+    }
+});
+
 Shri.AboutRoute = Ember.Route.extend({
     renderTemplate: function(){
         this.render({outlet:'content'});
