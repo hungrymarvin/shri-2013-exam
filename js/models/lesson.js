@@ -2,7 +2,8 @@ Shri.Lesson = DS.Model.extend({
     name: DS.attr('string'),
     link: DS.attr('string'),
     lector_id: DS.attr('number'),
-    url: DS.attr('string')
+    video_url: DS.attr('string'),
+    slides_url: DS.attr('string')
 });
 
 Shri.Lesson.FIXTURES = [
