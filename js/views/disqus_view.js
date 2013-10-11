@@ -8,8 +8,8 @@ Shri.DisqusView = Ember.View.extend({
         DISQUS.reset({
             reload: true,
             config: function () {
-                this.page.identifier = "newidentifier"+id;
-                this.page.url = "http://example.com/#!"+id;
+                this.page.identifier = "lesson"+id;
+                this.page.url = "http://myalin.ru/shri/#!"+id;
             }
         });
     }
