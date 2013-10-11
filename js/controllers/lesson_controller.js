@@ -1,4 +1,5 @@
 Shri.LessonController = Ember.ObjectController.extend({
+    isSelected: false,
     actions: {
         select: function() {
             var lesson = this.get('model');
