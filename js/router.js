@@ -15,39 +15,47 @@ Shri.ApplicationRoute = Ember.Route.extend({
     model: function () {
         var store = this.get('store');
 
+        var students = store.find('student');
         $.getJSON('js/data/students.json').then(function (data) {
             $(data).each(function () {
-                var student = store.createRecord('student', this);
-                student.save();
+                var student = store.getById('student', this.id);
+                if (student.get('isEmpty')) {
+                    student = store.createRecord('student', this);
+                    student.save();
+                }
             })
+
         })
 
+        var lessons = store.find('lesson');
         $.getJSON('js/data/lessons.json').then(function (data) {
             $(data).each(function () {
-                var lesson = store.createRecord('lesson', this);
-                lesson.save();
+                var lesson = store.getById('lesson', this.id);
+                if (lesson.get('isEmpty')) {
+                    lesson = store.createRecord('lesson', this);
+                    lesson.save();
+                }
             })
         })
-
     }
 });
 
 Shri.IndexRoute = Ember.Route.extend({
-    redirect: function() {
+    redirect: function () {
         this.transitionTo('about');
     }
 });
 
 Shri.AboutRoute = Ember.Route.extend({
-    renderTemplate: function(){
-        this.render({outlet:'content'});
+    renderTemplate: function () {
+        this.render({outlet: 'content'});
         this.render('twitter', {
             outlet: 'sidebar'});
     }
 })
 
 Shri.StudentsRoute = Ember.Route.extend({
-    renderTemplate: function() {
+    renderTemplate: function () {
         this.render({ outlet: 'sidebar' });
     },
     model: function () {
@@ -60,7 +68,7 @@ Shri.StudentRoute = Ember.Route.extend({
         return this.store.find('student', params.student_id);
     },
     renderTemplate: function () {
-        this.render('student_profile',{ outlet:'content'});
+        this.render('student_profile', { outlet: 'content'});
     }
 
 });
@@ -70,7 +78,7 @@ Shri.LessonsRoute = Ember.Route.extend({
         return this.store.find('lesson');
     },
     renderTemplate: function () {
-        this.render({ outlet:'sidebar'});
+        this.render({ outlet: 'sidebar'});
     }
 
 });
@@ -80,6 +88,6 @@ Shri.LessonRoute = Ember.Route.extend({
         return this.store.find('lesson', params.lesson_id);
     },
     renderTemplate: function () {
-        this.render('lesson_profile',{ outlet:'content'});
+        this.render('lesson_profile', { outlet: 'content'});
     }
 });
