@@ -1,4 +1,7 @@
-Shri.StudentsController = Ember.ArrayController.extend({
+var StudentsController = Ember.ArrayController.extend({
     sortProperties: ['id'],
     sortAscending: true
 });
+
+module.exports = StudentsController;
+

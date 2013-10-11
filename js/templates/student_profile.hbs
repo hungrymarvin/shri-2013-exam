@@ -1,0 +1,34 @@
+<div class='student student__student-expand'>
+    <div class="student__photo">
+        <img {{bind-attr src="link_photo" alt="first_name last_name"}}></img>
+    </div>
+    <div class="student__info">
+        <span class="student__name">{{first_name}} {{last_name}}</span>
+        <span class="student__location">{{city}}</span>
+        <ul class="student__social">
+            {{#if link_facebook}}
+                <li><a {{bind-attr href="link_facebook" }}><i class="icon-facebook"></i>{{link_facebook}}</a></li>
+            {{/if}}
+            {{#if link_vk}}
+                <li><a {{bind-attr href="link_vk" }}><i class="icon-vkontakte-rect"></i>{{link_vk}}</a></li>
+            {{/if}}
+            {{#if link_gihub}}
+                <li><a {{bind-attr href="link_gihub" }}><i class="icon-github"></i>{{link_gihub}}</a></li>
+            {{/if}}
+            {{#if link_yaru}}
+                <li><a {{bind-attr href="link_yaru" }}><i class="icon-yandex-rect"></i>{{link_yaru}}</a></li>
+            {{/if}}
+        </ul>
+    </div>
+    <p class="student__about">{{about}}</p>
+</div>
+<div class="student__edit-controls">
+    {{#if isEditing}}
+        {{partial 'student/edit'}}
+        <button
+            {{action 'doneEditing'}}>Сохранить</button>
+    {{else}}
+        <button
+            {{action 'edit'}}>Редактировать</button>
+    {{/if}}
+</div>

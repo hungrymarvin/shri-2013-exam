@@ -1,4 +1,4 @@
-Shri.LessonController = Ember.ObjectController.extend({
+var LessonController = Ember.ObjectController.extend({
     isSelected: false,
     actions: {
         select: function() {
@@ -15,3 +15,6 @@ Shri.LessonController = Ember.ObjectController.extend({
         }
     }
 });
+
+module.exports = LessonController;
+

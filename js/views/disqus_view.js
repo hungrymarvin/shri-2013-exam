@@ -1,4 +1,4 @@
-Shri.DisqusView = Ember.View.extend({
+var DisqusView = Ember.View.extend({
     tagName: 'div',
     elementId: 'disqus_thread',
 
@@ -14,3 +14,6 @@ Shri.DisqusView = Ember.View.extend({
         });
     }
 });
+
+module.exports = DisqusView;
+
