@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="header">
+        <div class="header__text">
+            ШРИ 2013
+        </div>
+        <div class="header__annotation">
+            как это было и почему это было круто
+        </div>
+    </div>
+    <div class="navigation">
+        <ul class="navigation__menu">
+            <li class="menu__item">
+                {{#link-to 'about'}}О школе{{/link-to}}
+            </li>
+            <li class="menu__item">
+                {{#link-to 'students'}}Студенты{{/link-to}}
+            </li>
+            <li class="menu__item">
+                {{#link-to 'lessons'}}Лекции{{/link-to}}
+            </li>
+
+        </ul>
+    </div>
+    <div class="wrapper">
+        <div class="sidebar">
+            {{outlet sidebar}}
+        </div>
+        <div class="content">
+            {{outlet content}}
+        </div>
+    </div>
+    <div class="footer">
+        <hr>
+
+        <span class="footer__line">Maxim M.</span>
+        <span class="footer__line">2013</span>
+    </div>
+</div>

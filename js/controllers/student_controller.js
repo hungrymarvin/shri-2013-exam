@@ -1,4 +1,4 @@
-Shri.StudentController = Ember.ObjectController.extend({
+var StudentController = Ember.ObjectController.extend({
     isEditing: false,
     actions: {
         edit: function () {
@@ -9,9 +9,13 @@ Shri.StudentController = Ember.ObjectController.extend({
             this.set('isEditing', false);
             this.get('model').save();
         },
-        select: function() {
+
+        select: function () {
             var student = this.get('model');
             this.transitionToRoute('student', student);
         }
     }
 });
+
+module.exports = StudentController;
+

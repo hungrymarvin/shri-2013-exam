@@ -7,15 +7,29 @@
     cursor: pointer;
 }
 
+.lesson:hover
+{
+    background: #f5f5f5;
+}
+
+.lesson_lesson-selected
+{
+    background: #f6f6f6;
+}
+
 .lesson_lesson-expand
 {
     height: auto;
 }
 
+.lesson__name
+{
+    display: block;
+}
+
 .lesson__location
 {
     color: #dedede;
-    display: block;
     font-size: 12px;
 }
 
@@ -25,3 +39,24 @@
     vertical-align: top;
     padding-left: 5px;
 }
+
+.lesson__date
+{
+    color: #dedede;
+    font-size: 12px;
+}
+
+.lesson-expand__slides {
+    width: 100%;
+    min-height: 430px;
+}
+
+.lesson-expand__name {
+    font-size: 35px;
+}
+
+.lesson-expand__date
+{
+    color: #dedede;
+}
+

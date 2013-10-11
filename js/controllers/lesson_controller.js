@@ -1,4 +1,5 @@
-Shri.LessonController = Ember.ObjectController.extend({
+var LessonController = Ember.ObjectController.extend({
+    isSelected: false,
     actions: {
         select: function() {
             var lesson = this.get('model');
@@ -7,10 +8,13 @@ Shri.LessonController = Ember.ObjectController.extend({
             DISQUS.reset({
                 reload: true,
                 config: function () {
-                    this.page.identifier = "newidentifier"+lesson.id;
-                    this.page.url = "http://example.com/#!"+lesson.id;
+                    this.page.identifier = "lesson"+lesson.id;
+                    this.page.url = "http://myalin.ru/shri/#!"+lesson.id;
                 }
             });
         }
     }
 });
+
+module.exports = LessonController;
+

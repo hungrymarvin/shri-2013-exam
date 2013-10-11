@@ -1,4 +1,4 @@
-Shri.DisqusView = Ember.View.extend({
+var DisqusView = Ember.View.extend({
     tagName: 'div',
     elementId: 'disqus_thread',
 
@@ -8,9 +8,12 @@ Shri.DisqusView = Ember.View.extend({
         DISQUS.reset({
             reload: true,
             config: function () {
-                this.page.identifier = "newidentifier"+id;
-                this.page.url = "http://example.com/#!"+id;
+                this.page.identifier = "lesson"+id;
+                this.page.url = "http://myalin.ru/shri/#!"+id;
             }
         });
     }
 });
+
+module.exports = DisqusView;
+

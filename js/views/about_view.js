@@ -1,4 +1,6 @@
-Shri.AboutView = Ember.View.extend({
-
+var AboutView = Ember.View.extend({
 
 });
+
+module.exports = AboutView;
+
