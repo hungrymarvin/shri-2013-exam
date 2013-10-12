@@ -9,6 +9,10 @@ App.Router.map(function() {
         this.resource("lesson", { path: ':lesson_id' });
     });
 
+    this.resource("lectors", function () {
+        this.resource("lector", { path: ':lector_id' });
+    });
+
     this.resource("about");
 });
 

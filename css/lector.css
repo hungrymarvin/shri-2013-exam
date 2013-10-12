@@ -1,4 +1,4 @@
-.lesson
+.lector
 {
     padding: 5px;
     border: 1px solid #c0c0c0;
@@ -7,59 +7,59 @@
     cursor: pointer;
 }
 
-.lesson:hover
+.lector:hover
 {
     background: #f5f5f5;
 }
 
-.lesson_lesson-selected
+.lector_lector-selected
 {
     background: #f6f6f6;
 }
 
-.lesson_lesson-expand
+.lector_lector-expand
 {
     height: auto;
 }
 
-.lesson__name
+.lector__name
 {
     display: block;
 }
 
-.lesson__location
+.lector__location
 {
     color: #dedede;
     font-size: 12px;
 }
 
-.lesson__info
+.lector__info
 {
     display: inline-block;
     vertical-align: top;
     padding-left: 5px;
 }
 
-.lesson__date
+.lector__date
 {
     color: #dedede;
     font-size: 12px;
 }
 
-.lesson-expand__slides {
+.lector-expand__slides {
     width: 100%;
     min-height: 430px;
 }
 
-.lesson-expand__name {
+.lector-expand__name {
     font-size: 35px;
 }
 
-.lesson-expand__date
+.lector-expand__date
 {
     color: #dedede;
 }
 
-.lesson-expand__lector-name {
+.lector-expand__lector-name {
     display: block;
 }
