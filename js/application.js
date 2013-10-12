@@ -281,6 +281,16 @@ var ApplicationRoute = Ember.Route.extend({
             })
         })
 
+        var lectors = store.find('lector');
+        $.getJSON('data/lectors.json').then(function (data) {
+            $(data).each(function () {
+                var lector = store.getById('lector', this.id);
+                if (lector === null || lector.get('isEmpty')) {
+                    lector = store.createRecord('lector', this);
+                    lector.save();
+                }
+            })
+        })
     }
 });
 
