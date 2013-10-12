@@ -1,1 +1,13 @@
 {{ name }}
+<a {{{bind-attr href="yatech"}}}>Профиль на YaTech</a>
+<div>
+<img {{bind-attr src="photo_url" alt="name"}}></img>
+</div>
+<p>{{about}}</p>
+<ul class="lesson-list">
+    {{#each all_lectures}}
+        <li>
+            {{render "lesson" this}}
+        </li>
+    {{/each}}
+</ul>

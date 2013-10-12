@@ -10756,7 +10756,7 @@
              This returns the objects at the specified indexes, using `objectAt`.
 
              ```javascript
-             var arr =В ['a', 'b', 'c', 'd'];
+             var arr =Â ['a', 'b', 'c', 'd'];
              arr.objectsAt([0, 1, 2]);  // ["a", "b", "c"]
              arr.objectsAt([2, 3, 4]);  // ["c", "d", undefined]
              ```
@@ -23669,7 +23669,7 @@
                 "use strict";
                 // ==========================================================================
                 // Project:   metamorph
-                // Copyright: В©2011 My Company Inc. All rights reserved.
+                // Copyright: Â©2011 My Company Inc. All rights reserved.
                 // ==========================================================================
 
                 var K = function() {},
@@ -25906,7 +25906,7 @@
          ```
 
          All three strategies - string return value, boolean return value, and
-         hard-coded value вЂ“ can be combined in a single declaration:
+         hard-coded value â€“ can be combined in a single declaration:
 
          ```handlebars
          <img {{bind-attr class=":class-name-to-always-apply view.someBool:class-name-if-true view.someProperty"}}>
