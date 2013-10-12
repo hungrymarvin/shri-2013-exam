@@ -158,7 +158,11 @@ module.exports = App;
 
 },{"./config/app":1,"./config/routes":2,"./controllers/lector_controller":4,"./controllers/lesson_controller":5,"./controllers/lessons_controller":6,"./controllers/student_controller":7,"./controllers/students_controller":8,"./models/lector":10,"./models/lesson":11,"./models/student":12,"./routes/about_route":13,"./routes/application_route":14,"./routes/index_route":15,"./routes/lector_route":16,"./routes/lesson_route":17,"./routes/lessons_route":18,"./routes/student_route":19,"./routes/students_route":20,"./templates":21,"./views/about_view":27,"./views/disqus_view":28,"./views/lector_view":29,"./views/lesson_view":30,"./views/lessons_view":31,"./views/student_view":32,"./views/students_view":33,"./views/twitter_view":34}],10:[function(require,module,exports){
 var Lector = DS.Model.extend({
-
+    native_id: DS.attr('string'),
+    name: DS.attr('string'),
+    about: DS.attr('string'),
+    photo_url: DS.attr('string'),
+    all_lectures: DS.attr('string')
 });
 
 module.exports = Lector;
@@ -230,6 +234,18 @@ var ApplicationRoute = Ember.Route.extend({
                     lesson = store.createRecord('lesson', this);
                     lesson.save();
                 }
+            })
+        })
+
+        var lectors = store.find('lector');
+        $.getJSON('data/lectors.json').then(function (data) {
+            $(data).each(function () {
+                var lector = store.getById('lector', this.id);
+                if (lector.get('isEmpty')) {
+                    lector = store.createRecord('lector', this);
+                    lector.save();
+                }
+                console.log(lector);
             })
         })
     }
