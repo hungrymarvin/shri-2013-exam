@@ -5,7 +5,6 @@ var Lesson = DS.Model.extend({
     video_url: DS.attr('string'),
     slides_url: DS.attr('string'),
     date : DS.attr('string')
-
 });
 
 module.exports = Lesson;

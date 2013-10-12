@@ -4,6 +4,7 @@ var Lector = DS.Model.extend({
     about: DS.attr('string'),
     photo_url: DS.attr('string'),
     all_lectures: DS.hasMany('lesson')
+
 });
 
 module.exports = Lector;

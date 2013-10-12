@@ -6,7 +6,7 @@ var ApplicationRoute = Ember.Route.extend({
         $.getJSON('data/students.json').then(function (data) {
             $(data).each(function () {
                 var student = store.getById('student', this.id);
-                if (student.get('isEmpty')) {
+                if (student === null || student.get('isEmpty')) {
                     student = store.createRecord('student', this);
                     student.save();
                 }
@@ -18,7 +18,7 @@ var ApplicationRoute = Ember.Route.extend({
         $.getJSON('data/lessons.json').then(function (data) {
             $(data).each(function () {
                 var lesson = store.getById('lesson', this.id);
-                if (lesson.get('isEmpty')) {
+                if (lesson === null || lesson.get('isEmpty')) {
                     lesson = store.createRecord('lesson', this);
                     lesson.save();
                 }
@@ -29,7 +29,7 @@ var ApplicationRoute = Ember.Route.extend({
         $.getJSON('data/lectors.json').then(function (data) {
             $(data).each(function () {
                 var lector = store.getById('lector', this.id);
-                if (lector.get('isEmpty')) {
+                if (lector === null || lector.get('isEmpty')) {
                     lector = store.createRecord('lector', this);
                     lector.save();
                 }
