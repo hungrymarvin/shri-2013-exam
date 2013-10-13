@@ -1,6 +1,5 @@
 .lesson
 {
-    padding: 5px;
     border: 1px solid #c0c0c0;
     min-height: 50px;
     margin-bottom: 10px;
@@ -29,7 +28,7 @@
 
 .lesson__location
 {
-    color: #dedede;
+    color: #d6d6d6;
     font-size: 12px;
 }
 
@@ -37,15 +36,18 @@
 {
     display: inline-block;
     vertical-align: top;
-    padding-left: 5px;
+    padding: 5px;
 }
 
 .lesson__date
 {
-    color: #dedede;
+    color: #d6d6d6;
     font-size: 12px;
 }
-
+.lesson-expand__info
+{
+    margin-bottom: 10px;
+}
 .lesson-expand__slides {
     width: 100%;
     min-height: 430px;
@@ -57,7 +59,8 @@
 
 .lesson-expand__date
 {
-    color: #dedede;
+    color: #d6d6d6;
+    font-size: 12px;
 }
 
 .lesson-expand__lector-name {
