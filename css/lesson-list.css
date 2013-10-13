@@ -4,3 +4,9 @@
     padding: 0;
     margin: 0;
 }
+
+.lesson-list__item.active {
+
+    background-color: rgba(111, 209, 255, 0.21);
+
+}

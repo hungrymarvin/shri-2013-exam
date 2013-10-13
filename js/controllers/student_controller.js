@@ -1,5 +1,8 @@
 var StudentController = Ember.ObjectController.extend({
     isEditing: false,
+    style: function() {
+        return "background-image:url('" + this.get('link_photo')+"')";
+    }.property(),
     actions: {
         edit: function () {
             this.set('isEditing', true);
