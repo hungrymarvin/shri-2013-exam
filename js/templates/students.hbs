@@ -1,8 +1,7 @@
-{{outlet}}
-<ul class="student-list">
+{{#link-to 'student' tagName="ul" href=false class="student-list"}}
     {{#each}}
         <li>
             {{render "student" this}}
         </li>
     {{/each}}
-</ul>
+{{/link-to}}

@@ -1,7 +1,7 @@
-<ul class="lector-list">
+{{#link-to 'lector' tagName="ul" href=false class="lector-list"}}
     {{#each}}
         <li>
             {{render "lector" this}}
         </li>
     {{/each}}
-</ul>
+{{/link-to}}
