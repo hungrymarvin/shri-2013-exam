@@ -27,3 +27,41 @@ html, body {
     width: 70%;
     box-sizing: border-box;
 }
+@media (max-width: 955px) {
+    .sidebar
+    {
+        width: 40%;
+    }
+
+    .content
+    {
+        width: 60%;
+    }
+}
+@media (max-width: 750px) {
+    body
+    {
+        margin: 5px;
+    }
+    .lesson-list.active {
+        display: none;
+    }
+
+    .lector-list.active {
+        display: none;
+    }
+
+    .student-list.active {
+        display: none;
+    }
+
+    .content {
+        width: 100%;
+        padding-left: 0px;
+    }
+
+    .sidebar
+    {
+        width: 100%;
+    }
+}
