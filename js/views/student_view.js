@@ -1,6 +1,8 @@
 var StudentView = Ember.View.extend({
+
     click: function (evt) {
         this.get('controller').send('select');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
     }
 });
 

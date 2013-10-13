@@ -1,7 +1,9 @@
-<ul class="lesson-list">
+{{#link-to 'lesson' tagName="ul" href=false class="lesson-list"}}
     {{#each}}
-        <li>
+        {{#link-to 'lesson' this tagName="li" href=false class="lesson-list__item"}}
+
             {{render "lesson" this}}
-        </li>
+
+        {{/link-to}}
     {{/each}}
-</ul>
+{{/link-to}}

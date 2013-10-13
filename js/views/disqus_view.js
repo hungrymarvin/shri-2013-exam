@@ -5,6 +5,7 @@ var DisqusView = Ember.View.extend({
     didInsertElement: function(){
         var arr = window.location.hash.split('/');
         var id = arr[arr.length-1];
+        try{
         DISQUS.reset({
             reload: true,
             config: function () {
@@ -12,6 +13,11 @@ var DisqusView = Ember.View.extend({
                 this.page.url = "http://myalin.ru/shri/#!"+id;
             }
         });
+        }
+        catch (e)
+        {
+            console.log(e.message);
+        }
     }
 });
 
