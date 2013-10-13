@@ -7,14 +7,7 @@ require('../vendor/handlebars');
 require('../vendor/ember');
 require('../vendor/ember-data'); // delete if you don't want ember-data
 
-var App = Ember.Application.create({
-    LOG_TRANSITIONS: true,
-    LOG_BINDINGS: true,
-    LOG_VIEW_LOOKUPS: true,
-    LOG_STACKTRACE_ON_DEPRECATION: true,
-    LOG_VERSION: true,
-    debugMode: true
-});
+var App = Ember.Application.create();
 
 App.Store = require('./store'); // delete if you don't want ember-data
 
@@ -46,8 +39,6 @@ App.Router.map(function() {
 require('../vendor/localstorage_adapter');
 
 module.exports = DS.Store.extend({
-  revision: 11,
-  //adapter: DS.RESTAdapter.create()
   adapter: DS.LSAdapter.create({
       namespace: 'shri'
   })
@@ -1119,15 +1110,15 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 },{}],25:[function(require,module,exports){
 // ==========================================================================
 // Project:   Ember Data
-// Copyright: Copyright 2011-2013 Tilde Inc. and contributors.
-//            Portions Copyright 2011 LivingSocial Inc.
+// Copyright: ©2011-2012 Tilde Inc. and contributors.
+//            Portions ©2011 Living Social Inc. and contributors.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 
 
-// Version: v1.0.0-beta.3-56-g8367aa5
-// Last commit: 8367aa5 (2013-10-12 07:56:29 +0300)
+// Version: v1.0.0-beta.3-2-ga01195b
+// Last commit: a01195b (2013-10-01 19:41:06 -0700)
 
 
 (function() {
@@ -1180,10 +1171,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @class DS
          @static
          */
-        var DS;
+
         if ('undefined' === typeof DS) {
             DS = Ember.Namespace.create({
-                VERSION: '1.0.0-beta.2'
+                VERSION: '1.0.0-beta.3'
             });
 
             if ('undefined' !== typeof window) {
@@ -1194,6 +1185,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 Ember.libraries.registerCoreLibrary('Ember Data', DS.VERSION);
             }
         }
+
     })();
 
 
@@ -1345,10 +1337,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             // HELPERS
 
-            transformFor: function(attributeType, skipAssertion) {
-                var transform = this.container.lookup('transform:' + attributeType);
-                Ember.assert("Unable to find transform for '" + attributeType + "'", skipAssertion || !!transform);
-                return transform;
+            transformFor: function(attributeType) {
+                return this.container.lookup('transform:' + attributeType);
             }
         });
 
@@ -1702,7 +1692,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         /**
          Date.parse with progressive enhancement for ISO 8601 <https://github.com/csnover/js-iso8601>
 
-         Â© 2011 Colin Snover <http://zetafleet.com>
+         © 2011 Colin Snover <http://zetafleet.com>
 
          Released under MIT license.
 
@@ -1721,12 +1711,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         Ember.Date.parse = function (date) {
             var timestamp, struct, minutesOffset = 0;
 
-            // ES5 Â§15.9.4.2 states that the string should attempt to be parsed as a Date Time String Format string
-            // before falling back to any implementation-specific date parsing, so thatâ€™s what we do, even if native
+            // ES5 §15.9.4.2 states that the string should attempt to be parsed as a Date Time String Format string
+            // before falling back to any implementation-specific date parsing, so that’s what we do, even if native
             // implementations could be faster
-            //              1 YYYY                2 MM       3 DD           4 HH    5 mm       6 ss        7 msec        8 Z 9 Â±    10 tzHH    11 tzmm
+            //              1 YYYY                2 MM       3 DD           4 HH    5 mm       6 ss        7 msec        8 Z 9 ±    10 tzHH    11 tzmm
             if ((struct = /^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/.exec(date))) {
-                // avoid NaN timestamps caused by â€œundefinedâ€ values being passed to Date.UTC
+                // avoid NaN timestamps caused by “undefined” values being passed to Date.UTC
                 for (var i = 0, k; (k = numericKeys[i]); ++i) {
                     struct[k] = +struct[k] || 0;
                 }
@@ -2009,7 +1999,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             replaceContent: function(index, removed, added) {
                 // Map the array of record objects into an array of  client ids.
                 added = map(added, function(record) {
-                    Ember.assert("You cannot add '" + record.constructor.typeKey + "' records to this relationship (only '" + this.type.typeKey + "' allowed)", !this.type || record instanceof this.type);
+
                     return record;
                 }, this);
 
@@ -2097,7 +2087,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     type = get(this, 'type'),
                     record;
 
-                Ember.assert("You cannot add '" + type.typeKey + "' records to this polymorphic relationship.", !get(this, 'isPolymorphic'));
 
                 record = store.createRecord.call(store, type, hash);
                 this.pushObject(record);
@@ -2424,7 +2413,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             defaultAdapter: Ember.computed(function() {
                 var adapter = get(this, 'adapter');
 
-                Ember.assert('You tried to set `adapter` property to an instance of `DS.Adapter`, where it should be a name or a factory', !(adapter instanceof DS.Adapter));
 
                 if (typeof adapter === 'string') {
                     adapter = this.container.lookup('adapter:' + adapter) || this.container.lookup('adapter:application') || this.container.lookup('adapter:_rest');
@@ -2649,8 +2637,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 var adapter = this.adapterFor(type);
 
-                Ember.assert("You tried to find a record but you have no adapter (for " + type + ")", adapter);
-                Ember.assert("You tried to find a record but your adapter (for " + type + ") does not implement 'find'", adapter.find);
+
 
                 _find(adapter, this, type, id, resolver);
 
@@ -2699,9 +2686,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     adapter = this.adapterFor(type),
                     id = get(record, 'id');
 
-                Ember.assert("You cannot reload a record without an ID", id);
-                Ember.assert("You tried to reload a record but you have no adapter (for " + type + ")", adapter);
-                Ember.assert("You tried to reload a record but your adapter does not implement `find`", adapter.find);
+
+
 
                 return _find(adapter, this, type, id, resolver);
             },
@@ -2739,8 +2725,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     var ids = records.mapProperty('id'),
                         adapter = this.adapterFor(type);
 
-                    Ember.assert("You tried to load many records but you have no adapter (for " + type + ")", adapter);
-                    Ember.assert("You tried to load many records but your adapter does not implement `findMany`", adapter.findMany);
+
 
                     _findMany(adapter, this, type, ids, owner, resolver);
                 }, this);
@@ -2750,7 +2735,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              Returns true if a record for a given type and ID is already loaded.
 
              @method hasRecordForId
-             @param {DS.Model} type
+             @param {String} type
              @param {String|Integer} id
              @returns Boolean
              */
@@ -2843,8 +2828,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             findHasMany: function(owner, link, relationship, resolver) {
                 var adapter = this.adapterFor(owner.constructor);
 
-                Ember.assert("You tried to load a hasMany relationship but you have no adapter (for " + owner.constructor + ")", adapter);
-                Ember.assert("You tried to load a hasMany relationship from a specified `link` in the original payload but your adapter does not implement `findHasMany`", adapter.findHasMany);
+
 
                 var records = this.recordArrayManager.createManyArray(relationship.type, Ember.A([]));
                 _findHasMany(adapter, this, owner, link, relationship, resolver);
@@ -2854,8 +2838,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             findBelongsTo: function(owner, link, relationship, resolver) {
                 var adapter = this.adapterFor(owner.constructor);
 
-                Ember.assert("You tried to load a belongsTo relationship but you have no adapter (for " + owner.constructor + ")", adapter);
-                Ember.assert("You tried to load a belongsTo relationship from a specified `link` in the original payload but your adapter does not implement `findBelongsTo`", adapter.findBelongsTo);
+
 
                 _findBelongsTo(adapter, this, owner, link, relationship, resolver);
             },
@@ -2890,8 +2873,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var adapter = this.adapterFor(type),
                     resolver = Ember.RSVP.defer();
 
-                Ember.assert("You tried to load a query but you have no adapter (for " + type + ")", adapter);
-                Ember.assert("You tried to load a query but your adapter does not implement `findQuery`", adapter.findQuery);
+
 
                 _findQuery(adapter, this, type, query, array, resolver);
 
@@ -2928,8 +2910,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 set(array, 'isUpdating', true);
 
-                Ember.assert("You tried to load all records but you have no adapter (for " + type + ")", adapter);
-                Ember.assert("You tried to load all records but your adapter does not implement `findAll`", adapter.findAll);
+
 
                 _findAll(adapter, this, type, sinceToken, resolver);
 
@@ -3014,13 +2995,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              filter function will be invoked again to determine whether it should
              still be in the array.
 
-             Optionally you can pass a query which will be triggered at first. The
-             results returned by the server could then appear in the filter if they
-             match the filter function.
-
              @method filter
              @param {Class} type
-             @param {Object} query optional query
              @param {Function} filter
              @return {DS.FilteredRecordArray}
              */
@@ -3229,7 +3205,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var oldId = get(record, 'id'),
                     id = coerceId(data.id);
 
-                Ember.assert("An adapter cannot assign a new id to a record that already has an id. " + record + " had id: " + oldId + " and you tried to update it with " + id + ". This likely happened because your server returned data in response to a find or update that had a different id than the one you sent.", oldId === null || id === oldId);
 
                 this.typeMapFor(record.constructor).idToRecord[id] = record;
 
@@ -3293,22 +3268,20 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              etc.)
 
              @method modelFor
-             @param {String or subclass of DS.Model} key
+             @param {String} key
              @returns {subclass of DS.Model}
              */
             modelFor: function(key) {
-                var factory;
-
-                if (typeof key === 'string') {
-                    factory = this.container.lookupFactory('model:' + key);
-                    Ember.assert("No model was found for '" + key + "'", factory);
-                    factory.typeKey = key;
-                } else {
-                    // A factory already supplied.
-                    factory = key;
+                if (typeof key !== 'string') {
+                    return key;
                 }
 
+                var factory = this.container.lookupFactory('model:'+key);
+
+
                 factory.store = this;
+                factory.typeKey = key;
+
                 return factory;
             },
 
@@ -3378,7 +3351,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 // If passed, it means that the data should be
                 // merged into the existing data, not replace it.
 
-                Ember.assert("You must include an `id` in a hash passed to `push`", data.id != null);
 
                 type = this.modelFor(type);
 
@@ -3429,7 +3401,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             update: function(type, data) {
-                Ember.assert("You must include an `id` in a hash passed to `update`", data.id != null);
+
 
                 return this.push(type, data, true);
             },
@@ -3479,7 +3451,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var typeMap = this.typeMapFor(type),
                     idToRecord = typeMap.idToRecord;
 
-                Ember.assert('The id ' + id + ' has already been used with another record of type ' + type.toString() + '.', !id || !idToRecord[id]);
 
                 // lookupFactory should really return an object that creates
                 // instances with the injections applied
@@ -3650,7 +3621,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     deserializeRecordId(store, data, key, relationship, value);
                 } else if (kind === 'hasMany') {
                     deserializeRecordIds(store, data, key, relationship, value);
-                    addUnsavedRecords(record, key, value);
                 }
             });
 
@@ -3684,14 +3654,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         function deserializeRecordIds(store, data, key, relationship, ids) {
             for (var i=0, l=ids.length; i<l; i++) {
                 deserializeRecordId(store, ids, i, relationship, ids[i]);
-            }
-        }
-
-// If there are any unsaved records that are in a hasMany they won't be
-// in the payload, so add them back in manually.
-        function addUnsavedRecords(record, key, data) {
-            if(record) {
-                data.pushObjects(record.get(key).filterBy('isNew'));
             }
         }
 
@@ -3742,7 +3704,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 serializer = serializerForAdapter(adapter, type);
 
             return resolve(promise).then(function(payload) {
-                Ember.assert("You made a request for a " + type.typeKey + " with id " + id + ", but the adapter's response did not have any data", payload);
+
                 payload = serializer.extract(store, type, payload, id, 'find');
 
                 return store.push(type, payload);
@@ -3760,7 +3722,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             return resolve(promise).then(function(payload) {
                 payload = serializer.extract(store, type, payload, null, 'findMany');
 
-                Ember.assert("The response from a findMany must be an Array, not " + Ember.inspect(payload), Ember.typeOf(payload) === 'array');
 
                 store.pushMany(type, payload);
             }).then(resolver.resolve, resolver.reject);
@@ -3773,7 +3734,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             return resolve(promise).then(function(payload) {
                 payload = serializer.extract(store, relationship.type, payload, null, 'findHasMany');
 
-                Ember.assert("The response from a findHasMany must be an Array, not " + Ember.inspect(payload), Ember.typeOf(payload) === 'array');
 
                 var records = store.pushMany(relationship.type, payload);
                 record.updateHasMany(relationship.key, records);
@@ -3789,7 +3749,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 var record = store.push(relationship.type, payload);
                 record.updateBelongsTo(relationship.key, record);
-                return record;
             }).then(resolver.resolve, resolver.reject);
         }
 
@@ -3800,7 +3759,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             return resolve(promise).then(function(payload) {
                 payload = serializer.extract(store, type, payload, null, 'findAll');
 
-                Ember.assert("The response from a findAll must be an Array, not " + Ember.inspect(payload), Ember.typeOf(payload) === 'array');
 
                 store.pushMany(type, payload);
                 store.didUpdateAll(type);
@@ -3815,7 +3773,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             return resolve(promise).then(function(payload) {
                 payload = serializer.extract(store, type, payload, null, 'findAll');
 
-                Ember.assert("The response from a findQuery must be an Array, not " + Ember.inspect(payload), Ember.typeOf(payload) === 'array');
 
                 recordArray.load(payload);
                 return recordArray;
@@ -3827,7 +3784,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 promise = adapter[operation](store, type, record),
                 serializer = serializerForAdapter(adapter, type);
 
-            Ember.assert("Your adapter's '" + operation + "' method must return a promise, but it returned " + promise, isThenable(promise));
 
             return promise.then(function(payload) {
                 if (payload) { payload = serializer.extract(store, type, payload, get(record, 'id'), operation); }
@@ -4407,7 +4363,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                     didCommit: function(record) {
                         record.send('invokeLifecycleCallbacks', get(record, 'lastDirtyType'));
-                    }
+                    },
 
                 },
 
@@ -4733,8 +4689,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 for (i=0, l=setups.length; i<l; i++) {
                     setups[i].setup(this);
                 }
-
-                this.updateRecordArraysLater();
             },
 
             _unhandledEvent: function(state, name, context) {
@@ -4770,31 +4724,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 this.send('pushedData');
             },
 
-            /**
-             Marks the record as deleted but does not save it. You must call
-             `save` afterwards if you want to persist it. You might use this
-             method if you want to allow the user to still `rollback()` a
-             delete after it was made.
-
-             @method deleteRecord
-             */
             deleteRecord: function() {
                 this.send('deleteRecord');
             },
 
-            /**
-             Same as `deleteRecord`, but saves the record immediately.
-
-             @method destroyRecord
-             @returns Promise
-             */
-            destroyRecord: function() {
-                this.deleteRecord();
-                return this.save();
-            },
-
             unloadRecord: function() {
-                Ember.assert("You can only unload a loaded, non-dirty record.", !get(this, 'isDirty'));
+
 
                 this.send('unloadRecord');
             },
@@ -4932,7 +4867,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             materializeAttributes: function(attributes) {
-                Ember.assert("Must pass a hash of attributes to materializeAttributes", !!attributes);
+
                 merge(this._data, attributes);
             },
 
@@ -5146,7 +5081,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 this.eachComputedProperty(function(name, meta) {
                     if (meta.isAttribute) {
-                        Ember.assert("You may not set `id` as an attribute on your model. Please remove any lines that look like: `id: DS.attr('<type>')` from " + this.toString(), name !== 'id');
+
 
                         meta.name = name;
                         map.set(name, meta);
@@ -5241,7 +5176,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             return Ember.computed(function(key, value) {
                 if (arguments.length > 1) {
-                    Ember.assert("You may not set `id` as an attribute on your model. Please remove any lines that look like: `id: DS.attr('<type>')` from " + this.constructor.toString(), key !== 'id');
+
                     var oldValue = this._attributes[key] || this._inFlightAttributes[key] || this._data[key];
                     this.send('didSetProperty', { name: key, oldValue: oldValue, originalValue: this._data[key], value: value });
                     this._attributes[key] = value;
@@ -5523,7 +5458,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             } else if (options.key) {
                 key = options.key;
             } else {
-                Ember.assert("You must pass either a parentType or belongsToName option to OneToManyChange.forChildAndParent", false);
+
             }
 
             var change = DS.RelationshipChange._createChange({
@@ -5573,7 +5508,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             } else if (options.key) {
                 key = options.key;
             } else {
-                Ember.assert("You must pass either a parentType or belongsToName option to OneToManyChange.forChildAndParent", false);
+
             }
 
             var change = DS.RelationshipChange._createChange({
@@ -5799,8 +5734,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     store = get(this, 'store');
 
                 if (arguments.length === 2) {
-                    Ember.assert("You can only add a '" + type + "' record to this relationship", !value || value instanceof store.modelFor(type));
-                    return value === undefined ? null : DS.PromiseObject.create({ promise: Ember.RSVP.resolve(value) });
+
+                    return value === undefined ? null : value;
                 }
 
                 var link = data.links && data.links[key],
@@ -5824,7 +5759,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 options = type;
                 type = undefined;
             } else {
-                Ember.assert("The first argument DS.belongsTo must be a model type or string, like DS.belongsTo(App.Person)", !!type && (typeof type === 'string' || DS.Model.detect(type)));
+
             }
 
             options = options || {};
@@ -5846,7 +5781,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 }
 
                 if (arguments.length === 2) {
-                    Ember.assert("You can only add a '" + type + "' record to this relationship", !value || value instanceof typeClass);
+
                     return value === undefined ? null : value;
                 }
 
@@ -5975,7 +5910,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             return Ember.computed(function(key, value) {
                 return buildRelationship(this, key, options, function(store, data) {
                     var records = data[key];
-                    Ember.assert("You looked up the '" + key + "' relationship on '" + this + "' but some of the associated records were not loaded. Either make sure they are all loaded together with the parent record, or specify that the relationship is async (`DS.hasMany({ async: true })`)", Ember.A(records).everyProperty('isEmpty', false));
+
                     return store.findMany(this, data[key], meta.type);
                 });
             }).property('data').meta(meta);
@@ -6112,7 +6047,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                     if (possibleRelationships.length === 0) { return null; }
 
-                    Ember.assert("You defined the '" + name + "' relationship on " + this + ", but multiple possible inverse relationships of type " + this + " were found on " + inverseType + ".", possibleRelationships.length === 1);
 
                     inverseName = possibleRelationships[0].name;
                     inverseKind = possibleRelationships[0].kind;
@@ -6272,10 +6206,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             type = get(this, type, false) || this.store.modelFor(type);
                         }
 
-                        Ember.assert("You specified a hasMany (" + meta.type + ") on " + meta.parentType + " but " + meta.type + " was not found.",  type);
 
                         if (!types.contains(type)) {
-                            Ember.assert("Trying to sideload " + name + " on " + this.toString() + " but the type doesn't exist.", !!type);
+
                             types.push(type);
                         }
                     }
@@ -6927,7 +6860,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @param  type
              */
             queryFixtures: function(fixtures, query, type) {
-                Ember.assert('Not implemented: You must override the DS.FixtureAdapter::queryFixtures method to support querying the fixture store.');
+
             },
 
             /**
@@ -6948,7 +6881,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             /**
-             Implement this method in order to provide json for CRUD methods
+             Implement this method in order to provide provide json for CRUD methods
 
              @method mockJSON
              @param  type
@@ -6977,7 +6910,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var fixtures = this.fixturesForType(type),
                     fixture;
 
-                Ember.assert("Unable to find fixtures for model type "+type.toString(), fixtures);
 
                 if (fixtures) {
                     fixture = Ember.A(fixtures).findProperty('id', id);
@@ -6999,7 +6931,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             findMany: function(store, type, ids) {
                 var fixtures = this.fixturesForType(type);
 
-                Ember.assert("Unable to find fixtures for model type "+type.toString(), fixtures);
 
                 if (fixtures) {
                     fixtures = fixtures.filter(function(item) {
@@ -7022,7 +6953,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             findAll: function(store, type) {
                 var fixtures = this.fixturesForType(type);
 
-                Ember.assert("Unable to find fixtures for model type "+type.toString(), fixtures);
 
                 return this.simulateRemoteCall(function() {
                     return fixtures;
@@ -7039,7 +6969,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             findQuery: function(store, type, query, array) {
                 var fixtures = this.fixturesForType(type);
 
-                Ember.assert("Unable to find fixtures for model type "+type.toString(), fixtures);
 
                 fixtures = this.queryFixtures(fixtures, query, type);
 
@@ -7681,7 +7610,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              in data streaming in from your server structured the same way
              that fetches and saves are structured.
 
-             @method pushPayload
              @param {DS.Store} store
              @param {Object} payload
              */
@@ -8154,8 +8082,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              This method will be called with the parent record and `/posts/1/comments`.
 
              It will make an Ajax request to the originally specified URL.
-             If the URL is host-relative (starting with a single slash), the
-             request will use the host specified on the adapter (if any).
 
              @method findHasMany
              @see RESTAdapter/buildURL
@@ -8166,13 +8092,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @returns Promise
              */
             findHasMany: function(store, record, url) {
-                var host = get(this, 'host'),
-                    id   = get(record, 'id'),
+                var id   = get(record, 'id'),
                     type = record.constructor.typeKey;
-
-                if (host && url.charAt(0) === '/' && url.charAt(1) !== '/') {
-                    url = host + url;
-                }
 
                 return this.ajax(this.urlPrefix(url, this.buildURL(type, id)), 'GET');
             },
@@ -8419,7 +8340,25 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var adapter = this;
 
                 return new Ember.RSVP.Promise(function(resolve, reject) {
-                    hash = adapter.ajaxOptions(url, type, hash);
+                    hash = hash || {};
+                    hash.url = url;
+                    hash.type = type;
+                    hash.dataType = 'json';
+                    hash.context = adapter;
+
+                    if (hash.data && type !== 'GET') {
+                        hash.contentType = 'application/json; charset=utf-8';
+                        hash.data = JSON.stringify(hash.data);
+                    }
+
+                    if (adapter.headers !== undefined) {
+                        var headers = adapter.headers;
+                        hash.beforeSend = function (xhr) {
+                            forEach.call(Ember.keys(headers), function(key) {
+                                xhr.setRequestHeader(key, headers[key]);
+                            });
+                        };
+                    }
 
                     hash.success = function(json) {
                         Ember.run(null, resolve, json);
@@ -8431,31 +8370,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                     Ember.$.ajax(hash);
                 });
-            },
-
-            ajaxOptions: function(url, type, hash) {
-                hash = hash || {};
-                hash.url = url;
-                hash.type = type;
-                hash.dataType = 'json';
-                hash.context = this;
-
-                if (hash.data && type !== 'GET') {
-                    hash.contentType = 'application/json; charset=utf-8';
-                    hash.data = JSON.stringify(hash.data);
-                }
-
-                if (this.headers !== undefined) {
-                    var headers = this.headers;
-                    hash.beforeSend = function (xhr) {
-                        forEach.call(Ember.keys(headers), function(key) {
-                            xhr.setRequestHeader(key, headers[key]);
-                        });
-                    };
-                }
-
-
-                return hash;
             }
 
         });
@@ -8555,6 +8469,26 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
     (function() {
+//Copyright (C) 2011 by Living Social, Inc.
+
+//Permission is hereby granted, free of charge, to any person obtaining a copy of
+//this software and associated documentation files (the "Software"), to deal in
+//the Software without restriction, including without limitation the rights to
+//use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+//of the Software, and to permit persons to whom the Software is furnished to do
+//so, subject to the following conditions:
+
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
+
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//SOFTWARE.
+
         /**
          Ember Data
 
@@ -9043,11 +8977,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             payload = hash[payloadKey];
                             if (payload && payload.type) {
                                 payload.type = this.typeForRoot(payload.type);
-                            } else if (payload && relationship.kind === "hasMany") {
-                                var self = this;
-                                forEach(payload, function(single) {
-                                    single.type = self.typeForRoot(single.type);
-                                });
                             }
                         } else {
                             payloadKey = this.keyForRelationship(key, relationship.kind);
@@ -9116,8 +9045,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     payload[embeddedTypeKey] = payload[embeddedTypeKey] || [];
 
                     forEach(partial[attribute], function(data) {
-                        var embeddedType = store.modelFor(relationship.type.typeKey);
-                        updatePayloadWithEmbedded(store, serializer, embeddedType, data, payload);
                         ids.push(data[primaryKey]);
                         payload[embeddedTypeKey].push(data);
                     });
@@ -9263,209 +9190,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
 })();
+
+
+if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    Ember.Logger.warn("You are running a production build of Ember on localhost and won't receive detailed error messages. "+
+        "If you want full error messages please use the non-minified build provided on the Ember website.");
+}
 },{}],26:[function(require,module,exports){
-// ==========================================================================
-// Project:   Ember - JavaScript Application Framework
-// Copyright: Copyright 2011-2013 Tilde Inc. and contributors
-//            Portions Copyright 2006-2011 Strobe Inc.
-//            Portions Copyright 2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license
-//            See https://raw.github.com/emberjs/ember.js/master/LICENSE
-// ==========================================================================
-
-
-// Version: v1.0.0-289-g90d5bb9
-// Last commit: 90d5bb9 (2013-10-11 11:40:54 -0700)
-
-
-(function() {
-    /*global __fail__*/
-
-    /**
-     Ember Debug
-
-     @module ember
-     @submodule ember-debug
-     */
-
-    /**
-     @class Ember
-     */
-
-    if ('undefined' === typeof Ember) {
-        Ember = {};
-
-        if ('undefined' !== typeof window) {
-            window.Em = window.Ember = Em = Ember;
-        }
-    }
-
-    Ember.ENV = 'undefined' === typeof ENV ? {} : ENV;
-
-    if (!('MANDATORY_SETTER' in Ember.ENV)) {
-        Ember.ENV.MANDATORY_SETTER = true; // default to true for debug dist
-    }
-
-    /**
-     Define an assertion that will throw an exception if the condition is not
-     met. Ember build tools will remove any calls to `Ember.assert()` when
-     doing a production build. Example:
-
-     ```javascript
-     // Test for truthiness
-     Ember.assert('Must pass a valid object', obj);
-     // Fail unconditionally
-     Ember.assert('This code path should never be run')
-     ```
-
-     @method assert
-     @param {String} desc A description of the assertion. This will become
-     the text of the Error thrown if the assertion fails.
-     @param {Boolean} test Must be truthy for the assertion to pass. If
-     falsy, an exception will be thrown.
-     */
-    Ember.assert = function(desc, test) {
-        if (!test) {
-            Ember.Logger.assert(test, desc);
-        }
-
-        if (Ember.testing && !test) {
-            // when testing, ensure test failures when assertions fail
-            throw new Ember.Error("Assertion Failed: " + desc);
-        }
-    };
-
-
-    /**
-     Display a warning with the provided message. Ember build tools will
-     remove any calls to `Ember.warn()` when doing a production build.
-
-     @method warn
-     @param {String} message A warning to display.
-     @param {Boolean} test An optional boolean. If falsy, the warning
-     will be displayed.
-     */
-    Ember.warn = function(message, test) {
-        if (!test) {
-            Ember.Logger.warn("WARNING: "+message);
-            if ('trace' in Ember.Logger) Ember.Logger.trace();
-        }
-    };
-
-    /**
-     Display a debug notice. Ember build tools will remove any calls to
-     `Ember.debug()` when doing a production build.
-
-     ```javascript
-     Ember.debug("I'm a debug notice!");
-     ```
-
-     @method debug
-     @param {String} message A debug message to display.
-     */
-    Ember.debug = function(message) {
-        Ember.Logger.debug("DEBUG: "+message);
-    };
-
-    /**
-     Display a deprecation warning with the provided message and a stack trace
-     (Chrome and Firefox only). Ember build tools will remove any calls to
-     `Ember.deprecate()` when doing a production build.
-
-     @method deprecate
-     @param {String} message A description of the deprecation.
-     @param {Boolean} test An optional boolean. If falsy, the deprecation
-     will be displayed.
-     */
-    Ember.deprecate = function(message, test) {
-        if (Ember.TESTING_DEPRECATION) { return; }
-
-        if (arguments.length === 1) { test = false; }
-        if (test) { return; }
-
-        if (Ember.ENV.RAISE_ON_DEPRECATION) { throw new Ember.Error(message); }
-
-        var error;
-
-        // When using new Error, we can't do the arguments check for Chrome. Alternatives are welcome
-        try { __fail__.fail(); } catch (e) { error = e; }
-
-        if (Ember.LOG_STACKTRACE_ON_DEPRECATION && error.stack) {
-            var stack, stackStr = '';
-            if (error['arguments']) {
-                // Chrome
-                stack = error.stack.replace(/^\s+at\s+/gm, '').
-                    replace(/^([^\(]+?)([\n$])/gm, '{anonymous}($1)$2').
-                    replace(/^Object.<anonymous>\s*\(([^\)]+)\)/gm, '{anonymous}($1)').split('\n');
-                stack.shift();
-            } else {
-                // Firefox
-                stack = error.stack.replace(/(?:\n@:0)?\s+$/m, '').
-                    replace(/^\(/gm, '{anonymous}(').split('\n');
-            }
-
-            stackStr = "\n    " + stack.slice(2).join("\n    ");
-            message = message + stackStr;
-        }
-
-        Ember.Logger.warn("DEPRECATION: "+message);
-    };
-
-
-
-    /**
-     Alias an old, deprecated method with its new counterpart.
-
-     Display a deprecation warning with the provided message and a stack trace
-     (Chrome and Firefox only) when the assigned method is called.
-
-     Ember build tools will not remove calls to `Ember.deprecateFunc()`, though
-     no warnings will be shown in production.
-
-     ```javascript
-     Ember.oldMethod = Ember.deprecateFunc("Please use the new, updated method", Ember.newMethod);
-     ```
-
-     @method deprecateFunc
-     @param {String} message A description of the deprecation.
-     @param {Function} func The new function called to replace its deprecated counterpart.
-     @return {Function} a new function that wrapped the original function with a deprecation warning
-     */
-    Ember.deprecateFunc = function(message, func) {
-        return function() {
-            Ember.deprecate(message);
-            return func.apply(this, arguments);
-        };
-    };
-
-
-// Inform the developer about the Ember Inspector if not installed.
-    if (!Ember.testing) {
-        if (typeof window !== 'undefined' && window.chrome && window.addEventListener) {
-            window.addEventListener("load", function() {
-                if (document.body && document.body.dataset && !document.body.dataset.emberExtension) {
-                    Ember.debug('For more advanced debugging, install the Ember Inspector from https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi');
-                }
-            }, false);
-        }
-    }
-
-})();
-
-// ==========================================================================
-// Project:   Ember - JavaScript Application Framework
-// Copyright: Copyright 2011-2013 Tilde Inc. and contributors
-//            Portions Copyright 2006-2011 Strobe Inc.
-//            Portions Copyright 2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license
-//            See https://raw.github.com/emberjs/ember.js/master/LICENSE
-// ==========================================================================
-
-
-// Version: v1.0.0-289-g90d5bb9
-// Last commit: 90d5bb9 (2013-10-11 11:40:54 -0700)
-
-
 (function() {
     var define, requireModule;
 
@@ -9529,7 +9260,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
          @class Ember
          @static
-         @version 1.0.0
+         @version 1.1.0-beta.4
          */
 
         if ('undefined' === typeof Ember) {
@@ -9556,10 +9287,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         /**
          @property VERSION
          @type String
-         @default '1.0.0'
+         @default '1.1.0-beta.4'
          @final
          */
-        Ember.VERSION = '1.0.0';
+        Ember.VERSION = '1.1.0-beta.4';
 
         /**
          Standard environmental variables. You can define these in a global `ENV`
@@ -9587,27 +9318,22 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         /**
          Hash of enabled Canary features. Add to before creating your application.
 
-         You can also define `ENV.FEATURES` if you need to enable features flagged at runtime.
-
          @property FEATURES
          @type Hash
          */
 
-        Ember.FEATURES = Ember.ENV.FEATURES || {};
+        Ember.FEATURES = {};
 
         /**
          Test that a feature is enabled. Parsed by Ember's build tools to leave
          experimental features out of beta/stable builds.
-
-         You can define an `ENV.ENABLE_ALL_FEATURES` config to force all features to
-         be enabled.
 
          @method isEnabled
          @param {string} feature
          */
 
         Ember.FEATURES.isEnabled = function(feature) {
-            return Ember.ENV.ENABLE_ALL_FEATURES || Ember.FEATURES[feature];
+            return Ember.FEATURES[feature];
         };
 
 // ..........................................................
@@ -10226,14 +9952,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @module ember-metal
          */
 
-        /**
-         @private
-
-         Prefix used for guids through out Ember.
-
-         */
-        Ember.GUID_PREFIX = 'ember';
-
 
         var o_defineProperty = Ember.platform.defineProperty,
             o_create = Ember.create,
@@ -10288,13 +10006,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @return {String} the guid
          */
         Ember.generateGuid = function generateGuid(obj, prefix) {
-            if (!prefix) prefix = Ember.GUID_PREFIX;
+            if (!prefix) prefix = 'ember';
             var ret = (prefix + (uuid++));
             if (obj) {
                 GUID_DESC.value = ret;
                 o_defineProperty(obj, GUID_KEY, GUID_DESC);
             }
-            return ret;
+            return ret ;
         };
 
         /**
@@ -10500,7 +10218,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          shared with its constructor
          */
         Ember.metaPath = function metaPath(obj, path, writable) {
-            Ember.deprecate("Ember.metaPath is deprecated and will be removed from future releases.");
+
             var meta = Ember.meta(obj, writable), keyName, value;
 
             for (var i=0, l=path.length; i<l; i++) {
@@ -11230,8 +10948,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 obj = null;
             }
 
-            Ember.assert("Cannot call get with "+ keyName +" key.", !!keyName);
-            Ember.assert("Cannot call get with '"+ keyName +"' on an undefined object.", obj !== undefined);
+
 
             if (obj === null || keyName.indexOf('.') !== -1) {
                 return getPath(obj, keyName);
@@ -11333,6 +11050,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
         Ember.get = get;
+        Ember.getPath = Ember.deprecateFunc('getPath is deprecated since get now supports paths', Ember.get);
 
     })();
 
@@ -11449,7 +11167,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {Boolean} once A flag whether a function should only be called once
          */
         function addListener(obj, eventName, target, method, once) {
-            Ember.assert("You must pass at least an object and event name to Ember.addListener", !!obj && !!eventName);
+
 
             if (!method && 'function' === typeof target) {
                 method = target;
@@ -11484,7 +11202,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {Function|String} method A function or the name of a function to be called on `target`
          */
         function removeListener(obj, eventName, target, method) {
-            Ember.assert("You must pass at least an object and event name to Ember.removeListener", !!obj && !!eventName);
+
 
             if (!method && 'function' === typeof target) {
                 method = target;
@@ -12082,20 +11800,18 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          */
         var set = function set(obj, keyName, value, tolerant) {
             if (typeof obj === 'string') {
-                Ember.assert("Path '" + obj + "' must be global if no obj is given.", IS_GLOBAL.test(obj));
+
                 value = keyName;
                 keyName = obj;
                 obj = null;
             }
 
-            Ember.assert("Cannot call set with "+ keyName +" key.", !!keyName);
 
             if (!obj || keyName.indexOf('.') !== -1) {
                 return setPath(obj, keyName, value, tolerant);
             }
 
-            Ember.assert("You need to provide an object and key to `set`.", !!obj && keyName !== undefined);
-            Ember.assert('calling set on destroyed object', !obj.isDestroyed);
+
 
             var meta = obj[META_KEY], desc = meta && meta.descs[keyName],
                 isUnknown, currentValue;
@@ -12171,6 +11887,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         }
 
         Ember.set = set;
+        Ember.setPath = Ember.deprecateFunc('setPath is deprecated since set now supports paths', Ember.set);
 
         /**
          Error-tolerant form of `Ember.set`. Will not blow up if any part of the
@@ -12188,6 +11905,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         Ember.trySet = function(root, path, value) {
             return set(root, path, value, true);
         };
+        Ember.trySetPath = Ember.deprecateFunc('trySetPath has been renamed to trySet', Ember.trySet);
 
     })();
 
@@ -12605,7 +12323,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 //
 
         var MANDATORY_SETTER_FUNCTION = Ember.MANDATORY_SETTER_FUNCTION = function(value) {
-            Ember.assert("You must use Ember.set() to access this property (of " + this + ")", false);
+
         };
 
         var DEFAULT_GETTER_FUNCTION = Ember.DEFAULT_GETTER_FUNCTION = function(name) {
@@ -13198,51 +12916,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
     (function() {
-        /**
-         @module ember-metal
-         */
-
-        var forEach = Ember.EnumerableUtils.forEach,
-            IS_BRACE_EXPANSION = /^\{([^.]*)\}$/;
-
-        /**
-         Expands `pattern`, invoking `callback` for each expansion.
-
-         The only pattern supported is brace-expansion, anything else will be passed
-         once to `callback` directly.  Furthermore, brace-expansion is only applied to
-         the entire pattern, not to substrings.
-
-         Example
-         ```js
-         function echo(arg){ console.log(arg); }
-
-         Ember.expandProperties('foo.bar', echo);        //=> 'foo.bar'
-         Ember.expandProperties('{foo,bar}', echo);      //=> 'foo', 'bar'
-         Ember.expandProperties('foo.{bar,baz}', echo);  //=> 'foo.{bar,baz}'
-         ```
-
-         @method
-         @private
-         @param {string} pattern The property pattern to expand.
-         @param {function} callback The callback to invoke.  It is invoked once per
-         expansion, and is passed the expansion.
-         */
-        Ember.expandProperties = function (pattern, callback) {
-            if (Ember.FEATURES.isEnabled('propertyBraceExpansion')) {
-                if (IS_BRACE_EXPANSION.test(pattern)) {
-                    forEach(pattern.substring(1, pattern.length-1).split(','), callback);
-                    return;
-                }
-            }
-
-            callback(pattern);
-        };
-
-    })();
-
-
-
-    (function() {
         var metaFor = Ember.meta, // utils.js
             typeOf = Ember.typeOf, // utils.js
             ChainNode = Ember._ChainNode; // chains.js
@@ -13296,7 +12969,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         var metaFor = Ember.meta, // utils.js
             GUID_KEY = Ember.GUID_KEY, // utils.js
             META_KEY = Ember.META_KEY, // utils.js
-            expandProperties = Ember.expandProperties,
             removeChainWatcher = Ember.removeChainWatcher,
             watchKey = Ember.watchKey, // watch_key.js
             unwatchKey = Ember.unwatchKey,
@@ -13325,17 +12997,15 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param obj
          @param {String} keyName
          */
-        Ember.watch = function(obj, _keyPath) {
+        Ember.watch = function(obj, keyPath) {
             // can't watch length on Array - it is special...
-            if (_keyPath === 'length' && typeOf(obj) === 'array') { return; }
+            if (keyPath === 'length' && typeOf(obj) === 'array') { return; }
 
-            expandProperties(_keyPath, function (keyPath) {
-                if (isKeyName(keyPath)) {
-                    watchKey(obj, keyPath);
-                } else {
-                    watchPath(obj, keyPath);
-                }
-            });
+            if (isKeyName(keyPath)) {
+                watchKey(obj, keyPath);
+            } else {
+                watchPath(obj, keyPath);
+            }
         };
 
         Ember.isWatching = function isWatching(obj, key) {
@@ -13345,17 +13015,15 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
         Ember.watch.flushPending = Ember.flushPendingChains;
 
-        Ember.unwatch = function(obj, _keyPath) {
+        Ember.unwatch = function(obj, keyPath) {
             // can't watch length on Array - it is special...
-            if (_keyPath === 'length' && typeOf(obj) === 'array') { return; }
+            if (keyPath === 'length' && typeOf(obj) === 'array') { return; }
 
-            expandProperties(_keyPath, function (keyPath) {
-                if (isKeyName(keyPath)) {
-                    unwatchKey(obj, keyPath);
-                } else {
-                    unwatchPath(obj, keyPath);
-                }
-            });
+            if (isKeyName(keyPath)) {
+                unwatchKey(obj, keyPath);
+            } else {
+                unwatchPath(obj, keyPath);
+            }
         };
 
         /**
@@ -13374,7 +13042,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             // make sure the object has its own guid.
             if (GUID_KEY in obj && !obj.hasOwnProperty(GUID_KEY)) {
-                generateGuid(obj);
+                generateGuid(obj, 'ember');
             }
 
             // make sure any chained watchers update.
@@ -13435,13 +13103,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @module ember-metal
          */
 
-        Ember.warn("The CP_DEFAULT_CACHEABLE flag has been removed and computed properties are always cached by default. Use `volatile` if you don't want caching.", Ember.ENV.CP_DEFAULT_CACHEABLE !== false);
 
 
         var get = Ember.get,
             set = Ember.set,
             metaFor = Ember.meta,
-            expandProperties = Ember.expandProperties,
             a_slice = [].slice,
             o_create = Ember.create,
             META_KEY = Ember.META_KEY,
@@ -13701,13 +13367,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @chainable
          */
         ComputedPropertyPrototype.property = function() {
-            function addArg(arg) {
-                args.push(arg);
-            }
-
             var args = [];
             for (var i = 0, l = arguments.length; i < l; i++) {
-                expandProperties(arguments[i], addArg);
+                args.push(arguments[i]);
             }
             this._dependentKeys = args;
             return this;
@@ -14560,9 +14222,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @module ember-metal
          */
 
-        var AFTER_OBSERVERS = ':change',
-            BEFORE_OBSERVERS = ':before',
-            expandProperties = Ember.expandProperties;
+        var AFTER_OBSERVERS = ':change';
+        var BEFORE_OBSERVERS = ':before';
 
         function changeEvent(keyName) {
             return keyName+AFTER_OBSERVERS;
@@ -14579,12 +14240,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {Object|Function} targetOrMethod
          @param {Function|String} [method]
          */
-        Ember.addObserver = function(obj, _path, target, method) {
-            expandProperties(_path, function (path) {
-                Ember.addListener(obj, changeEvent(path), target, method);
-                Ember.watch(obj, path);
-            });
-
+        Ember.addObserver = function(obj, path, target, method) {
+            Ember.addListener(obj, changeEvent(path), target, method);
+            Ember.watch(obj, path);
             return this;
         };
 
@@ -14599,11 +14257,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {Object|Function} targetOrMethod
          @param {Function|String} [method]
          */
-        Ember.removeObserver = function(obj, _path, target, method) {
-            expandProperties(_path, function (path) {
-                Ember.unwatch(obj, path);
-                Ember.removeListener(obj, changeEvent(path), target, method);
-            });
+        Ember.removeObserver = function(obj, path, target, method) {
+            Ember.unwatch(obj, path);
+            Ember.removeListener(obj, changeEvent(path), target, method);
             return this;
         };
 
@@ -14614,11 +14270,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {Object|Function} targetOrMethod
          @param {Function|String} [method]
          */
-        Ember.addBeforeObserver = function(obj, _path, target, method) {
-            expandProperties(_path, function (path) {
-                Ember.addListener(obj, beforeEvent(path), target, method);
-                Ember.watch(obj, path);
-            });
+        Ember.addBeforeObserver = function(obj, path, target, method) {
+            Ember.addListener(obj, beforeEvent(path), target, method);
+            Ember.watch(obj, path);
             return this;
         };
 
@@ -14657,14 +14311,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {Object|Function} targetOrMethod
          @param {Function|String} [method]
          */
-        Ember.removeBeforeObserver = function(obj, _path, target, method) {
-            expandProperties(_path, function (path) {
-                Ember.unwatch(obj, path);
-                Ember.removeListener(obj, beforeEvent(path), target, method);
-            });
+        Ember.removeBeforeObserver = function(obj, path, target, method) {
+            Ember.unwatch(obj, path);
+            Ember.removeListener(obj, beforeEvent(path), target, method);
             return this;
         };
-
     })();
 
 
@@ -15755,7 +15406,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 // Make sure it's not an autorun during testing
         function checkAutoRun() {
             if (!Ember.run.currentRunLoop) {
-                Ember.assert("You have turned on testing mode, which disabled the run-loop's autorun. You will need to wrap any code with asynchronous side-effects in an Ember.run", !Ember.testing);
+
             }
         }
 
@@ -15919,7 +15570,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @return {Ember.Binding} `this`
              */
             connect: function(obj) {
-                Ember.assert('Must pass a valid object to Ember.Binding.connect()', !!obj);
+
 
                 var fromPath = this._from, toPath = this._to;
                 Ember.trySet(obj, toPath, getWithGlobals(obj, fromPath));
@@ -15944,7 +15595,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @return {Ember.Binding} `this`
              */
             disconnect: function(obj) {
-                Ember.assert('Must pass a valid object to Ember.Binding.disconnect()', !!obj);
+
 
                 var twoWay = !this._oneWay;
 
@@ -16372,7 +16023,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     return Ember.makeArray(baseValue).concat(value);
                 }
             } else {
-                return Ember.makeArray(value);
+                // Make sure this mixin has its own array so it is not
+                // accidentally mutated by another child's interactions
+                return Ember.makeArray(value).slice();
             }
         }
 
@@ -16435,7 +16088,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             for(var i=0, l=mixins.length; i<l; i++) {
                 mixin = mixins[i];
-                Ember.assert('Expected hash or Mixin instance, got ' + Object.prototype.toString.call(mixin), typeof mixin === 'object' && mixin !== null && Object.prototype.toString.call(mixin) !== '[object Array]');
+
 
                 props = mixinProperties(m, mixin);
                 if (props === CONTINUE) { continue; }
@@ -16708,7 +16361,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             for(idx=0; idx < len; idx++) {
                 mixin = arguments[idx];
-                Ember.assert('Expected hash or Mixin instance, got ' + Object.prototype.toString.call(mixin), typeof mixin === 'object' && mixin !== null && Object.prototype.toString.call(mixin) !== '[object Array]');
+
 
                 if (mixin instanceof Mixin) {
                     mixins.push(mixin);
@@ -16853,7 +16506,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @deprecated Use `Ember.aliasMethod` or `Ember.computed.alias` instead
          */
         Ember.alias = function(methodName) {
-            Ember.deprecate("Ember.alias is deprecated. Please use Ember.aliasMethod or Ember.computed.alias instead.");
+
             return new Alias(methodName);
         };
 
@@ -16939,7 +16592,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         Ember.immediateObserver = function() {
             for (var i=0, l=arguments.length; i<l; i++) {
                 var arg = arguments[i];
-                Ember.assert("Immediate observers must observe internal properties only, not properties on other objects.", typeof arg !== "string" || arg.indexOf('.') === -1);
+
             }
 
             return Ember.observer.apply(this, arguments);
@@ -18729,7 +18382,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             // avoid cyclical loops
             if (deep && (loc=indexOf(seen, obj))>=0) return copies[loc];
 
-            Ember.assert('Cannot clone an Ember.Object that does not implement Ember.Copyable', !(obj instanceof Ember.Object) || (Ember.Copyable && Ember.Copyable.detect(obj)));
 
             // IMPORTANT: this specific test will detect a native array only. Any other
             // object will need to implement Copyable.
@@ -19899,36 +19551,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 return this ;
             }
 
-        });
-
-        if (Ember.FEATURES.isEnabled("ember-runtime-sortBy")) {
-            Ember.Enumerable.reopen({
-                /**
-                 Converts the enumerable into an array and sorts by the keys
-                 specified in the argument.
-
-                 You may provide multiple arguments to sort by multiple properties.
-
-                 @method sortBy
-                 @param {String} property name(s) to sort on
-                 @return {Array} The sorted array.
-                 */
-                sortBy: function() {
-                    var sortKeys = arguments;
-                    return this.toArray().sort(function(a, b){
-                        for(var i = 0; i < sortKeys.length; i++) {
-                            var key = sortKeys[i],
-                                propA = get(a, key),
-                                propB = get(b, key);
-                            // return 1 or -1 else continue to the next sortKey
-                            var compareValue = Ember.compare(propA, propB);
-                            if (compareValue) { return compareValue; }
-                        }
-                        return 0;
-                    });
-                }
-            });
-        }
+        }) ;
 
     })();
 
@@ -20364,7 +19987,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
     (function() {
-        var e_get = Ember.get,
+        var get = Ember.get,
             set = Ember.set,
             guidFor = Ember.guidFor,
             metaFor = Ember.meta,
@@ -20382,16 +20005,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         // testing, but there's no particular reason why it should be disallowed.
             eachPropertyPattern = /^(.*)\.@each\.(.*)/,
             doubleEachPropertyPattern = /(.*\.@each){2,}/;
-
-        function get(obj, key) {
-            if (Ember.FEATURES.isEnabled('reduceComputedSelf')) {
-                if (key === '@self') {
-                    return obj;
-                }
-            }
-
-            return e_get(obj, key);
-        }
 
         /*
          Tracks changes to dependent arrays, as well as to properties of items in
@@ -20426,7 +20039,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         }
 
         function ItemPropertyObserverContext (dependentArray, index, trackedArray) {
-            Ember.assert("Internal error: trackedArray is null or undefined", trackedArray);
+
 
             this.dependentArray = dependentArray;
             this.index = index;
@@ -20447,7 +20060,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             setupObservers: function (dependentArray, dependentKey) {
-                Ember.assert("dependent array must be an `Ember.Array`", Ember.Array.detect(dependentArray));
+
 
                 this.dependentKeysByGuid[guidFor(dependentArray)] = dependentKey;
 
@@ -20828,7 +20441,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             };
 
             this.func = function (propertyName) {
-                Ember.assert("Computed reduce values require at least one dependent key", cp._dependentKeys);
+
 
                 recompute.call(this, propertyName);
 
@@ -21037,37 +20650,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
       }
     });
   };
-         ```
-
-         Dependent keys may refer to `@self` to observe changes to the object itself,
-         which must be array-like, rather than a property of the object.  This is
-         mostly useful for array proxies, to ensure objects are retrieved via
-         `objectAtContent`.  This is how you could sort items by properties defined on an item controller.
-
-         Example
-
-         ```javascript
-         App.PeopleController = Ember.ArrayController.extend({
-    itemController: 'person',
-
-    sortedPeople: Ember.computed.sort('@self.@each.reversedName', function(personA, personB) {
-      // `reversedName` isn't defined on Person, but we have access to it via
-      // the item controller App.PersonController.  If we'd used
-      // `content.@each.reversedName` above, we would be getting the objects
-         // directly and not have access to `reversedName`.
-         //
-         var reversedNameA = get(personA, 'reversedName'),
-         reversedNameB = get(personB, 'reversedName');
-
-         return Ember.compare(reversedNameA, reversedNameB);
-         })
-         });
-
-         App.PersonController = Ember.ObjectController.extend({
-    reversedName: function () {
-      return reverse(get(this, 'name'));
-    }.property('name')
-  })
          ```
 
          @method reduceComputed
@@ -21883,7 +21465,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          on the sort property array or callback function
          */
         Ember.computed.sort = function (itemsKey, sortDefinition) {
-            Ember.assert("Ember.computed.sort requires two arguments: an array key to sort and either a sort properties key or sort function", arguments.length === 2);
+
 
             var initFn, sortPropertiesKey;
 
@@ -21903,7 +21485,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             idx,
                             asc;
 
-                        Ember.assert("Cannot sort: '" + sortPropertiesKey + "' is not an array.", Ember.isArray(sortPropertyDefinitions));
 
                         changeMeta.property.clearItemPropertyKeys(itemsKey);
 
@@ -22252,34 +21833,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             capitalize: function(str) {
                 return str.charAt(0).toUpperCase() + str.substr(1);
             }
+
         };
-
-        if (Ember.FEATURES.isEnabled("string-humanize")) {
-            /**
-             Returns the Humanized form of a string
-
-             Replaces underscores with spaces, and capitializes first character
-             of string. Also strips "_id" suffixes.
-
-             ```javascript
-             'first_name'.humanize()       // 'First name'
-             'user_id'.humanize()          // 'User'
-             ```
-
-             @method humanize
-             @param {String} str The string to humanize.
-             @return {String} The humanized string.
-             */
-
-            Ember.String.humanize = function(str) {
-                return str.replace(/_id$/, '').
-                    replace(/_/g, ' ').
-                    replace(/^\w/g, function(s){
-                        return s.toUpperCase();
-                    });
-            };
-        }
-
 
     })();
 
@@ -22302,10 +21857,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             underscore = Ember.String.underscore,
             capitalize = Ember.String.capitalize,
             classify = Ember.String.classify;
-
-        if (Ember.FEATURES.isEnabled("string-humanize")) {
-            var humanize = Ember.String.humanize;
-        }
 
         if (Ember.EXTEND_PROTOTYPES === true || Ember.EXTEND_PROTOTYPES.String) {
 
@@ -22398,18 +21949,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             String.prototype.capitalize = function() {
                 return capitalize(this);
             };
-
-            if (Ember.FEATURES.isEnabled("string-humanize")) {
-                /**
-                 See [Ember.String.humanize](/api/classes/Ember.String.html#method_humanize).
-
-                 @method humanize
-                 @for String
-                 */
-                String.prototype.humanize = function() {
-                    return humanize(this);
-                };
-            }
 
         }
 
@@ -22551,7 +22090,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             Function.prototype.observesImmediately = function() {
                 for (var i=0, l=arguments.length; i<l; i++) {
                     var arg = arguments[i];
-                    Ember.assert("Immediate observers must observe internal properties only, not properties on other objects.", arg.indexOf('.') === -1);
+
                 }
 
                 return this.observes.apply(this, arguments);
@@ -23646,6 +23185,29 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             /**
+             @deprecated
+             @method getPath
+             @param {String} path The property path to retrieve
+             @return {Object} The property value or undefined.
+             */
+            getPath: function(path) {
+
+                return this.get(path);
+            },
+
+            /**
+             @deprecated
+             @method setPath
+             @param {String} path The path to the property that will be set
+             @param {Object} value The value to set or `null`.
+             @return {Ember.Observable}
+             */
+            setPath: function(path, value) {
+
+                return this.set(path, value);
+            },
+
+            /**
              Retrieves the value of a property, or a default value in the case that the
              property returns `undefined`.
 
@@ -23677,7 +23239,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              */
             incrementProperty: function(keyName, increment) {
                 if (Ember.isNone(increment)) { increment = 1; }
-                Ember.assert("Must pass a numeric value to incrementProperty", (!isNaN(parseFloat(increment)) && isFinite(increment)));
+
                 set(this, keyName, (get(this, keyName) || 0) + increment);
                 return get(this, keyName);
             },
@@ -23697,7 +23259,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              */
             decrementProperty: function(keyName, decrement) {
                 if (Ember.isNone(decrement)) { decrement = 1; }
-                Ember.assert("Must pass a numeric value to decrementProperty", (!isNaN(parseFloat(decrement)) && isFinite(decrement)));
+
                 set(this, keyName, (get(this, keyName) || 0) - decrement);
                 return get(this, keyName);
             },
@@ -23869,7 +23431,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     if (target.send) {
                         ret = target.send.apply(target, args(actionContext, action));
                     } else {
-                        Ember.assert("The action '" + action + "' did not exist on " + target, typeof target[action] === 'function');
+
                         ret = target[action].apply(target, args(actionContext));
                     }
 
@@ -24172,7 +23734,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 }
 
                 if (target = get(this, 'target')) {
-                    Ember.assert("The `target` for " + this + " (" + target + ") does not have a `send` method", typeof target.send === 'function');
+
                     target.send.apply(target, arguments);
                 }
             }
@@ -24808,14 +24370,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         this._operations.splice(index+1, 1);
                     }
                 }
-            },
-
-            toString: function () {
-                var str = "";
-                forEach(this._operations, function (operation) {
-                    str += " " + operation.type + ":" + operation.count;
-                });
-                return str.substring(1);
             }
         };
 
@@ -24900,7 +24454,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     for (var i = 0, l = props.length; i < l; i++) {
                         var properties = props[i];
 
-                        Ember.assert("Ember.Object.create no longer supports mixing in other definitions, use createWithMixins instead.", !(properties instanceof Ember.Mixin));
 
                         if (Ember.typeOf(properties) !== 'object') { continue; }
 
@@ -24924,9 +24477,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                             var desc = m.descs[keyName];
 
-                            Ember.assert("Ember.Object.create no longer supports defining computed properties.", !(value instanceof Ember.ComputedProperty));
-                            Ember.assert("Ember.Object.create no longer supports defining methods that call _super.", !(typeof value === 'function' && value.toString().indexOf('._super') !== -1));
-                            Ember.assert("`actions` must be provided at extend time, not at create time, when Ember.ActionHandler is used (i.e. views, controllers & routes).", !((keyName === 'actions') && Ember.ActionHandler.detect(this)));
+
+
 
                             if (concatenatedProperties && indexOf(concatenatedProperties, keyName) >= 0) {
                                 var baseValue = this[keyName];
@@ -25330,7 +24882,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 proto = Class.prototype = o_create(this.prototype);
                 proto.constructor = Class;
-                generateGuid(proto);
+                generateGuid(proto, 'ember');
                 meta(proto).proto = proto; // this will disable observers on prototype
 
                 Class.ClassMixin.apply(Class);
@@ -25535,7 +25087,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             metaForProperty: function(key) {
                 var desc = meta(this.proto(), false).descs[key];
 
-                Ember.assert("metaForProperty() could not find a computed property with key '"+key+"'.", !!desc && desc instanceof Ember.ComputedProperty);
                 return desc._meta || {};
             },
 
@@ -25584,36 +25135,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @module ember
          @submodule ember-runtime
          */
-
-        if (Ember.FEATURES.isEnabled("em-o")) {
-            /**
-             Shorthand for `Ember.Object.create(properties)`.
-
-             Wraps a vanilla/native object in an `Ember.Object` instance with the same
-             properties. The `properties` argument will not be altered.
-
-             If you pass an instance of `Ember.Object` as the `properties` argument, the
-             same object will be returned.
-
-             Example:
-
-             ```javascript
-             var john1 = Ember.O({name: 'John'});
-             //...has the same effect as:
-             var john2 = Ember.Object.create({name: 'John'});
-
-             console.log(john1 === Em.O(john1); //true
-             ```
-
-             @method O
-             @for Ember
-             @param {Object} [properties]
-             @returns Ember.Object
-             */
-            Ember.O = function(properties) {
-                return Ember.Object.detectInstance(properties) ? properties : Ember.Object.create(properties);
-            };
-        }
 
         /**
          `Ember.Object` is the main base class for all Ember objects. It is a subclass
@@ -25767,7 +25288,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 }
 
                 if (isNamespace) {
-                    Ember.deprecate("Namespaces should not begin with lowercase.", /^[A-Z]/.test(prop));
+
                     obj[NAME_KEY] = prop;
                 }
             }
@@ -25985,7 +25506,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             _contentDidChange: Ember.observer(function() {
                 var content = get(this, 'content');
 
-                Ember.assert("Can't set ArrayProxy's content to itself", content !== this);
 
                 this._setupContent();
             }, 'content'),
@@ -26015,7 +25535,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var arrangedContent = get(this, 'arrangedContent'),
                     len = arrangedContent ? get(arrangedContent, 'length') : 0;
 
-                Ember.assert("Can't set ArrayProxy's content to itself", arrangedContent !== this);
 
                 this._setupArrangedContent();
 
@@ -26060,7 +25579,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             _replace: function(idx, amt, objects) {
                 var content = get(this, 'content');
-                Ember.assert('The content property of '+ this.constructor + ' should be set before modifying it', content);
+
                 if (content) this.replaceContent(idx, amt, objects);
                 return this;
             },
@@ -26285,7 +25804,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              */
             content: null,
             _contentDidChange: Ember.observer(function() {
-                Ember.assert("Can't set ObjectProxy's content to itself", this.get('content') !== this);
+
             }, 'content'),
 
             isTruthy: Ember.computed.bool('content'),
@@ -26321,7 +25840,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 }
 
                 var content = get(this, 'content');
-                Ember.assert(fmt("Cannot delegate set('%@', %@) to the 'content' property of object proxy %@: its 'content' is undefined.", [key, value, this]), content);
+
                 return set(content, key, value);
             }
 
@@ -26372,7 +25891,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             while(--loc>=idx) {
                 var item = content.objectAt(loc);
                 if (item) {
-                    Ember.assert('When using @each to observe the array ' + content + ', the array must return an object', Ember.typeOf(item) === 'instance' || Ember.typeOf(item) === 'object');
+
                     Ember.addBeforeObserver(item, keyName, proxy, 'contentKeyWillChange');
                     Ember.addObserver(item, keyName, proxy, 'contentKeyDidChange');
 
@@ -26577,7 +26096,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var len = objects ? get(objects, 'length') : 0;
                 this.arrayContentWillChange(idx, amt, len);
 
-                if (len === 0) {
+                if (!objects || objects.length === 0) {
                     this.splice(idx, amt);
                 } else {
                     replace(this, idx, amt, objects);
@@ -27322,8 +26841,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             deprecatedSend: function(actionName) {
                 var args = [].slice.call(arguments, 1);
-                Ember.assert('' + this + " has the action " + actionName + " but it is not a function", typeof this[actionName] === 'function');
-                Ember.deprecate('Action handlers implemented directly on controllers are deprecated in favor of action handlers on an `actions` object (' + actionName + ' on ' + this + ')', false);
+
+
                 this[actionName].apply(this, args);
                 return;
             }
@@ -27448,7 +26967,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     sortAscending = get(this, 'sortAscending'),
                     sortFunction = get(this, 'sortFunction');
 
-                Ember.assert("you need to define `sortProperties`", !!sortProperties);
 
                 forEach(sortProperties, function(propertyName) {
                     if (result === 0) {
@@ -27903,12 +27421,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @submodule ember-views
          */
 
-        var jQuery = this.jQuery || (Ember.imports && Ember.imports.jQuery);
-        if (!jQuery && typeof require === 'function') {
-            jQuery = require('jquery');
-        }
+        var jQuery = Ember.imports.jQuery;
 
-        Ember.assert("Ember Views require jQuery 1.7, 1.8, 1.9, 1.10, or 2.0", jQuery && (jQuery().jquery.match(/^((1\.(7|8|9|10))|2.0)(\.\d+)?(pre|rc\d?)?/) || Ember.ENV.FORCE_JQUERY));
 
         /**
          Alias for jQuery
@@ -28052,7 +27566,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             } else {
                 // Firefox versions < 11 do not have support for element.outerHTML.
                 var outerHTML = element.outerHTML || new XMLSerializer().serializeToString(element);
-                Ember.assert("Can't set innerHTML on "+element.tagName+" in this browser", outerHTML);
+
 
                 var startTag = outerHTML.match(new RegExp("<"+tagName+"([^>]*)>", 'i'))[0],
                     endTag = '</'+tagName+'>';
@@ -28729,13 +28243,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 rootElement = Ember.$(get(this, 'rootElement'));
 
-                Ember.assert(fmt('You cannot use the same root element (%@) multiple times in an Ember.Application', [rootElement.selector || rootElement[0].tagName]), !rootElement.is('.ember-application'));
-                Ember.assert('You cannot make a new Ember.Application using a root element that is a descendent of an existing Ember.Application', !rootElement.closest('.ember-application').length);
-                Ember.assert('You cannot make a new Ember.Application using a root element that is an ancestor of an existing Ember.Application', !rootElement.find('.ember-application').length);
+
+
 
                 rootElement.addClass('ember-application');
 
-                Ember.assert('Unable to add "ember-application" class to rootElement. Make sure you set rootElement to the body or an element in the body.', rootElement.is('.ember-application'));
 
                 for (event in events) {
                     if (events.hasOwnProperty(event)) {
@@ -28949,7 +28461,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             ret.replace = function (idx, removedCount, addedViews) {
                 if (view instanceof Ember.ContainerView) {
-                    Ember.deprecate("Manipulating an Ember.ContainerView through its childViews property is deprecated. Please use the ContainerView instance itself as an Ember.MutableArray.");
+
                     return view.replace(idx, removedCount, addedViews);
                 }
                 throw new Ember.Error("childViews is immutable");
@@ -28958,7 +28470,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             return ret;
         });
 
-        Ember.warn("The VIEW_PRESERVES_CONTEXT flag has been removed and the functionality can no longer be disabled.", Ember.ENV.VIEW_PRESERVES_CONTEXT !== false);
 
         /**
          Global hash of shared templates. This will automatically be populated
@@ -29107,8 +28618,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             deprecatedSend: function(actionName) {
                 var args = [].slice.call(arguments, 1);
-                Ember.assert('' + this + " has the action " + actionName + " but it is not a function", typeof this[actionName] === 'function');
-                Ember.deprecate('Action handlers implemented directly on views are deprecated in favor of action handlers on an `actions` object (' + actionName + ' on ' + this + ')', false);
+
+
                 this[actionName].apply(this, args);
                 return;
             },
@@ -29826,7 +29337,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     var templateName = get(this, 'templateName'),
                         template = this.templateForName(templateName, 'template');
 
-                    Ember.assert("You specified the templateName " + templateName + " for " + this + ", but it did not exist.", !templateName || template);
 
                     return template || get(this, 'defaultTemplate');
                 }).property('templateName'),
@@ -29861,7 +29371,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     var layoutName = get(this, 'layoutName'),
                         layout = this.templateForName(layoutName, 'layout');
 
-                    Ember.assert("You specified the layoutName " + layoutName + " for " + this + ", but it did not exist.", !layoutName || layout);
 
                     return layout || get(this, 'defaultLayout');
                 }).property('layoutName'),
@@ -29873,7 +29382,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 templateForName: function(name, type) {
                     if (!name) { return; }
-                    Ember.assert("templateNames are not allowed to contain periods: "+name, name.indexOf('.') === -1);
+
 
                     // the defaultContainer is deprecated
                     var container = this.container || (Ember.Container && Ember.Container.defaultContainer);
@@ -29998,7 +29507,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                  @deprecated
                  */
                 nearestInstanceOf: function(klass) {
-                    Ember.deprecate("nearestInstanceOf is deprecated and will be removed from future releases. Use nearestOfType.");
+
                     var view = get(this, 'parentView');
 
                     while (view) {
@@ -30134,7 +29643,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         // is the view's controller by default. A hash of data is also passed that provides
                         // the template with access to the view and render buffer.
 
-                        Ember.assert('template must be a function. Did you mean to call Ember.Handlebars.compile("...") or specify templateName instead?', typeof template === 'function');
                         // The template should write directly to the render buffer instead
                         // of returning a string.
                         output = template(context, { data: data });
@@ -30405,8 +29913,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     // Schedule the DOM element to be created and appended to the given
                     // element after bindings have synchronized.
                     this._insertElementLater(function() {
-                        Ember.assert("You tried to append to (" + target + ") but that isn't in the DOM", Ember.$(target).length > 0);
-                        Ember.assert("You cannot append to an existing Ember.View. Consider using Ember.ContainerView instead.", !Ember.$(target).is('.ember-view') && !Ember.$(target).parents().is('.ember-view'));
+
+
                         this.$().appendTo(target);
                     });
 
@@ -30427,8 +29935,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                  @return {Ember.View} received
                  */
                 replaceIn: function(target) {
-                    Ember.assert("You tried to replace in (" + target + ") but that isn't in the DOM", Ember.$(target).length > 0);
-                    Ember.assert("You cannot replace an existing Ember.View. Consider using Ember.ContainerView instead.", !Ember.$(target).is('.ember-view') && !Ember.$(target).parents().is('.ember-view'));
+
+
 
                     this._insertElementLater(function() {
                         Ember.$(target).empty();
@@ -30898,10 +30406,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     // setup child views. be sure to clone the child views array first
                     this._childViews = this._childViews.slice();
 
-                    Ember.assert("Only arrays are allowed for 'classNameBindings'", Ember.typeOf(this.classNameBindings) === 'array');
                     this.classNameBindings = Ember.A(this.classNameBindings.slice());
 
-                    Ember.assert("Only arrays are allowed for 'classNames'", Ember.typeOf(this.classNames) === 'array');
                     this.classNames = Ember.A(this.classNames.slice());
                 },
 
@@ -31044,12 +30550,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         var fullName = 'view:' + view;
                         var View = this.container.lookupFactory(fullName);
 
-                        Ember.assert("Could not find view: '" + fullName + "'", !!View);
 
                         attrs.templateData = get(this, 'templateData');
                         view = View.create(attrs);
                     } else {
-                        Ember.assert('You must pass instance or subclass of View', view.isView);
+
                         attrs.container = this.container;
 
                         if (!get(view, 'templateData')) {
@@ -31579,7 +31084,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             empty: function() {
-                Ember.assert("Emptying a view in the inBuffer state is not allowed and should not happen under normal circumstances. Most likely there is a bug in your application. This may be due to excessive property change notifications.");
+
             },
 
             renderToBufferIfNeeded: function (view, buffer) {
@@ -31706,7 +31211,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 // Register the view for event handling. This hash is used by
                 // Ember.EventDispatcher to dispatch incoming events.
                 if (!view.isVirtual) {
-                    Ember.assert("Attempted to register a view with an id already in use: "+view.elementId, !Ember.View.views[view.elementId]);
+
                     Ember.View.views[view.elementId] = view;
                 }
 
@@ -31992,7 +31497,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             replace: function(idx, removedCount, addedViews) {
                 var addedCount = addedViews ? get(addedViews, 'length') : 0;
                 var self = this;
-                Ember.assert("You can't add a child to a container that is already a child of another view", Ember.A(addedViews).every(function(item) { return !get(item, '_parentView') || get(item, '_parentView') === self; }));
+
 
                 this.arrayContentWillChange(idx, removedCount, addedCount);
                 this.childViewsWillChange(this._childViews, idx, removedCount);
@@ -32117,7 +31622,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             _currentViewDidChange: Ember.observer(function() {
                 var currentView = get(this, 'currentView');
                 if (currentView) {
-                    Ember.assert("You tried to set a current view that already has a parent. Make sure you don't have multiple outlets in the same view.", !get(currentView, '_parentView'));
+
                     this.pushObject(currentView);
                 }
             }, 'currentView'),
@@ -32448,7 +31953,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @method _assertArrayLike
              */
             _assertArrayLike: function(content) {
-                Ember.assert(fmt("an Ember.CollectionView's content must implement Ember.Array. You passed %@", [content]), Ember.Array.detect(content));
+
             },
 
             /**
@@ -32539,7 +32044,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         itemViewClass = get(itemViewClass) || itemViewClass;
                     }
 
-                    Ember.assert(fmt("itemViewClass must be a subclass of Ember.View, not %@", [itemViewClass]), 'string' === typeof itemViewClass || Ember.View.detect(itemViewClass));
 
                     for (idx = start; idx < start+added; idx++) {
                         item = content.objectAt(idx);
@@ -32738,7 +32242,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     template = get(this, 'template');
 
                 if (template) {
-                    Ember.assert("A Component must have a parent view in order to yield.", parentView);
+
 
                     view.appendChild(Ember.View, {
                         isVirtual: true,
@@ -32827,10 +32331,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 // Send the default action
                 if (action === undefined) {
                     actionName = get(this, 'action');
-                    Ember.assert("The default action was triggered on the component " + this.toString() + ", but the action name (" + actionName + ") was not a string.", isNone(actionName) || typeof actionName === 'string');
+
                 } else {
                     actionName = get(this, action);
-                    Ember.assert("The " + action + " action was triggered on the component " + this.toString() + ", but the action name (" + actionName + ") was not a string.", isNone(actionName) || typeof actionName === 'string');
+
                 }
 
                 // If no action name for that action could be found, just abort.
@@ -33418,8 +32922,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             Handlebars = require('handlebars');
         }
 
-        Ember.assert("Ember Handlebars requires Handlebars version 1.0.0. Include a SCRIPT tag in the HTML HEAD linking to the Handlebars file before you link to Ember.", Handlebars);
-        Ember.assert("Ember Handlebars requires Handlebars version 1.0.0, COMPILER_REVISION expected: 4, got: " +  Handlebars.COMPILER_REVISION + " - Please note: Builds of master may have other COMPILER_REVISION values.", Handlebars.COMPILER_REVISION === 4);
+
 
         /**
          Prepares the Handlebars templating library for use inside Ember's view
@@ -33491,32 +32994,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {String} dependentKeys*
          */
         Ember.Handlebars.helper = function(name, value) {
-            Ember.assert("You tried to register a component named '" + name + "', but component names must include a '-'", !Ember.Component.detect(value) || name.match(/-/));
+
 
             if (Ember.View.detect(value)) {
-                Ember.Handlebars.registerHelper(name, Ember.Handlebars.makeViewHelper(value));
+                Ember.Handlebars.registerHelper(name, function(options) {
+
+                    return Ember.Handlebars.helpers.view.call(this, value, options);
+                });
             } else {
                 Ember.Handlebars.registerBoundHelper.apply(null, arguments);
             }
-        };
-
-        /**
-         @private
-
-         Returns a helper function that renders the provided ViewClass.
-
-         Used internally by Ember.Handlebars.helper and other methods
-         involving helper/component registration.
-
-         @method helper
-         @for Ember.Handlebars
-         @param {Function} ViewClass view class constructor
-         */
-        Ember.Handlebars.makeViewHelper = function(ViewClass) {
-            return function(options) {
-                Ember.assert("You can only pass attributes (such as name=value) not bare values to a helper for a View", arguments.length < 2);
-                return Ember.Handlebars.helpers.view.call(this, ViewClass, options);
-            };
         };
 
         /**
@@ -33575,43 +33062,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          */
         Ember.Handlebars.JavaScriptCompiler.prototype.appendToBuffer = function(string) {
             return "data.buffer.push("+string+");";
-        };
-
-// Hacks ahead:
-// Handlebars presently has a bug where the `blockHelperMissing` hook
-// doesn't get passed the name of the missing helper name, but rather
-// gets passed the value of that missing helper evaluated on the current
-// context, which is most likely `undefined` and totally useless.
-//
-// So we alter the compiled template function to pass the name of the helper
-// instead, as expected.
-//
-// This can go away once the following is closed:
-// https://github.com/wycats/handlebars.js/issues/617
-
-        var DOT_LOOKUP_REGEX = /helpers\.(.*?)\)/,
-            BRACKET_STRING_LOOKUP_REGEX = /helpers\['(.*?)'/,
-            INVOCATION_SPLITTING_REGEX = /(.*blockHelperMissing\.call\(.*)(stack[0-9]+)(,.*)/;
-
-        Ember.Handlebars.JavaScriptCompiler.stringifyLastBlockHelperMissingInvocation = function(source) {
-            var helperInvocation = source[source.length - 1],
-                helperName = (DOT_LOOKUP_REGEX.exec(helperInvocation) || BRACKET_STRING_LOOKUP_REGEX.exec(helperInvocation))[1],
-                matches = INVOCATION_SPLITTING_REGEX.exec(helperInvocation);
-
-            source[source.length - 1] = matches[1] + "'" + helperName + "'" + matches[3];
-        }
-        var stringifyBlockHelperMissing = Ember.Handlebars.JavaScriptCompiler.stringifyLastBlockHelperMissingInvocation;
-
-        var originalBlockValue = Ember.Handlebars.JavaScriptCompiler.prototype.blockValue;
-        Ember.Handlebars.JavaScriptCompiler.prototype.blockValue = function() {
-            originalBlockValue.apply(this, arguments);
-            stringifyBlockHelperMissing(this.source);
-        };
-
-        var originalAmbiguousBlockValue = Ember.Handlebars.JavaScriptCompiler.prototype.ambiguousBlockValue;
-        Ember.Handlebars.JavaScriptCompiler.prototype.ambiguousBlockValue = function() {
-            originalAmbiguousBlockValue.apply(this, arguments);
-            stringifyBlockHelperMissing(this.source);
         };
 
         var prefix = "ember" + (+new Date()), incr = 1;
@@ -33708,8 +33158,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
     })();
 
     (function() {
-        var slice = Array.prototype.slice,
-            originalTemplate = Ember.Handlebars.template;
+        var slice = Array.prototype.slice;
 
         /**
          @private
@@ -33785,6 +33234,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             }
             return value;
         };
+        Ember.Handlebars.getPath = Ember.deprecateFunc('`Ember.Handlebars.getPath` has been changed to `Ember.Handlebars.get` for consistency.', Ember.Handlebars.get);
 
         Ember.Handlebars.resolveParams = function(context, params, options) {
             var resolvedParams = [], types = options.types, param, type;
@@ -33836,56 +33286,14 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {String} path
          @param {Hash} options
          */
-        Ember.Handlebars.registerHelper('helperMissing', function(path) {
+        Ember.Handlebars.registerHelper('helperMissing', function(path, options) {
             var error, view = "";
-
-            var options = arguments[arguments.length - 1];
-
-            if (Ember.FEATURES.isEnabled('container-renderables')) {
-
-                var helper = Ember.Handlebars.resolveHelper(options.data.view.container, path);
-
-                if (helper) {
-                    return helper.apply(this, slice.call(arguments, 1));
-                }
-            }
 
             error = "%@ Handlebars error: Could not find property '%@' on object %@.";
             if (options.data) {
                 view = options.data.view;
             }
             throw new Ember.Error(Ember.String.fmt(error, [view, path, this]));
-        });
-
-        /**
-         @private
-
-         Registers a helper in Handlebars that will be called if no property with the
-         given name can be found on the current context object, and no helper with
-         that name is registered.
-
-         This throws an exception with a more helpful error message so the user can
-         track down where the problem is happening.
-
-         @method helperMissing
-         @for Ember.Handlebars.helpers
-         @param {String} path
-         @param {Hash} options
-         */
-        Ember.Handlebars.registerHelper('blockHelperMissing', function(path) {
-
-            var options = arguments[arguments.length - 1];
-
-            if (Ember.FEATURES.isEnabled('container-renderables')) {
-
-                var helper = Ember.Handlebars.resolveHelper(options.data.view.container, path);
-
-                if (helper) {
-                    return helper.apply(this, slice.call(arguments, 1));
-                }
-            }
-
-            return Handlebars.helpers.blockHelperMissing.apply(this, arguments);
         });
 
         /**
@@ -33998,39 +33406,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {String} dependentKeys*
          */
         Ember.Handlebars.registerBoundHelper = function(name, fn) {
-            var boundHelperArgs = slice.call(arguments, 1),
-                boundFn = Ember.Handlebars.makeBoundHelper.apply(this, boundHelperArgs);
-            Ember.Handlebars.registerHelper(name, boundFn);
-        };
-
-        /**
-         @private
-
-         A (mostly) private helper function to `registerBoundHelper`. Takes the
-         provided Handlebars helper function fn and returns it in wrapped
-         bound helper form.
-
-         The main use case for using this outside of `registerBoundHelper`
-         is for registering helpers on the container:
-
-         ```js
-         var boundHelperFn = Ember.Handlebars.makeBoundHelper(function(word) {
-    return word.toUpperCase();
-  });
-
-         container.register('helper:my-bound-helper', boundHelperFn);
-         ```
-
-         In the above example, if the helper function hadn't been wrapped in
-         `makeBoundHelper`, the registered helper would be unbound.
-
-         @method makeBoundHelper
-         @for Ember.Handlebars
-         @param {Function} function
-         @param {String} dependentKeys*
-         */
-        Ember.Handlebars.makeBoundHelper = function(fn) {
-            var dependentKeys = slice.call(arguments, 1);
+            var dependentKeys = slice.call(arguments, 2);
 
             function helper() {
                 var properties = slice.call(arguments, 0, -1),
@@ -34048,7 +33424,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     boundOption, property,
                     normalizedValue = Ember._SimpleHandlebarsView.prototype.normalizedValue;
 
-                Ember.assert("registerBoundHelper-generated helpers do not support use with Handlebars blocks.", !options.fn);
 
                 // Detect bound options (e.g. countBinding="otherCount")
                 var boundOptions = hash.boundOptions = {};
@@ -34143,7 +33518,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             }
 
             helper._rawFunction = fn;
-            return helper;
+            Ember.Handlebars.registerHelper(name, helper);
         };
 
         /**
@@ -34181,10 +33556,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
          @method template
          @for Ember.Handlebars
-         @param {String} spec
+         @param {String} template spec
          */
         Ember.Handlebars.template = function(spec) {
-            var t = originalTemplate(spec);
+            var t = Handlebars.template(spec);
             t.isTop = true;
             return t;
         };
@@ -34344,7 +33719,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             init: function() {
                 this._super();
                 this.morph = Metamorph();
-                Ember.deprecate('Supplying a tagName to Metamorph views is unreliable and is deprecated. You may be setting the tagName on a Handlebars helper that creates a Metamorph.', !this.tagName);
+
             },
 
             beforeRender: function(buffer) {
@@ -34860,7 +34235,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         /**
          @private
 
-         '_triageMustache' is used internally select between a binding, helper, or component for
+         '_triageMustache' is used internally select between a binding and helper for
          the given context. Until this point, it would be hard to determine if the
          mustache is a property reference or a regular helper reference. This triage
          helper resolves that.
@@ -34870,46 +34245,18 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @method _triageMustache
          @for Ember.Handlebars.helpers
          @param {String} property Property/helperID to triage
-         @param {Object} options hash of template/rendering options
+         @param {Function} fn Context to provide for rendering
          @return {String} HTML string
          */
-        EmberHandlebars.registerHelper('_triageMustache', function(property, options) {
-            Ember.assert("You cannot pass more than one argument to the _triageMustache helper", arguments.length <= 2);
+        EmberHandlebars.registerHelper('_triageMustache', function(property, fn) {
 
             if (helpers[property]) {
-                return helpers[property].call(this, options);
+                return helpers[property].call(this, fn);
             }
-
-            if (Ember.FEATURES.isEnabled('container-renderables')) {
-
-                var helper = Ember.Handlebars.resolveHelper(options.data.view.container, property);
-                if (helper) {
-                    return helper.call(this, options);
-                }
+            else {
+                return helpers.bind.apply(this, arguments);
             }
-
-            return helpers.bind.call(this, property, options);
         });
-
-        Ember.Handlebars.resolveHelper = function(container, name) {
-
-            if (!container || name.indexOf('-') === -1) {
-                return;
-            }
-
-            var helper = container.lookup('helper:' + name);
-            if (!helper) {
-                var componentLookup = container.lookup('component-lookup:main');
-                Ember.assert("Could not find 'component-lookup:main' on the provided container, which is necessary for performing component lookups", componentLookup);
-
-                var Component = componentLookup.lookupFactory(name, container);
-                if (Component) {
-                    helper = EmberHandlebars.makeViewHelper(Component);
-                    container.register('helper:' + name, helper);
-                }
-            }
-            return helper;
-        };
 
         /**
          @private
@@ -34936,7 +34283,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @return {String} HTML string
          */
         EmberHandlebars.registerHelper('bind', function(property, options) {
-            Ember.assert("You cannot pass more than one argument to the bind helper", arguments.length <= 2);
+
 
             var context = (options.contexts && options.contexts.length) ? options.contexts[0] : this;
 
@@ -34992,12 +34339,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             if (arguments.length === 4) {
                 var keywordName, path, rootPath, normalized;
 
-                Ember.assert("If you pass more than one argument to the with helper, it must be in the form #with foo as bar", arguments[1] === "as");
                 options = arguments[3];
                 keywordName = arguments[2];
                 path = arguments[0];
 
-                Ember.assert("You must pass a block to the with helper", options.fn && options.fn !== Handlebars.VM.noop);
 
                 if (Ember.isGlobalPath(path)) {
                     Ember.bind(options.data.keywords, keywordName, path);
@@ -35018,8 +34363,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 return bind.call(this, path, options, true, exists);
             } else {
-                Ember.assert("You must pass exactly one argument to the with helper", arguments.length === 2);
-                Ember.assert("You must pass a block to the with helper", options.fn && options.fn !== Handlebars.VM.noop);
+
+
                 return helpers.bind.call(options.contexts[0], context, options);
             }
         });
@@ -35035,8 +34380,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @return {String} HTML string
          */
         EmberHandlebars.registerHelper('if', function(context, options) {
-            Ember.assert("You must pass exactly one argument to the if helper", arguments.length === 2);
-            Ember.assert("You must pass a block to the if helper", options.fn && options.fn !== Handlebars.VM.noop);
+
+
 
             return helpers.boundIf.call(options.contexts[0], context, options);
         });
@@ -35049,8 +34394,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @return {String} HTML string
          */
         EmberHandlebars.registerHelper('unless', function(context, options) {
-            Ember.assert("You must pass exactly one argument to the unless helper", arguments.length === 2);
-            Ember.assert("You must pass a block to the unless helper", options.fn && options.fn !== Handlebars.VM.noop);
+
+
 
             var fn = options.fn, inverse = options.inverse;
 
@@ -35099,7 +34444,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
          `bind-attr` supports a special syntax for handling a number of cases unique
          to the `class` DOM element attribute. The `class` attribute combines
-         multiple discrete values into a single attribute as a space-delimited
+         multiple discreet values into a single attribute as a space-delimited
          list of strings. Each string can be:
 
          * a string return value of an object's property.
@@ -35187,7 +34532,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             var attrs = options.hash;
 
-            Ember.assert("You must specify at least one hash argument to bind-attr", !!Ember.keys(attrs).length);
 
             var view = options.data.view;
             var ret = [];
@@ -35215,21 +34559,18 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var path = attrs[attr],
                     normalized;
 
-                Ember.assert(fmt("You must provide an expression as the value of bound attribute. You specified: %@=%@", [attr, path]), typeof path === 'string');
 
                 normalized = normalizePath(ctx, path, options.data);
 
                 var value = (path === 'this') ? normalized.root : handlebarsGet(ctx, path, options),
                     type = Ember.typeOf(value);
 
-                Ember.assert(fmt("Attributes must be numbers, strings or booleans, not %@", [value]), value === null || value === undefined || type === 'number' || type === 'string' || type === 'boolean');
 
                 var observer, invoker;
 
                 observer = function observer() {
                     var result = handlebarsGet(ctx, path, options);
 
-                    Ember.assert(fmt("Attributes must be numbers, strings or booleans, not %@", [result]), result === null || result === undefined || typeof result === 'number' || typeof result === 'string' || typeof result === 'boolean');
 
                     var elem = view.$("[data-bindattr-" + dataId + "='" + dataId + "']");
 
@@ -35426,7 +34767,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     var value = hash[prop];
 
                     if (Ember.IS_BINDING.test(prop)) {
-                        Ember.warn("You're attempting to render a view by passing " + prop + "=" + value + " to a view helper, but this syntax is ambiguous. You should either surround " + value + " in quotes or remove `Binding` from " + prop + ".");
+
                     } else {
                         hash[prop + 'Binding'] = value;
                         hashType[prop + 'Binding'] = 'STRING';
@@ -35447,7 +34788,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
         EmberHandlebars.ViewHelper = Ember.Object.create({
 
-            propertiesFromHTMLOptions: function(options) {
+            propertiesFromHTMLOptions: function(options, thisContext) {
                 var hash = options.hash, data = options.data;
                 var extensions = {},
                     classes = hash['class'],
@@ -35481,7 +34822,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 }
 
                 if (hash.attributeBindings) {
-                    Ember.assert("Setting 'attributeBindings' via Handlebars is not allowed. Please subclass Ember.View and set it there instead.");
+
                     extensions.attributeBindings = null;
                     dup = true;
                 }
@@ -35563,18 +34904,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     // as deprecation warnings
                     //
                     if (options.types[0] === 'STRING' && LOWERCASE_A_Z.test(path) && !VIEW_PREFIX.test(path)) {
-                        Ember.assert("View requires a container", !!data.view.container);
+
                         newView = data.view.container.lookupFactory('view:' + path);
                     } else {
                         newView = EmberHandlebars.get(thisContext, path, options);
                     }
 
-                    Ember.assert("Unable to find view at path '" + path + "'", !!newView);
                 } else {
                     newView = path;
                 }
 
-                Ember.assert(Ember.String.fmt('You must pass a view to the #view helper, not %@ (%@)', [path, newView]), Ember.View.detect(newView) || Ember.View.detectInstance(newView));
 
                 var viewOptions = this.propertiesFromHTMLOptions(options, thisContext);
                 var currentView = data.view;
@@ -35582,7 +34921,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 var newViewProto = newView.proto ? newView.proto() : newView;
 
                 if (fn) {
-                    Ember.assert("You cannot provide a template block if you also specified a templateName", !get(viewOptions, 'templateName') && !get(newViewProto, 'templateName'));
+
                     viewOptions.template = fn;
                 }
 
@@ -35762,7 +35101,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @return {String} HTML string
          */
         EmberHandlebars.registerHelper('view', function(path, options) {
-            Ember.assert("The view helper only takes a single argument", arguments.length <= 2);
+
 
             // If no path is provided, treat path param as options.
             if (path && path.data && path.data.isRenderData) {
@@ -35912,15 +35251,15 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @deprecated Use `{{each}}` helper instead.
          */
         Ember.Handlebars.registerHelper('collection', function(path, options) {
-            Ember.deprecate("Using the {{collection}} helper without specifying a class has been deprecated as the {{each}} helper now supports the same functionality.", path !== 'collection');
+
 
             // If no path is provided, treat path param as options.
             if (path && path.data && path.data.isRenderData) {
                 options = path;
                 path = undefined;
-                Ember.assert("You cannot pass more than one argument to the collection helper", arguments.length === 1);
+
             } else {
-                Ember.assert("You cannot pass more than one argument to the collection helper", arguments.length === 2);
+
             }
 
             var fn = options.fn;
@@ -35932,7 +35271,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             // Otherwise, just default to the standard class.
             var collectionClass;
             collectionClass = path ? handlebarsGet(this, path, options) : Ember.CollectionView;
-            Ember.assert(fmt("%@ #collection: Could not find collection class %@", [data.view, path]), !!collectionClass);
+
 
             var hash = options.hash, itemHash = {}, match;
 
@@ -35942,17 +35281,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
             if (hash.itemView) {
                 var controller = data.keywords.controller;
-                Ember.assert('You specified an itemView, but the current context has no container to look the itemView up in. This probably means that you created a view manually, instead of through the container. Instead, use container.lookup("view:viewName"), which will properly instantiate your view.', controller && controller.container);
+
                 var container = controller.container;
-                itemViewClass = container.resolve('view:' + hash.itemView);
-                Ember.assert('You specified the itemView ' + hash.itemView + ", but it was not found at " + container.describe("view:" + hash.itemView) + " (and it was not registered in the container)", !!itemViewClass);
+                itemViewClass = container.resolve('view:' + Ember.String.camelize(hash.itemView));
+
             } else if (hash.itemViewClass) {
                 itemViewClass = handlebarsGet(collectionPrototype, hash.itemViewClass, options);
             } else {
                 itemViewClass = collectionPrototype.itemViewClass;
             }
 
-            Ember.assert(fmt("%@ #collection: Could not find itemViewClass %@", [data.view, itemViewClass]), !!itemViewClass);
 
             delete hash.itemViewClass;
             delete hash.itemView;
@@ -36142,8 +35480,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             _assertArrayLike: function(content) {
-                Ember.assert("The value that #each loops over must be an Array. You passed " + content.constructor + ", but it should have been an ArrayController", !Ember.ControllerMixin.detect(content) || (content && content.isGenerated) || content instanceof Ember.ArrayController);
-                Ember.assert("The value that #each loops over must be an Array. You passed " + ((Ember.ControllerMixin.detect(content) && content.get('model') !== undefined) ? ("" + content.get('model') + " (wrapped in " + content + ")") : ("" + content)), Ember.Array.detect(content));
+
+
             },
 
             disableContentObservers: function(callback) {
@@ -36479,7 +35817,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          */
         Ember.Handlebars.registerHelper('each', function(path, options) {
             if (arguments.length === 4) {
-                Ember.assert("If you pass more than one argument to the each helper, it must be in the form #each foo in bar", arguments[1] === "in");
+
 
                 var keywordName = arguments[0];
 
@@ -36561,7 +35899,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          */
 
         Ember.Handlebars.registerHelper('template', function(name, options) {
-            Ember.deprecate("The `template` helper has been deprecated in favor of the `partial` helper. Please use `partial` instead, which will work the same way.");
+
             return Ember.Handlebars.helpers.partial.apply(this, arguments);
         });
 
@@ -36612,7 +35950,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 template = view.templateForName(underscoredName),
                 deprecatedTemplate = !template && view.templateForName(name);
 
-            Ember.assert("Unable to find partial with name '"+name+"'.", template || deprecatedTemplate);
 
             template = template || deprecatedTemplate;
 
@@ -36724,7 +36061,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 }
             }
 
-            Ember.assert("You called yield in a template that was not a layout", !!view);
 
             view._yield(this, options);
         });
@@ -36858,7 +36194,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         Ember.TextSupport = Ember.Mixin.create({
             value: "",
 
-            attributeBindings: ['placeholder', 'disabled', 'maxlength', 'tabindex', 'readonly'],
+            attributeBindings: ['placeholder', 'disabled', 'maxlength', 'tabindex'],
             placeholder: null,
             disabled: false,
             maxlength: null,
@@ -37218,7 +36554,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             init: function() {
-                Ember.deprecate("Ember.Button is deprecated and will be removed from future releases. Consider using the `{{action}}` helper.");
+
                 this._super();
             }
         });
@@ -38046,7 +37382,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          * `indeterminate`
          * `name`
 
-
          When set to a quoted string, these values will be directly applied to the HTML
          element. When left unquoted, these values will be bound to a property on the
          template's current rendering context (most typically a controller instance).
@@ -38098,7 +37433,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {Hash} options
          */
         Ember.Handlebars.registerHelper('input', function(options) {
-            Ember.assert('You can only pass attributes to the `input` helper, not arguments', arguments.length < 2);
+
 
             var hash = options.hash,
                 types = options.hashTypes,
@@ -38265,44 +37600,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @param {Hash} options
          */
         Ember.Handlebars.registerHelper('textarea', function(options) {
-            Ember.assert('You can only pass attributes to the `textarea` helper, not arguments', arguments.length < 2);
+
 
             var hash = options.hash,
                 types = options.hashTypes;
 
             return Ember.Handlebars.helpers.view.call(this, Ember.TextArea, options);
-        });
-
-    })();
-
-
-
-    (function() {
-        Ember.ComponentLookup = Ember.Object.extend({
-            lookupFactory: function(name, container) {
-
-                container = container || this.container;
-
-                var fullName = 'component:' + name,
-                    templateFullName = 'template:components/' + name,
-                    templateRegistered = container && container.has(templateFullName);
-
-                if (templateRegistered) {
-                    container.injection(fullName, 'layout', templateFullName);
-                }
-
-                var Component = container.lookupFactory(fullName);
-
-                // Only treat as a component if either the component
-                // or a template has been registered.
-                if (templateRegistered || Component) {
-                    if (!Component) {
-                        container.register(fullName, Ember.Component);
-                        Component = container.lookupFactory(fullName);
-                    }
-                    return Component;
-                }
-            }
         });
 
     })();
@@ -38380,7 +37683,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
         function registerComponent(container, name) {
-            Ember.assert("You provided a template named 'components/" + name + "', but custom components must include a '-'", name.match(/-/));
+
 
             var fullName = 'component:' + name;
 
@@ -38394,10 +37697,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             }
 
             Ember.Handlebars.helper(name, Component);
-        }
-
-        function registerComponentLookup(container) {
-            container.register('component-lookup:main', Ember.ComponentLookup);
         }
 
         /*
@@ -38417,24 +37716,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 initialize: bootstrap
             });
 
-            var useNewComponentLookup = false;
-            if (Ember.FEATURES.isEnabled('container-renderables')) {
-                useNewComponentLookup = true;
-            }
-
-            if (useNewComponentLookup) {
-                Application.initializer({
-                    name: 'registerComponentLookup',
-                    after: 'domTemplates',
-                    initialize: registerComponentLookup
-                });
-            } else {
-                Application.initializer({
-                    name: 'registerComponents',
-                    after: 'domTemplates',
-                    initialize: registerComponents
-                });
-            }
+            Application.initializer({
+                name: 'registerComponents',
+                after: 'domTemplates',
+                initialize: registerComponents
+            });
         });
 
     })();
@@ -38558,7 +37844,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             results.push(new StarSegment(match[1]));
                             names.push(match[1]);
                             types.stars++;
-                        } else if(segment === "") {
+                        } else if (segment === "") {
                             results.push(new EpsilonSegment());
                         } else {
                             results.push(new StaticSegment(segment));
@@ -38707,31 +37993,19 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     return nextStates;
                 }
 
-                function findHandler(state, path, queryParams) {
+                function findHandler(state, path) {
                     var handlers = state.handlers, regex = state.regex;
                     var captures = path.match(regex), currentCapture = 1;
                     var result = [];
 
                     for (var i=0, l=handlers.length; i<l; i++) {
-                        var handler = handlers[i], names = handler.names, params = {},
-                            watchedQueryParams = handler.queryParams || [],
-                            activeQueryParams = {},
-                            j, m;
+                        var handler = handlers[i], names = handler.names, params = {};
 
-                        for (j=0, m=names.length; j<m; j++) {
+                        for (var j=0, m=names.length; j<m; j++) {
                             params[names[j]] = captures[currentCapture++];
                         }
-                        for (j=0, m=watchedQueryParams.length; j < m; j++) {
-                            var key = watchedQueryParams[j];
-                            if(queryParams[key]){
-                                activeQueryParams[key] = queryParams[key];
-                            }
-                        }
-                        var currentResult = { handler: handler.handler, params: params, isDynamic: !!names.length };
-                        if(watchedQueryParams && watchedQueryParams.length > 0) {
-                            currentResult.queryParams = activeQueryParams;
-                        }
-                        result.push(currentResult);
+
+                        result.push({ handler: handler.handler, params: params, isDynamic: !!names.length });
                     }
 
                     return result;
@@ -38786,11 +38060,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                                 regex += segment.regex();
                             }
 
-                            var handler = { handler: route.handler, names: names };
-                            if(route.queryParams) {
-                                handler.queryParams = route.queryParams;
-                            }
-                            handlers.push(handler);
+                            handlers.push({ handler: route.handler, names: names });
                         }
 
                         if (isEmpty) {
@@ -38842,61 +38112,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                         if (output.charAt(0) !== '/') { output = '/' + output; }
 
-                        if (params && params.queryParams) {
-                            output += this.generateQueryString(params.queryParams, route.handlers);
-                        }
-
                         return output;
-                    },
-
-                    generateQueryString: function(params, handlers) {
-                        var pairs = [], allowedParams = [];
-                        for(var i=0; i < handlers.length; i++) {
-                            var currentParamList = handlers[i].queryParams;
-                            if(currentParamList) {
-                                allowedParams.push.apply(allowedParams, currentParamList);
-                            }
-                        }
-                        for(var key in params) {
-                            if (params.hasOwnProperty(key)) {
-                                if(allowedParams.indexOf(key) === -1) {
-                                    throw 'Query param "' + key + '" is not specified as a valid param for this route';
-                                }
-                                var value = params[key];
-                                var pair = encodeURIComponent(key);
-                                if(value !== true) {
-                                    pair += "=" + encodeURIComponent(value);
-                                }
-                                pairs.push(pair);
-                            }
-                        }
-
-                        if (pairs.length === 0) { return ''; }
-
-                        return "?" + pairs.join("&");
-                    },
-
-                    parseQueryString: function(queryString) {
-                        var pairs = queryString.split("&"), queryParams = {};
-                        for(var i=0; i < pairs.length; i++) {
-                            var pair      = pairs[i].split('='),
-                                key       = decodeURIComponent(pair[0]),
-                                value     = pair[1] ? decodeURIComponent(pair[1]) : true;
-                            queryParams[key] = value;
-                        }
-                        return queryParams;
                     },
 
                     recognize: function(path) {
                         var states = [ this.rootState ],
-                            pathLen, i, l, queryStart, queryParams = {};
-
-                        queryStart = path.indexOf('?');
-                        if (queryStart !== -1) {
-                            var queryString = path.substr(queryStart + 1, path.length);
-                            path = path.substr(0, queryStart);
-                            queryParams = this.parseQueryString(queryString);
-                        }
+                            pathLen, i, l;
 
                         // DEBUG GROUP path
 
@@ -38924,7 +38145,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         var state = solutions[0];
 
                         if (state && state.handlers) {
-                            return findHandler(state, path, queryParams);
+                            return findHandler(state, path);
                         }
                     }
                 };
@@ -38949,35 +38170,18 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             if (callback.length === 0) { throw new Error("You must have an argument in the function passed to `to`"); }
                             this.matcher.addChild(this.path, target, callback, this.delegate);
                         }
-                        return this;
-                    },
-
-                    withQueryParams: function() {
-                        if (arguments.length === 0) { throw new Error("you must provide arguments to the withQueryParams method"); }
-                        for (var i = 0; i < arguments.length; i++) {
-                            if (typeof arguments[i] !== "string") {
-                                throw new Error('you should call withQueryParams with a list of strings, e.g. withQueryParams("foo", "bar")');
-                            }
-                        }
-                        var queryParams = [].slice.call(arguments);
-                        this.matcher.addQueryParams(this.path, queryParams);
                     }
                 };
 
                 function Matcher(target) {
                     this.routes = {};
                     this.children = {};
-                    this.queryParams = {};
                     this.target = target;
                 }
 
                 Matcher.prototype = {
                     add: function(path, handler) {
                         this.routes[path] = handler;
-                    },
-
-                    addQueryParams: function(path, params) {
-                        this.queryParams[path] = params;
                     },
 
                     addChild: function(path, target, callback, delegate) {
@@ -39006,26 +38210,23 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     };
                 }
 
-                function addRoute(routeArray, path, handler, queryParams) {
+                function addRoute(routeArray, path, handler) {
                     var len = 0;
                     for (var i=0, l=routeArray.length; i<l; i++) {
                         len += routeArray[i].path.length;
                     }
 
                     path = path.substr(len);
-                    var route = { path: path, handler: handler };
-                    if(queryParams) { route.queryParams = queryParams; }
-                    routeArray.push(route);
+                    routeArray.push({ path: path, handler: handler });
                 }
 
                 function eachRoute(baseRoute, matcher, callback, binding) {
                     var routes = matcher.routes;
-                    var queryParams = matcher.queryParams;
 
                     for (var path in routes) {
                         if (routes.hasOwnProperty(path)) {
                             var routeArray = baseRoute.slice();
-                            addRoute(routeArray, path, routes[path], queryParams[path]);
+                            addRoute(routeArray, path, routes[path]);
 
                             if (matcher.children[path]) {
                                 eachRoute(routeArray, matcher.children[path], callback, binding);
@@ -39164,9 +38365,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                      */
                     retry: function() {
                         this.abort();
+
                         var recogHandlers = this.router.recognizer.handlersFor(this.targetName),
-                            handlerInfos  = generateHandlerInfosWithQueryParams(this.router, recogHandlers, this.queryParams),
-                            newTransition = performTransition(this.router, handlerInfos, this.providedModelsArray, this.params, this.queryParams, this.data);
+                            newTransition = performTransition(this.router, recogHandlers, this.providedModelsArray, this.params, this.data);
 
                         return newTransition;
                     },
@@ -39191,10 +38392,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     method: function(method) {
                         this.urlMethod = method;
                         return this;
-                    },
-
-                    toString: function() {
-                        return "Transition (sequence " + this.sequence + ")";
                     }
                 };
 
@@ -39339,21 +38536,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                      @param {Array[Object]} contexts
                      @return {Object} a serialized parameter hash
                      */
-
                     paramsForHandler: function(handlerName, contexts) {
-                        var partitionedArgs = extractQueryParams(slice.call(arguments, 1));
-                        return paramsForHandler(this, handlerName, partitionedArgs[0], partitionedArgs[1]);
-                    },
-
-                    /**
-                     This method takes a handler name and returns a list of query params
-                     that are valid to pass to the handler or its parents
-
-                     @param {String} handlerName
-                     @return {Array[String]} a list of query parameters
-                     */
-                    queryParamsForHandler: function (handlerName) {
-                        return queryParamsForHandler(this, handlerName);
+                        return paramsForHandler(this, handlerName, slice.call(arguments, 1));
                     },
 
                     /**
@@ -39367,41 +38551,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                      @return {String} a URL
                      */
                     generate: function(handlerName) {
-                        var partitionedArgs = extractQueryParams(slice.call(arguments, 1)),
-                            suppliedParams = partitionedArgs[0],
-                            queryParams = partitionedArgs[1];
-
-                        var params = paramsForHandler(this, handlerName, suppliedParams, queryParams),
-                            validQueryParams = queryParamsForHandler(this, handlerName);
-
-                        var missingParams = [];
-
-                        for (var key in queryParams) {
-                            if (queryParams.hasOwnProperty(key) && !~validQueryParams.indexOf(key)) {
-                                missingParams.push(key);
-                            }
-                        }
-
-                        if (missingParams.length > 0) {
-                            var err = 'You supplied the params ';
-                            err += missingParams.map(function(param) {
-                                return '"' + param + "=" + queryParams[param] + '"';
-                            }).join(' and ');
-
-                            err += ' which are not valid for the "' + handlerName + '" handler or its parents';
-
-                            throw new Error(err);
-                        }
-
+                        var params = paramsForHandler(this, handlerName, slice.call(arguments, 1));
                         return this.recognizer.generate(handlerName, params);
                     },
 
                     isActive: function(handlerName) {
-                        var partitionedArgs   = extractQueryParams(slice.call(arguments, 1)),
-                            contexts          = partitionedArgs[0],
-                            queryParams       = partitionedArgs[1],
-                            activeQueryParams  = {},
-                            effectiveQueryParams = {};
+                        var contexts = slice.call(arguments, 1);
 
                         var targetHandlerInfos = this.targetHandlerInfos,
                             found = false, names, object, handlerInfo, handlerObj;
@@ -39409,24 +38564,19 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         if (!targetHandlerInfos) { return false; }
 
                         var recogHandlers = this.recognizer.handlersFor(targetHandlerInfos[targetHandlerInfos.length - 1].name);
+
                         for (var i=targetHandlerInfos.length-1; i>=0; i--) {
                             handlerInfo = targetHandlerInfos[i];
                             if (handlerInfo.name === handlerName) { found = true; }
 
                             if (found) {
-                                var recogHandler = recogHandlers[i];
+                                if (contexts.length === 0) { break; }
 
-                                merge(activeQueryParams, handlerInfo.queryParams);
-                                if (queryParams !== false) {
-                                    merge(effectiveQueryParams, handlerInfo.queryParams);
-                                    mergeSomeKeys(effectiveQueryParams, queryParams, recogHandler.queryParams);
-                                }
-
-                                if (handlerInfo.isDynamic && contexts.length > 0) {
+                                if (handlerInfo.isDynamic) {
                                     object = contexts.pop();
 
                                     if (isParam(object)) {
-                                        var name = recogHandler.names[0];
+                                        var recogHandler = recogHandlers[i], name = recogHandler.names[0];
                                         if ("" + object !== this.currentParams[name]) { return false; }
                                     } else if (handlerInfo.context !== object) {
                                         return false;
@@ -39435,8 +38585,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             }
                         }
 
-
-                        return contexts.length === 0 && found && queryParamsEqual(activeQueryParams, effectiveQueryParams);
+                        return contexts.length === 0 && found;
                     },
 
                     trigger: function(name) {
@@ -39459,7 +38608,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                  a shared pivot parent route and other data necessary to perform
                  a transition.
                  */
-                function getMatchPoint(router, handlers, objects, inputParams, queryParams) {
+                function getMatchPoint(router, handlers, objects, inputParams) {
 
                     var matchPoint = handlers.length,
                         providedModels = {}, i,
@@ -39514,12 +38663,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             }
                         }
 
-                        // If there is an old handler, see if query params are the same. If there isn't an old handler,
-                        // hasChanged will already be true here
-                        if(oldHandlerInfo && !queryParamsEqual(oldHandlerInfo.queryParams, handlerObj.queryParams)) {
-                            hasChanged = true;
-                        }
-
                         if (hasChanged) { matchPoint = i; }
                     }
 
@@ -39553,28 +38696,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     return (typeof object === "string" || object instanceof String || !isNaN(object));
                 }
 
-
-
-                /**
-                 @private
-
-                 This method takes a handler name and returns a list of query params
-                 that are valid to pass to the handler or its parents
-
-                 @param {Router} router
-                 @param {String} handlerName
-                 @return {Array[String]} a list of query parameters
-                 */
-                function queryParamsForHandler(router, handlerName) {
-                    var handlers = router.recognizer.handlersFor(handlerName),
-                        queryParams = [];
-
-                    for (var i = 0; i < handlers.length; i++) {
-                        queryParams.push.apply(queryParams, handlers[i].queryParams || []);
-                    }
-
-                    return queryParams;
-                }
                 /**
                  @private
 
@@ -39586,16 +38707,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                  @param {Array[Object]} objects
                  @return {Object} a serialized parameter hash
                  */
-                function paramsForHandler(router, handlerName, objects, queryParams) {
+                function paramsForHandler(router, handlerName, objects) {
 
                     var handlers = router.recognizer.handlersFor(handlerName),
                         params = {},
-                        handlerInfos = generateHandlerInfosWithQueryParams(router, handlers, queryParams),
-                        matchPoint = getMatchPoint(router, handlerInfos, objects).matchPoint,
-                        mergedQueryParams = {},
+                        matchPoint = getMatchPoint(router, handlers, objects).matchPoint,
                         object, handlerObj, handler, names, i;
-
-                    params.queryParams = {};
 
                     for (i=0; i<handlers.length; i++) {
                         handlerObj = handlers[i];
@@ -39615,13 +38732,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             // Serialize to generate params
                             merge(params, serialize(handler, object, names));
                         }
-                        if (queryParams !== false) {
-                            mergeSomeKeys(params.queryParams, router.currentQueryParams, handlerObj.queryParams);
-                            mergeSomeKeys(params.queryParams, queryParams, handlerObj.queryParams);
-                        }
                     }
-
-                    if (queryParamsEqual(params.queryParams, {})) { delete params.queryParams; }
                     return params;
                 }
 
@@ -39631,84 +38742,24 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     }
                 }
 
-                function mergeSomeKeys(hash, other, keys) {
-                    if (!other || !keys) { return; }
-                    for(var i = 0; i < keys.length; i++) {
-                        var key = keys[i], value;
-                        if(other.hasOwnProperty(key)) {
-                            value = other[key];
-                            if(value === null || value === false || typeof value === "undefined") {
-                                delete hash[key];
-                            } else {
-                                hash[key] = other[key];
-                            }
-                        }
-                    }
-                }
-
-                /**
-                 @private
-                 */
-
-                function generateHandlerInfosWithQueryParams(router, handlers, queryParams) {
-                    var handlerInfos = [];
-
-                    for (var i = 0; i < handlers.length; i++) {
-                        var handler = handlers[i],
-                            handlerInfo = { handler: handler.handler, names: handler.names, context: handler.context, isDynamic: handler.isDynamic },
-                            activeQueryParams = {};
-
-                        if (queryParams !== false) {
-                            mergeSomeKeys(activeQueryParams, router.currentQueryParams, handler.queryParams);
-                            mergeSomeKeys(activeQueryParams, queryParams, handler.queryParams);
-                        }
-
-                        if (handler.queryParams && handler.queryParams.length > 0) {
-                            handlerInfo.queryParams = activeQueryParams;
-                        }
-
-                        handlerInfos.push(handlerInfo);
-                    }
-
-                    return handlerInfos;
-                }
-
-                /**
-                 @private
-                 */
-                function createQueryParamTransition(router, queryParams) {
-                    var currentHandlers = router.currentHandlerInfos,
-                        currentHandler = currentHandlers[currentHandlers.length - 1],
-                        name = currentHandler.name;
-
-                    log(router, "Attempting query param transition");
-
-                    return createNamedTransition(router, [name, queryParams]);
-                }
-
                 /**
                  @private
                  */
                 function createNamedTransition(router, args) {
-                    var partitionedArgs     = extractQueryParams(args),
-                        pureArgs              = partitionedArgs[0],
-                        queryParams           = partitionedArgs[1],
-                        handlers              = router.recognizer.handlersFor(pureArgs[0]),
-                        handlerInfos          = generateHandlerInfosWithQueryParams(router, handlers, queryParams);
+                    var handlers = router.recognizer.handlersFor(args[0]);
 
+                    log(router, "Attempting transition to " + args[0]);
 
-                    log(router, "Attempting transition to " + pureArgs[0]);
-
-                    return performTransition(router, handlerInfos, slice.call(pureArgs, 1), router.currentParams, queryParams);
+                    return performTransition(router, handlers, slice.call(args, 1), router.currentParams);
                 }
 
                 /**
                  @private
                  */
                 function createURLTransition(router, url) {
+
                     var results = router.recognizer.recognize(url),
-                        currentHandlerInfos = router.currentHandlerInfos,
-                        queryParams = {};
+                        currentHandlerInfos = router.currentHandlerInfos;
 
                     log(router, "Attempting URL transition to " + url);
 
@@ -39716,11 +38767,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         return errorTransition(router, new Router.UnrecognizedURLError(url));
                     }
 
-                    for(var i = 0; i < results.length; i++) {
-                        merge(queryParams, results[i].queryParams);
-                    }
-
-                    return performTransition(router, results, [], {}, queryParams);
+                    return performTransition(router, results, [], {});
                 }
 
 
@@ -39804,9 +38851,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         checkAbort(transition);
 
                         setContext(handler, context);
-                        setQueryParams(handler, handlerInfo.queryParams);
 
-                        if (handler.setup) { handler.setup(context, handlerInfo.queryParams); }
+                        if (handler.setup) { handler.setup(context); }
                         checkAbort(transition);
                     } catch(e) {
                         if (!(e instanceof Router.TransitionAborted)) {
@@ -39840,31 +38886,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 /**
                  @private
 
-                 determines if two queryparam objects are the same or not
-                 **/
-                function queryParamsEqual(a, b) {
-                    a = a || {};
-                    b = b || {};
-                    var checkedKeys = [], key;
-                    for(key in a) {
-                        if (!a.hasOwnProperty(key)) { continue; }
-                        if(b[key] !== a[key]) { return false; }
-                        checkedKeys.push(key);
-                    }
-                    for(key in b) {
-                        if (!b.hasOwnProperty(key)) { continue; }
-                        if (~checkedKeys.indexOf(key)) { continue; }
-                        // b has a key not in a
-                        return false;
-                    }
-                    return true;
-                }
-
-                /**
-                 @private
-
                  This function is called when transitioning from one URL to
-                 another to determine which handlers are no longer active,
+                 another to determine which handlers are not longer active,
                  which handlers are newly active, and which handlers remain
                  active but have their context changed.
 
@@ -39909,21 +38932,19 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         unchanged: []
                     };
 
-                    var handlerChanged, contextChanged, queryParamsChanged, i, l;
+                    var handlerChanged, contextChanged, i, l;
 
                     for (i=0, l=newHandlers.length; i<l; i++) {
                         var oldHandler = oldHandlers[i], newHandler = newHandlers[i];
 
                         if (!oldHandler || oldHandler.handler !== newHandler.handler) {
                             handlerChanged = true;
-                        } else if (!queryParamsEqual(oldHandler.queryParams, newHandler.queryParams)) {
-                            queryParamsChanged = true;
                         }
 
                         if (handlerChanged) {
                             handlers.entered.push(newHandler);
                             if (oldHandler) { handlers.exited.unshift(oldHandler); }
-                        } else if (contextChanged || oldHandler.context !== newHandler.context || queryParamsChanged) {
+                        } else if (contextChanged || oldHandler.context !== newHandler.context) {
                             contextChanged = true;
                             handlers.updatedContext.push(newHandler);
                         } else {
@@ -39976,45 +38997,21 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     if (handler.contextDidChange) { handler.contextDidChange(); }
                 }
 
-                function setQueryParams(handler, queryParams) {
-                    handler.queryParams = queryParams;
-                    if (handler.queryParamsDidChange) { handler.queryParamsDidChange(); }
-                }
-
-
-                /**
-                 @private
-
-                 Extracts query params from the end of an array
-                 **/
-
-                function extractQueryParams(array) {
-                    var len = (array && array.length), head, queryParams;
-
-                    if(len && len > 0 && array[len - 1] && array[len - 1].hasOwnProperty('queryParams')) {
-                        queryParams = array[len - 1].queryParams;
-                        head = slice.call(array, 0, len - 1);
-                        return [head, queryParams];
-                    } else {
-                        return [array, null];
-                    }
-                }
-
                 /**
                  @private
 
                  Creates, begins, and returns a Transition.
                  */
-                function performTransition(router, recogHandlers, providedModelsArray, params, queryParams, data) {
+                function performTransition(router, recogHandlers, providedModelsArray, params, data) {
 
-                    var matchPointResults = getMatchPoint(router, recogHandlers, providedModelsArray, params, queryParams),
+                    var matchPointResults = getMatchPoint(router, recogHandlers, providedModelsArray, params),
                         targetName = recogHandlers[recogHandlers.length - 1].handler,
                         wasTransitioning = false,
                         currentHandlerInfos = router.currentHandlerInfos;
 
                     // Check if there's already a transition underway.
                     if (router.activeTransition) {
-                        if (transitionsIdentical(router.activeTransition, targetName, providedModelsArray, queryParams)) {
+                        if (transitionsIdentical(router.activeTransition, targetName, providedModelsArray)) {
                             return router.activeTransition;
                         }
                         router.activeTransition.abort();
@@ -40029,7 +39026,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     transition.providedModelsArray = providedModelsArray;
                     transition.params = matchPointResults.params;
                     transition.data = data || {};
-                    transition.queryParams = queryParams;
                     router.activeTransition = transition;
 
                     var handlerInfos = generateHandlerInfos(router, recogHandlers);
@@ -40058,9 +39054,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                                 currentHandlerInfos.length !== matchPointResults.matchPoint) {
                                 finalizeTransition(transition, handlerInfos);
                             }
-
-                            // currentHandlerInfos was updated in finalizeTransition
-                            trigger(router, router.currentHandlerInfos, true, ['didTransition']);
 
                             if (router.didTransition) {
                                 router.didTransition(handlerInfos);
@@ -40099,16 +39092,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         var handlerObj = recogHandlers[i],
                             isDynamic = handlerObj.isDynamic || (handlerObj.names && handlerObj.names.length);
 
-
-                        var handlerInfo = {
+                        handlerInfos.push({
                             isDynamic: !!isDynamic,
                             name: handlerObj.handler,
                             handler: router.getHandler(handlerObj.handler)
-                        };
-                        if(handlerObj.queryParams) {
-                            handlerInfo.queryParams = handlerObj.queryParams;
-                        }
-                        handlerInfos.push(handlerInfo);
+                        });
                     }
                     return handlerInfos;
                 }
@@ -40116,7 +39104,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 /**
                  @private
                  */
-                function transitionsIdentical(oldTransition, targetName, providedModelsArray, queryParams) {
+                function transitionsIdentical(oldTransition, targetName, providedModelsArray) {
 
                     if (oldTransition.targetName !== targetName) { return false; }
 
@@ -40126,11 +39114,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     for (var i = 0, len = oldModels.length; i < len; ++i) {
                         if (oldModels[i] !== providedModelsArray[i]) { return false; }
                     }
-
-                    if(!queryParamsEqual(oldTransition.queryParams, queryParams)) {
-                        return false;
-                    }
-
                     return true;
                 }
 
@@ -40144,12 +39127,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                     var router = transition.router,
                         seq = transition.sequence,
-                        handlerName = handlerInfos[handlerInfos.length - 1].name,
-                        i;
+                        handlerName = handlerInfos[handlerInfos.length - 1].name;
 
                     // Collect params for URL.
                     var objects = [], providedModels = transition.providedModelsArray.slice();
-                    for (i = handlerInfos.length - 1; i>=0; --i) {
+                    for (var i = handlerInfos.length - 1; i>=0; --i) {
                         var handlerInfo = handlerInfos[i];
                         if (handlerInfo.isDynamic) {
                             var providedModel = providedModels.pop();
@@ -40157,17 +39139,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         }
                     }
 
-                    var newQueryParams = {};
-                    for (i = handlerInfos.length - 1; i>=0; --i) {
-                        merge(newQueryParams, handlerInfos[i].queryParams);
-                    }
-                    router.currentQueryParams = newQueryParams;
-
-
-                    var params = paramsForHandler(router, handlerName, objects, transition.queryParams);
+                    var params = paramsForHandler(router, handlerName, objects);
 
                     router.currentParams = params;
-
 
                     var urlMethod = transition.urlMethod;
                     if (urlMethod) {
@@ -40259,20 +39233,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                         log(router, seq, handlerName + ": calling beforeModel hook");
 
-                        var args;
-
-                        if (handlerInfo.queryParams) {
-                            args = [handlerInfo.queryParams, transition];
-                        } else {
-                            args = [transition];
-                        }
-
-                        var p = handler.beforeModel && handler.beforeModel.apply(handler, args);
+                        var p = handler.beforeModel && handler.beforeModel(transition);
                         return (p instanceof Transition) ? null : p;
                     }
 
                     function model() {
                         log(router, seq, handlerName + ": resolving model");
+
                         var p = getModel(handlerInfo, transition, handlerParams[handlerName], index >= matchPoint);
                         return (p instanceof Transition) ? null : p;
                     }
@@ -40287,15 +39254,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                         transition.resolvedModels[handlerInfo.name] = context;
 
-                        var args;
-
-                        if (handlerInfo.queryParams) {
-                            args = [context, handlerInfo.queryParams, transition];
-                        } else {
-                            args = [context, transition];
-                        }
-
-                        var p = handler.afterModel && handler.afterModel.apply(handler, args);
+                        var p = handler.afterModel && handler.afterModel(context, transition);
                         return (p instanceof Transition) ? null : p;
                     }
 
@@ -40326,8 +39285,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                  or use one of the models provided to `transitionTo`.
                  */
                 function getModel(handlerInfo, transition, handlerParams, needsUpdate) {
+
                     var handler = handlerInfo.handler,
-                        handlerName = handlerInfo.name, args;
+                        handlerName = handlerInfo.name;
 
                     if (!needsUpdate && handler.hasOwnProperty('context')) {
                         return handler.context;
@@ -40338,13 +39298,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         return typeof providedModel === 'function' ? providedModel() : providedModel;
                     }
 
-                    if (handlerInfo.queryParams) {
-                        args = [handlerParams || {}, handlerInfo.queryParams, transition];
-                    } else {
-                        args = [handlerParams || {}, transition, handlerInfo.queryParams];
-                    }
-
-                    return handler.model && handler.model.apply(handler, args);
+                    return handler.model && handler.model(handlerParams || {}, transition);
                 }
 
                 /**
@@ -40377,12 +39331,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     // Normalize blank transitions to root URL transitions.
                     var name = args[0] || '/';
 
-                    if(args.length === 1 && args[0].hasOwnProperty('queryParams')) {
-                        return createQueryParamTransition(router, args[0]);
-                    } else if (name.charAt(0) === '/') {
+                    if (name.charAt(0) === '/') {
                         return createURLTransition(router, name);
                     } else {
-                        return createNamedTransition(router, slice.call(args));
+                        return createNamedTransition(router, args);
                     }
                 }
 
@@ -40460,21 +39412,21 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 if (callback) {
                     var dsl = new DSL(name);
                     callback.call(dsl);
-                    this.push(options.path, name, dsl.generate(), options.queryParams);
+                    this.push(options.path, name, dsl.generate());
                 } else {
-                    this.push(options.path, name, null, options.queryParams);
+                    this.push(options.path, name);
                 }
             },
 
-            push: function(url, name, callback, queryParams) {
+            push: function(url, name, callback) {
                 var parts = name.split('.');
                 if (url === "" || url === "/" || parts[parts.length-1] === "index") { this.explicitIndex = true; }
 
-                this.matches.push([url, name, callback, queryParams]);
+                this.matches.push([url, name, callback]);
             },
 
             route: function(name, options) {
-                Ember.assert("You must use `this.resource` to nest", typeof options !== 'function');
+
 
                 options = options || {};
 
@@ -40486,7 +39438,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     name = this.parent + "." + name;
                 }
 
-                this.push(options.path, name, null, options.queryParams);
+                this.push(options.path, name);
             },
 
             generate: function() {
@@ -40499,12 +39451,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 return function(match) {
                     for (var i=0, l=dslMatches.length; i<l; i++) {
                         var dslMatch = dslMatches[i];
-                        var matchObj = match(dslMatch[0]).to(dslMatch[1], dslMatch[2]);
-                        if (Ember.FEATURES.isEnabled("query-params")) {
-                            if(dslMatch[3]) {
-                                matchObj.withQueryParams.apply(matchObj, dslMatch[3]);
-                            }
-                        }
+                        match(dslMatch[0]).to(dslMatch[1], dslMatch[2]);
                     }
                 };
             }
@@ -40608,7 +39555,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          @namespace Ember
          @extends Ember.Object
          */
-        Ember.Router = Ember.Object.extend(Ember.Evented, {
+        Ember.Router = Ember.Object.extend({
             location: 'hash',
 
             init: function() {
@@ -40652,12 +39599,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 set(appController, 'currentRouteName', infos[infos.length - 1].name);
 
                 this.notifyPropertyChange('url');
-
-                if (Ember.FEATURES.isEnabled("ember-routing-didTransition-hook")) {
-                    // Put this in the runloop so url will be accurate. Seems
-                    // less surprising than didTransition being out of sync.
-                    Ember.run.once(this, this.trigger, 'didTransition');
-                }
 
                 if (get(this, 'namespace').LOG_TRANSITIONS) {
                     Ember.Logger.log("Transitioned into '" + path + "'");
@@ -40815,23 +39756,18 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 args = [].slice.call(args);
                 args[0] = args[0] || '/';
 
-                var passedName = args[0], name, self = this,
-                    isQueryParamsOnly = false;
+                var passedName = args[0], name, self = this;
 
-                if (Ember.FEATURES.isEnabled("query-params")) {
-                    isQueryParamsOnly = (args.length === 1 && args[0].hasOwnProperty('queryParams'));
-                }
-
-                if (!isQueryParamsOnly && passedName.charAt(0) === '/') {
+                if (passedName.charAt(0) === '/') {
                     name = passedName;
-                } else if (!isQueryParamsOnly) {
+                } else {
+
                     if (!this.router.hasRoute(passedName)) {
                         name = args[0] = passedName + '.index';
                     } else {
                         name = passedName;
                     }
 
-                    Ember.assert("The route " + passedName + " was not found", this.router.hasRoute(name));
                 }
 
                 var transitionPromise = this.router[method].apply(this.router, args);
@@ -40845,7 +39781,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     self._transitionCompleted(route);
                 }, function(error) {
                     if (error.name === "UnrecognizedURLError") {
-                        Ember.assert("The URL '" + error.message + "' did not match any routes in your application");
+
                     }
                 });
 
@@ -40908,7 +39844,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         return;
                     }
                 } else if (handler.events && handler.events[name]) {
-                    Ember.deprecate('Action handlers contained in an `events` object are deprecated in favor of putting them in an `actions` object (' + name + ' on ' + handler + ')', false);
+
                     if (handler.events[name].apply(handler, args) === true) {
                         eventWasHandled = true;
                     } else {
@@ -40952,7 +39888,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             },
 
             _defaultErrorHandler: function(error, transition) {
-                Ember.Logger.assert(false, 'Error while loading route: ' + Ember.inspect(error));
+                Ember.Logger.error('Error while loading route:', error);
+
+                // Using setTimeout allows us to escape from the Promise's try/catch block
+                setTimeout(function() { throw error; });
             },
 
             _routePath: function(handlerInfos) {
@@ -41345,7 +40284,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              */
             replaceWith: function() {
                 var router = this.router;
-                return router.replaceWith.apply(router, arguments);
+                return this.router.replaceWith.apply(this.router, arguments);
             },
 
             /**
@@ -41393,7 +40332,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
              @method setup
              */
-            setup: function(context, queryParams) {
+            setup: function(context) {
                 var controllerName = this.controllerName || this.routeName,
                     controller = this.controllerFor(controllerName, true);
                 if (!controller) {
@@ -41404,24 +40343,18 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 // referenced in action handlers
                 this.controller = controller;
 
-                var args = [controller, context];
-
-                if (Ember.FEATURES.isEnabled("query-params")) {
-                    args.push(queryParams);
-                }
-
                 if (this.setupControllers) {
-                    Ember.deprecate("Ember.Route.setupControllers is deprecated. Please use Ember.Route.setupController(controller, model) instead.");
+
                     this.setupControllers(controller, context);
                 } else {
-                    this.setupController.apply(this, args);
+                    this.setupController(controller, context);
                 }
 
                 if (this.renderTemplates) {
-                    Ember.deprecate("Ember.Route.renderTemplates is deprecated. Please use Ember.Route.renderTemplate(controller, model) instead.");
+
                     this.renderTemplates(context);
                 } else {
-                    this.renderTemplate.apply(this, args);
+                    this.renderTemplate(controller, context);
                 }
             },
 
@@ -41512,7 +40445,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
              @method beforeModel
              @param {Transition} transition
-             @param {Object} queryParams the active query params for this route
              @return {Promise} if the value returned from this hook is
              a promise, the transition will pause until the transition
              resolves. Otherwise, non-promise return values are not
@@ -41546,13 +40478,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @param {Object} resolvedModel the value returned from `model`,
              or its resolved value if it was a promise
              @param {Transition} transition
-             @param {Object} queryParams the active query params for this handler
              @return {Promise} if the value returned from this hook is
              a promise, the transition will pause until the transition
              resolves. Otherwise, non-promise return values are not
              utilized in any way.
              */
-            afterModel: function(resolvedModel, transition, queryParams) {
+            afterModel: function(resolvedModel, transition) {
                 this.redirect(resolvedModel, transition);
             },
 
@@ -41612,7 +40543,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @method model
              @param {Object} params the parameters extracted from the URL
              @param {Transition} transition
-             @param {Object} queryParams the query params for this route
              @return {Object|Promise} the model for this route. If
              a promise is returned, the transition will pause until
              the promise resolves, and the resolved value of the promise
@@ -41668,7 +40598,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     find: function(name, value) {
                         var modelClass = container.lookupFactory('model:' + name);
 
-                        Ember.assert("You used the dynamic segment " + name + "_id in your route "+ routeName + ", but " + namespace + "." + classify(name) + " did not exist and you did not override your route's `model` hook.", modelClass);
 
                         return modelClass.find(value);
                     }
@@ -41811,7 +40740,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 // NOTE: We're specifically checking that skipAssert is true, because according
                 //   to the old API the second parameter was model. We do not want people who
                 //   passed a model to skip the assertion.
-                Ember.assert("The controller named '"+name+"' could not be found. Make sure that this route exists and has already been entered at least once. If you are accessing a controller not associated with a route, make sure the controller class is explicitly defined.", controller || _skipAssert === true);
+
 
                 return controller;
             },
@@ -41974,7 +40903,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @param {Object} options the options
              */
             render: function(name, options) {
-                Ember.assert("The name in the given arguments is undefined", arguments.length > 0 ? !Ember.isNone(arguments[0]) : true);
+
 
                 var namePassed = !!name;
 
@@ -41997,7 +40926,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 }
 
                 if (!view && !template) {
-                    Ember.assert("Could not find \"" + name + "\" template or view.", !namePassed);
+
                     if (get(this.router, 'namespace.LOG_VIEW_LOOKUPS')) {
                         Ember.Logger.info("Could not find \"" + name + "\" template or view. Nothing will be rendered", { fullName: 'template:' + name });
                     }
@@ -42113,7 +41042,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             options.template = template;
             options.LOG_VIEW_LOOKUPS = get(route.router, 'namespace.LOG_VIEW_LOOKUPS');
 
-            Ember.assert("An outlet ("+options.outlet+") was specified but was not found.", options.outlet === 'main' || options.into);
 
             var controller = options.controller, namedController;
 
@@ -42429,15 +41357,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         templateContext = helperParameters.context,
                         paths = getResolvedPaths(helperParameters),
                         length = paths.length,
-                        path, i, normalizedPath;
-
-                    if (Ember.FEATURES.isEnabled('link-to-non-block')) {
-                        var linkTextPath = helperParameters.options.linkTextPath;
-                        if (linkTextPath) {
-                            normalizedPath = Ember.Handlebars.normalizePath(templateContext, linkTextPath, helperParameters.options.data);
-                            this.registerObserver(normalizedPath.root, normalizedPath.path, this, this.rerender);
-                        }
-                    }
+                        path, i;
 
                     for(i=0; i < length; i++) {
                         path = paths[i];
@@ -42446,17 +41366,9 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             continue;
                         }
 
-                        normalizedPath = Ember.Handlebars.normalizePath(templateContext, path, helperParameters.options.data);
+                        var normalizedPath =
+                            Ember.Handlebars.normalizePath(templateContext, path, helperParameters.options.data);
                         this.registerObserver(normalizedPath.root, normalizedPath.path, this, this._paramsChanged);
-                    }
-
-
-                    if (Ember.FEATURES.isEnabled("query-params")) {
-                        var queryParams = get(this, '_potentialQueryParams') || [];
-
-                        for(i=0; i < queryParams.length; i++) {
-                            this.registerObserver(this, queryParams[i], this, this._queryParamsChanged);
-                        }
                     }
                 },
 
@@ -42464,24 +41376,12 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                  @private
 
                  This method is invoked by observers installed during `init` that fire
-                 whenever the params change
+                 whenever the helpers
                  @method _paramsChanged
                  */
                 _paramsChanged: function() {
                     this.notifyPropertyChange('resolvedParams');
                 },
-
-
-                /**
-                 @private
-
-                 This method is invoked by observers installed during `init` that fire
-                 whenever the query params change
-                 */
-                _queryParamsChanged: function (object, path) {
-                    this.notifyPropertyChange('queryParams');
-                },
-
 
                 /**
                  @private
@@ -42605,16 +41505,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         types = options.types,
                         data = options.data;
 
-                    if (Ember.FEATURES.isEnabled("query-params")) {
-                        if (parameters.params.length === 0) {
-                            var appController = this.container.lookup('controller:application');
-                            return [get(appController, 'currentRouteName')];
-                        } else {
-                            return resolveParams(parameters.context, parameters.params, { types: types, data: data });
-                        }
-                    }
-
-                    // Original implementation if query params not enabled
                     return resolveParams(parameters.context, parameters.params, { types: types, data: data });
                 }).property(),
 
@@ -42628,6 +41518,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                  @return {Array} An array with the route name and any dynamic segments
                  */
                 routeArgs: Ember.computed(function() {
+
                     var resolvedParams = get(this, 'resolvedParams').slice(0),
                         router = get(this, 'router'),
                         namedRoute = resolvedParams[0];
@@ -42637,7 +41528,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     namedRoute = fullRouteName(router, namedRoute);
                     resolvedParams[0] = namedRoute;
 
-                    Ember.assert(fmt("The attempt to link-to route '%@' failed. The router did not find '%@' in its possible routes: '%@'", [namedRoute, namedRoute, Ember.keys(router.router.recognizer.names).join("', '")]), router.hasRoute(namedRoute));
 
                     for (var i = 1, len = resolvedParams.length; i < len; ++i) {
                         var param = resolvedParams[i];
@@ -42647,43 +41537,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                         }
                     }
 
-                    if (Ember.FEATURES.isEnabled("query-params")) {
-                        var queryParams = get(this, 'queryParams');
-
-                        if (queryParams || queryParams === false) { resolvedParams.push({queryParams: queryParams}); }
-                    }
-
                     return resolvedParams;
-                }).property('resolvedParams', 'queryParams', 'router.url'),
-
-
-                _potentialQueryParams: Ember.computed(function () {
-                    var namedRoute = get(this, 'resolvedParams')[0];
-                    if (!namedRoute) { return null; }
-                    var router          = get(this, 'router');
-
-                    namedRoute = fullRouteName(router, namedRoute);
-
-                    return router.router.queryParamsForHandler(namedRoute);
                 }).property('resolvedParams'),
-
-                queryParams: Ember.computed(function () {
-                    var self              = this,
-                        queryParams         = null,
-                        allowedQueryParams  = get(this, '_potentialQueryParams');
-
-                    if (!allowedQueryParams) { return null; }
-                    allowedQueryParams.forEach(function (param) {
-                        var value = get(self, param);
-                        if (typeof value !== 'undefined') {
-                            queryParams = queryParams || {};
-                            queryParams[param] = value;
-                        }
-                    });
-
-
-                    return queryParams;
-                }).property('_potentialQueryParams.[]'),
 
                 /**
                  Sets the element's `href` attribute to the url for
@@ -42969,24 +41824,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 hash.disabledBinding = hash.disabledWhen;
 
-                if (Ember.FEATURES.isEnabled('link-to-non-block')) {
-                    if (!options.fn) {
-                        var linkTitle = params.shift();
-                        var linkType = options.types.shift();
-                        var context = this;
-                        if (linkType === 'ID') {
-                            options.linkTextPath = linkTitle;
-                            options.fn = function() {
-                                return Ember.Handlebars.get(context, linkTitle, options);
-                            };
-                        } else {
-                            options.fn = function() {
-                                return linkTitle;
-                            };
-                        }
-                    }
-                }
-
                 hash.parameters = {
                     context: this,
                     options: options,
@@ -43199,7 +42036,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @return {String} HTML string
              */
             Ember.Handlebars.registerHelper('render', function(name, contextString, options) {
-                Ember.assert("You must pass a template to render", arguments.length >= 2);
+
                 var contextProvided = arguments.length === 3,
                     container, router, controller, view, context, lookupOptions;
 
@@ -43217,7 +42054,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 container = options.data.keywords.controller.container;
                 router = container.lookup('router:main');
 
-                Ember.assert("You can only use the {{render}} helper once without a model object as its second argument, as in {{render \"post\" post}}.", contextProvided || !router || !router._lookupActiveView(name));
 
                 view = container.lookup('view:' + name) || container.lookup('view:default');
 
@@ -43226,7 +42062,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 // Look up the controller by name, if provided.
                 if (controllerName) {
                     controller = container.lookup('controller:' + controllerName, lookupOptions);
-                    Ember.assert("The controller name you supplied '" + controllerName + "' did not resolve to a controller.", !!controller);
+
                 } else {
                     controller = container.lookup('controller:' + name, lookupOptions) ||
                         Ember.generateController(container, name, context);
@@ -43342,7 +42178,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                             if (target.send) {
                                 target.send.apply(target, args(options.parameters, actionName));
                             } else {
-                                Ember.assert("The action '" + actionName + "' did not exist on " + target, typeof target[actionName] === 'function');
+
                                 target[actionName].apply(target, args(options.parameters));
                             }
                         });
@@ -43669,8 +42505,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     childController = subContainer.lookup('controller:' + normalizedPath),
                     childTemplate = subContainer.lookup('template:' + path);
 
-                Ember.assert("Could not find controller for path: " + normalizedPath, childController);
-                Ember.assert("Could not find view for path: " + normalizedPath, childView);
+
 
                 set(childController, 'target', controller);
                 set(childController, 'model', model);
@@ -43764,7 +42599,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @method transitionTo
              */
             transitionTo: function() {
-                Ember.deprecate("transitionTo is deprecated. Please use transitionToRoute.");
+
                 return this.transitionToRoute.apply(this, arguments);
             },
 
@@ -43817,7 +42652,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @method replaceWith
              */
             replaceWith: function() {
-                Ember.deprecate("replaceWith is deprecated. Please use replaceRoute.");
+
                 return this.replaceRoute.apply(this, arguments);
             }
         });
@@ -44049,10 +42884,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              */
             create: function(options) {
                 var implementation = options && options.implementation;
-                Ember.assert("Ember.Location.create: you must specify a 'implementation' option", !!implementation);
+
 
                 var implementationClass = this.implementations[implementation];
-                Ember.assert("Ember.Location.create: " + implementation + " is not a valid implementation", !!implementationClass);
+
 
                 return implementationClass.create.apply(implementationClass, arguments);
             },
@@ -44218,19 +43053,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @method getURL
              */
             getURL: function() {
-                if (Ember.FEATURES.isEnabled("query-params")) {
-                    // location.hash is not used because it is inconsistently
-                    // URL-decoded between browsers.
-                    var href = get(this, 'location').href,
-                        hashIndex = href.indexOf('#');
-
-                    if ( hashIndex === -1 ) {
-                        return "";
-                    } else {
-                        return href.substr(hashIndex + 1);
-                    }
-                }
-                // Default implementation without feature flag enabled
                 return get(this, 'location').hash.substr(1);
             },
 
@@ -44379,16 +43201,10 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              */
             getURL: function() {
                 var rootURL = get(this, 'rootURL'),
-                    location = get(this, 'location'),
-                    path = location.pathname;
+                    url = get(this, 'location').pathname;
 
                 rootURL = rootURL.replace(/\/$/, '');
-                var url = path.replace(rootURL, '');
-
-                if (Ember.FEATURES.isEnabled("query-params")) {
-                    var search = location.search || '';
-                    url += search;
-                }
+                url = url.replace(rootURL, '');
 
                 return url;
             },
@@ -44769,7 +43585,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     type = split[0],
                     name = split[1];
 
-                Ember.assert("Tried to normalize a container name without a colon (:) in it. You probably tried to lookup a name that did not contain a type, a colon, and a name. A proper lookup name would be `view:post`.", split.length === 2);
 
                 if (type !== 'template') {
                     var result = name;
@@ -44834,7 +43649,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     var namespaceName = capitalize(parts.slice(0, -1).join('.'));
                     root = Ember.Namespace.byName(namespaceName);
 
-                    Ember.assert('You are looking for a ' + name + ' ' + type + ' in the ' + namespaceName + ' namespace, but the namespace could not be found', root);
                 }
 
                 return {
@@ -44918,10 +43732,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 return this.resolveOther(parsedName);
             },
 
-            resolveHelper: function(parsedName) {
-                return this.resolveOther(parsedName) || Ember.Handlebars.helpers[parsedName.fullNameWithoutType];
-            },
-
             /**
              Lookup the model on the Application namespace
 
@@ -44999,7 +43809,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
             return function() {
                 var container = this._container;
 
-                Ember.deprecate('Using the defaultContainer is no longer supported. [defaultContainer#' + method + '] see: http://git.io/EKPpnA', false);
                 return container[method].apply(container, arguments);
             };
         };
@@ -45216,7 +44025,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 if (!this.$) { this.$ = Ember.$; }
                 this.__container__ = this.buildContainer();
 
-                this.Router = this.defaultRouter();
+                this.Router = this.Router || this.defaultRouter();
+                if (this.Router) { this.Router.namespace = this; }
 
                 this._super();
 
@@ -45229,12 +44039,11 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     Ember.LOG_VERSION = false; // we only need to see this once per Application#init
                     var maxNameLength = Math.max.apply(this, Ember.A(Ember.libraries).mapBy("name.length"));
 
-                    Ember.debug('-------------------------------');
                     Ember.libraries.each(function(name, version) {
                         var spaces = new Array(maxNameLength - name.length + 1).join(" ");
-                        Ember.debug([name, spaces, ' : ', version].join(""));
+
                     });
-                    Ember.debug('-------------------------------');
+
                 }
             },
 
@@ -45275,17 +44084,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @method defaultRouter
              @return {Ember.Router} the default router
              */
-
             defaultRouter: function() {
-                if (this.Router === false) { return; }
-                var container = this.__container__;
-
-                if (this.Router) {
-                    container.unregister('router:main');
-                    container.register('router:main', this.Router);
+                // Create a default App.Router if one was not supplied to make
+                // it possible to do App.Router.map(...) without explicitly
+                // creating a router first.
+                if (this.router === undefined) {
+                    return Ember.Router.extend();
                 }
-
-                return container.lookupFactory('router:main');
             },
 
             /**
@@ -45341,8 +44146,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @method deferReadiness
              */
             deferReadiness: function() {
-                Ember.assert("You must call deferReadiness on an instance of Ember.Application", this instanceof Ember.Application);
-                Ember.assert("You cannot defer readiness since the `ready()` hook has already been called.", this._readinessDeferrals > 0);
+
+
                 this._readinessDeferrals++;
             },
 
@@ -45355,7 +44160,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @see {Ember.Application#deferReadiness}
              */
             advanceReadiness: function() {
-                Ember.assert("You must call advanceReadiness on an instance of Ember.Application", this instanceof Ember.Application);
+
                 this._readinessDeferrals--;
 
                 if (this._readinessDeferrals === 0) {
@@ -45424,7 +44229,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @method initialize
              **/
             initialize: function() {
-                Ember.deprecate('Calling initialize manually is not supported. Please see Ember.Application#advanceReadiness and Ember.Application#deferReadiness');
+
             },
             /**
              @private
@@ -45442,9 +44247,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 // At this point, the App.Router must already be assigned
                 if (this.Router) {
-                    var container = this.__container__;
-                    container.unregister('router:main');
-                    container.register('router:main', this.Router);
+                    this.register('router:main', this.Router);
                 }
 
                 this.runInitializers();
@@ -45555,16 +44358,16 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     container = this.__container__,
                     graph = new Ember.DAG(),
                     namespace = this,
-                    name, initializer;
+                    i, initializer;
 
-                for (name in initializers) {
-                    initializer = initializers[name];
+                for (i=0; i<initializers.length; i++) {
+                    initializer = initializers[i];
                     graph.addEdges(initializer.name, initializer.initialize, initializer.before, initializer.after);
                 }
 
                 graph.topsort(function (vertex) {
                     var initializer = vertex.value;
-                    Ember.assert("No application initializer named '"+vertex.name+"'", initializer);
+
                     initializer(container, namespace);
                 });
             },
@@ -45663,23 +44466,15 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
         });
 
         Ember.Application.reopenClass({
-            initializers: {},
+            concatenatedProperties: ['initializers'],
+            initializers: Ember.A(),
             initializer: function(initializer) {
-                // If this is the first initializer being added to a subclass, we are going to reopen the class
-                // to make sure we have a new `initializers` object, which extends from the parent class' using
-                // prototypal inheritance. Without this, attempting to add initializers to the subclass would
-                // pollute the parent class as well as other subclasses.
-                if (this.superclass.initializers !== undefined && this.superclass.initializers === this.initializers) {
-                    this.reopenClass({
-                        initializers: Ember.create(this.initializers)
-                    });
-                }
+                var initializers = get(this, 'initializers');
 
-                Ember.assert("The initializer '" + initializer.name + "' has already been registered", !this.initializers[initializer.name]);
-                Ember.assert("An initializer cannot be registered with both a before and an after", !(initializer.before && initializer.after));
-                Ember.assert("An initializer cannot be registered without an initialize function", Ember.canInvoke(initializer, 'initialize'));
 
-                this.initializers[initializer.name] = initializer;
+
+
+                initializers.push(initializer);
             },
 
             /**
@@ -45722,11 +44517,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 container.optionsForType('component', { singleton: false });
                 container.optionsForType('view', { singleton: false });
                 container.optionsForType('template', { instantiate: false });
-
-                if (Ember.FEATURES.isEnabled('container-renderables')) {
-                    container.optionsForType('helper', { instantiate: false });
-                }
-
                 container.register('application:main', namespace, { instantiate: false });
 
                 container.register('controller:basic', Ember.Controller, { instantiate: false });
@@ -45735,7 +44525,6 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 container.register('route:basic', Ember.Route, { instantiate: false });
                 container.register('event_dispatcher:main', Ember.EventDispatcher);
 
-                container.register('router:main',  Ember.Router);
                 container.injection('router:main', 'namespace', 'application:main');
 
                 container.injection('controller', 'target', 'router:main');
@@ -45766,7 +44555,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
          */
         function resolverFor(namespace) {
             if (namespace.get('resolver')) {
-                Ember.deprecate('Application.resolver is deprecated in favor of Application.Resolver', false);
+
             }
 
             var ResolverClass = namespace.get('resolver') || namespace.get('Resolver') || Ember.DefaultResolver;
@@ -45790,7 +44579,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                 if (resolver.normalize) {
                     return resolver.normalize(fullName);
                 } else {
-                    Ember.deprecate('The Resolver should now provide a \'normalize\' function', false);
+
                     return fullName;
                 }
             };
@@ -45829,7 +44618,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
                 // Structure assert to still do verification but not string concat in production
                 if (!container.has(dependency)) {
-                    Ember.assert(Ember.inspect(controller) + " needs " + dependency + " but it does not exist", false);
+
                 }
             }
         }
@@ -45874,7 +44663,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
                     length = get(needs, 'length');
 
                 if (length > 0) {
-                    Ember.assert(' `' + Ember.inspect(this) + ' specifies `needs`, but does not have a container. Please ensure this controller was instantiated with a container.', this.container);
+
 
                     verifyNeedsDependencies(this, this.container, needs);
 
@@ -45891,7 +44680,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
              @deprecated Use `needs` instead
              */
             controllerFor: function(controllerName) {
-                Ember.deprecate("Controller#controllerFor is deprecated, please use Controller#needs instead");
+
                 return Ember.controllerFor(get(this, 'container'), controllerName);
             },
 
@@ -46396,955 +45185,14 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
     })();
 
-    (function() {
-        /**
-         @module ember
-         @submodule ember-testing
-         */
-        var slice = [].slice,
-            helpers = {},
-            originalMethods = {},
-            injectHelpersCallbacks = [],
-            Router = requireModule('router');
-
-        /**
-         This is a container for an assortment of testing related functionality:
-
-         * Choose your default test adapter (for your framework of choice).
-         * Register/Unregister additional test helpers.
-         * Setup callbacks to be fired when the test helpers are injected into
-         your application.
-
-         @class Test
-         @namespace Ember
-         */
-        Ember.Test = {
-
-            /**
-             `registerHelper` is used to register a test helper that will be injected
-             when `App.injectTestHelpers` is called.
-
-             The helper method will always be called with the current Application as
-             the first parameter.
-
-             For example:
-             ```javascript
-             Ember.Test.registerHelper('boot', function(app) {
-        Ember.run(app, app.advanceReadiness);
-      });
-             ```
-
-             This helper can later be called without arguments because it will be
-             called with `app` as the first parameter.
-
-             ```javascript
-             App = Ember.Application.create();
-             App.injectTestHelpers();
-             boot();
-             ```
-
-             @public
-             @method registerHelper
-             @param {String} name The name of the helper method to add.
-             @param {Function} helperMethod
-             @param options {Object}
-             */
-            registerHelper: function(name, helperMethod) {
-                helpers[name] = {
-                    method: helperMethod,
-                    meta: { wait: false }
-                };
-            },
-
-            /**
-             `registerAsyncHelper` is used to register an async test helper that will be injected
-             when `App.injectTestHelpers` is called.
-
-             The helper method will always be called with the current Application as
-             the first parameter.
-
-             For example:
-             ```javascript
-             Ember.Test.registerAsyncHelper('boot', function(app) {
-        Ember.run(app, app.advanceReadiness);
-      });
-             ```
-
-             The advantage of an async helper is that it will not run
-             until the last async helper has completed.  All async helpers
-             after it will wait for it complete before running.
-
-
-             For example:
-             ```javascript
-             Ember.Test.registerAsyncHelper('deletePost', function(app, postId) {
-        click('.delete-' + postId);
-      });
-
-             // ... in your test
-             visit('/post/2');
-             deletePost(2);
-             visit('/post/3');
-             deletePost(3);
-             ```
-
-             @public
-             @method registerAsyncHelper
-             @param {String} name The name of the helper method to add.
-             @param {Function} helperMethod
-             */
-            registerAsyncHelper: function(name, helperMethod) {
-                helpers[name] = {
-                    method: helperMethod,
-                    meta: { wait: true }
-                };
-            },
-
-            /**
-             Remove a previously added helper method.
-
-             Example:
-             ```
-             Ember.Test.unregisterHelper('wait');
-             ```
-
-             @public
-             @method unregisterHelper
-             @param {String} name The helper to remove.
-             */
-            unregisterHelper: function(name) {
-                delete helpers[name];
-                if (originalMethods[name]) {
-                    window[name] = originalMethods[name];
-                }
-                delete originalMethods[name];
-                delete Ember.Test.Promise.prototype[name];
-            },
-
-            /**
-             Used to register callbacks to be fired whenever `App.injectTestHelpers`
-             is called.
-
-             The callback will receive the current application as an argument.
-
-             Example:
-             ```
-             Ember.Test.onInjectHelpers(function() {
-      Ember.$(document).ajaxStart(function() {
-        Test.pendingAjaxRequests++;
-      });
-
-      Ember.$(document).ajaxStop(function() {
-        Test.pendingAjaxRequests--;
-      });
-    });
-             ```
-
-             @public
-             @method onInjectHelpers
-             @param {Function} callback The function to be called.
-             */
-            onInjectHelpers: function(callback) {
-                injectHelpersCallbacks.push(callback);
-            },
-
-            /**
-             This returns a thenable tailored for testing.  It catches failed
-             `onSuccess` callbacks and invokes the `Ember.Test.adapter.exception`
-             callback in the last chained then.
-
-             This method should be returned by async helpers such as `wait`.
-
-             @public
-             @method promise
-             @param {Function} resolver The function used to resolve the promise.
-             */
-            promise: function(resolver) {
-                return new Ember.Test.Promise(resolver);
-            },
-
-            /**
-             Used to allow ember-testing to communicate with a specific testing
-             framework.
-
-             You can manually set it before calling `App.setupForTesting()`.
-
-             Example:
-             ```
-             Ember.Test.adapter = MyCustomAdapter.create()
-             ```
-
-             If you do not set it, ember-testing will default to `Ember.Test.QUnitAdapter`.
-
-             @public
-             @property adapter
-             @type {Class} The adapter to be used.
-             @default Ember.Test.QUnitAdapter
-             */
-            adapter: null,
-
-            /**
-             Replacement for `Ember.RSVP.resolve`
-             The only difference is this uses
-             and instance of `Ember.Test.Promise`
-
-             @public
-             @method resolve
-             @param {Mixed} The value to resolve
-             */
-            resolve: function(val) {
-                return Ember.Test.promise(function(resolve) {
-                    return resolve(val);
-                });
-            },
-
-            /**
-             @public
-
-             This allows ember-testing to play nicely with other asynchronous
-             events, such as an application that is waiting for a CSS3
-             transition or an IndexDB transaction.
-
-             For example:
-             ```javascript
-             Ember.Test.registerWaiter(function() {
-     return myPendingTransactions() == 0;
-     });
-             ```
-             The `context` argument allows you to optionally specify the `this`
-             with which your callback will be invoked.
-
-             For example:
-             ```javascript
-             Ember.Test.registerWaiter(MyDB, MyDB.hasPendingTransactions);
-             ```
-             @public
-             @method registerWaiter
-             @param {Object} context (optional)
-             @param {Function} callback
-             */
-            registerWaiter: function(context, callback) {
-                if (arguments.length === 1) {
-                    callback = context;
-                    context = null;
-                }
-                if (!this.waiters) {
-                    this.waiters = Ember.A();
-                }
-                this.waiters.push([context, callback]);
-            },
-            /**
-             `unregisterWaiter` is used to unregister a callback that was
-             registered with `registerWaiter`.
-
-             @public
-             @method unregisterWaiter
-             @param {Object} context (optional)
-             @param {Function} callback
-             */
-            unregisterWaiter: function(context, callback) {
-                var pair;
-                if (!this.waiters) { return; }
-                if (arguments.length === 1) {
-                    callback = context;
-                    context = null;
-                }
-                pair = [context, callback];
-                this.waiters = Ember.A(this.waiters.filter(function(elt) {
-                    return Ember.compare(elt, pair)!==0;
-                }));
-            }
-        };
-
-        function helper(app, name) {
-            var fn = helpers[name].method,
-                meta = helpers[name].meta;
-
-            return function() {
-                var args = slice.call(arguments),
-                    lastPromise = Ember.Test.lastPromise;
-
-                args.unshift(app);
-
-                // some helpers are not async and
-                // need to return a value immediately.
-                // example: `find`
-                if (!meta.wait) {
-                    return fn.apply(app, args);
-                }
-
-                if (!lastPromise) {
-                    // It's the first async helper in current context
-                    lastPromise = fn.apply(app, args);
-                } else {
-                    // wait for last helper's promise to resolve
-                    // and then execute
-                    run(function() {
-                        lastPromise = Ember.Test.resolve(lastPromise).then(function() {
-                            return fn.apply(app, args);
-                        });
-                    });
-                }
-
-                return lastPromise;
-            };
-        }
-
-        function run(fn) {
-            if (!Ember.run.currentRunLoop) {
-                Ember.run(fn);
-            } else {
-                fn();
-            }
-        }
-
-        Ember.Application.reopen({
-            /**
-             @property testHelpers
-             @type {Object}
-             @default {}
-             */
-            testHelpers: {},
-
-            /**
-             This hook defers the readiness of the application, so that you can start
-             the app when your tests are ready to run. It also sets the router's
-             location to 'none', so that the window's location will not be modified
-             (preventing both accidental leaking of state between tests and interference
-             with your testing framework).
-
-             Example:
-             ```
-             App.setupForTesting();
-             ```
-
-             @method setupForTesting
-             */
-            setupForTesting: function() {
-                Ember.testing = true;
-
-                this.deferReadiness();
-
-                this.Router.reopen({
-                    location: 'none'
-                });
-
-                // if adapter is not manually set default to QUnit
-                if (!Ember.Test.adapter) {
-                    Ember.Test.adapter = Ember.Test.QUnitAdapter.create();
-                }
-            },
-
-            /**
-             This injects the test helpers into the window's scope. If a function of the
-             same name has already been defined it will be cached (so that it can be reset
-             if the helper is removed with `unregisterHelper` or `removeTestHelpers`).
-
-             Any callbacks registered with `onInjectHelpers` will be called once the
-             helpers have been injected.
-
-             Example:
-             ```
-             App.injectTestHelpers();
-             ```
-
-             @method injectTestHelpers
-             */
-            injectTestHelpers: function() {
-                this.testHelpers = {};
-                for (var name in helpers) {
-                    originalMethods[name] = window[name];
-                    this.testHelpers[name] = window[name] = helper(this, name);
-                    protoWrap(Ember.Test.Promise.prototype, name, helper(this, name), helpers[name].meta.wait);
-                }
-
-                for(var i = 0, l = injectHelpersCallbacks.length; i < l; i++) {
-                    injectHelpersCallbacks[i](this);
-                }
-
-                Ember.RSVP.configure('onerror', onerror);
-            },
-
-            /**
-             This removes all helpers that have been registered, and resets and functions
-             that were overridden by the helpers.
-
-             Example:
-             ```
-             App.removeTestHelpers();
-             ```
-
-             @public
-             @method removeTestHelpers
-             */
-            removeTestHelpers: function() {
-                for (var name in helpers) {
-                    window[name] = originalMethods[name];
-                    delete this.testHelpers[name];
-                    delete originalMethods[name];
-                }
-                Ember.RSVP.configure('onerror', null);
-            }
-
-        });
-
-// This method is no longer needed
-// But still here for backwards compatibility
-// of helper chaining
-        function protoWrap(proto, name, callback, isAsync) {
-            proto[name] = function() {
-                var args = arguments;
-                if (isAsync) {
-                    return callback.apply(this, args);
-                } else {
-                    return this.then(function() {
-                        return callback.apply(this, args);
-                    });
-                }
-            };
-        }
-
-        Ember.Test.Promise = function() {
-            Ember.RSVP.Promise.apply(this, arguments);
-            Ember.Test.lastPromise = this;
-        };
-
-        Ember.Test.Promise.prototype = Ember.create(Ember.RSVP.Promise.prototype);
-        Ember.Test.Promise.prototype.constructor = Ember.Test.Promise;
-
-// Patch `then` to isolate async methods
-// specifically `Ember.Test.lastPromise`
-        var originalThen = Ember.RSVP.Promise.prototype.then;
-        Ember.Test.Promise.prototype.then = function(onSuccess, onFailure) {
-            return originalThen.call(this, function(val) {
-                return isolate(onSuccess, val);
-            }, onFailure);
-        };
-
-// This method isolates nested async methods
-// so that they don't conflict with other last promises.
-//
-// 1. Set `Ember.Test.lastPromise` to null
-// 2. Invoke method
-// 3. Return the last promise created during method
-// 4. Restore `Ember.Test.lastPromise` to original value
-        function isolate(fn, val) {
-            var value, lastPromise;
-
-            // Reset lastPromise for nested helpers
-            Ember.Test.lastPromise = null;
-
-            value = fn.call(null, val);
-
-            lastPromise = Ember.Test.lastPromise;
-
-            // If the method returned a promise
-            // return that promise. If not,
-            // return the last async helper's promise
-            if ((value && (value instanceof Ember.Test.Promise)) || !lastPromise) {
-                return value;
-            } else {
-                run(function() {
-                    lastPromise = Ember.Test.resolve(lastPromise).then(function() {
-                        return value;
-                    });
-                });
-                return lastPromise;
-            }
-        }
-
-
-        function onerror(error) {
-            if (!(error instanceof Router.TransitionAborted)) {
-                Ember.Test.adapter.exception(error);
-            }
-        }
-
-    })();
-
-
-
-    (function() {
-        /**
-         @module ember
-         @submodule ember-testing
-         */
-
-        var $ = Ember.$;
-
-        /**
-         This method creates a checkbox and triggers the click event to fire the
-         passed in handler. It is used to correct for a bug in older versions
-         of jQuery (e.g 1.8.3).
-
-         @private
-         @method testCheckboxClick
-         */
-        function testCheckboxClick(handler) {
-            $('<input type="checkbox">')
-                .css({ position: 'absolute', left: '-1000px', top: '-1000px' })
-                .appendTo('body')
-                .on('click', handler)
-                .trigger('click')
-                .remove();
-        }
-
-        $(function() {
-            /*
-             Determine whether a checkbox checked using jQuery's "click" method will have
-             the correct value for its checked property.
-
-             If we determine that the current jQuery version exhibits this behavior,
-             patch it to work correctly as in the commit for the actual fix:
-             https://github.com/jquery/jquery/commit/1fb2f92.
-             */
-            testCheckboxClick(function() {
-                if (!this.checked && !$.event.special.click) {
-                    $.event.special.click = {
-                        // For checkbox, fire native event so checked state will be right
-                        trigger: function() {
-                            if ($.nodeName( this, "input" ) && this.type === "checkbox" && this.click) {
-                                this.click();
-                                return false;
-                            }
-                        }
-                    };
-                }
-            });
-
-            // Try again to verify that the patch took effect or blow up.
-            testCheckboxClick(function() {
-                Ember.warn("clicked checkboxes should be checked! the jQuery patch didn't work", this.checked);
-            });
-        });
-
-    })();
-
-
-
-    (function() {
-        /**
-         @module ember
-         @submodule ember-testing
-         */
-
-        var Test = Ember.Test;
-
-        /**
-         The primary purpose of this class is to create hooks that can be implemented
-         by an adapter for various test frameworks.
-
-         @class Adapter
-         @namespace Ember.Test
-         */
-        Test.Adapter = Ember.Object.extend({
-            /**
-             This callback will be called whenever an async operation is about to start.
-
-             Override this to call your framework's methods that handle async
-             operations.
-
-             @public
-             @method asyncStart
-             */
-            asyncStart: Ember.K,
-
-            /**
-             This callback will be called whenever an async operation has completed.
-
-             @public
-             @method asyncEnd
-             */
-            asyncEnd: Ember.K,
-
-            /**
-             Override this method with your testing framework's false assertion.
-             This function is called whenever an exception occurs causing the testing
-             promise to fail.
-
-             QUnit example:
-
-             ```javascript
-             exception: function(error) {
-        ok(false, error);
-      };
-             ```
-
-             @public
-             @method exception
-             @param {String} error The exception to be raised.
-             */
-            exception: function(error) {
-                setTimeout(function() {
-                    throw error;
-                });
-            }
-        });
-
-        /**
-         This class implements the methods defined by Ember.Test.Adapter for the
-         QUnit testing framework.
-
-         @class QUnitAdapter
-         @namespace Ember.Test
-         @extends Ember.Test.Adapter
-         */
-        Test.QUnitAdapter = Test.Adapter.extend({
-            asyncStart: function() {
-                stop();
-            },
-            asyncEnd: function() {
-                start();
-            },
-            exception: function(error) {
-                ok(false, Ember.inspect(error));
-            }
-        });
-
-    })();
-
-
-
-    (function() {
-        /**
-         * @module ember
-         * @submodule ember-testing
-         */
-
-        var get = Ember.get,
-            Test = Ember.Test,
-            helper = Test.registerHelper,
-            asyncHelper = Test.registerAsyncHelper,
-            countAsync = 0;
-
-        Test.pendingAjaxRequests = 0;
-
-        Test.onInjectHelpers(function() {
-            Ember.$(document).ajaxStart(function() {
-                Test.pendingAjaxRequests++;
-            });
-
-            Ember.$(document).ajaxStop(function() {
-                Ember.assert("An ajaxStop event which would cause the number of pending AJAX requests to be negative has been triggered. This is most likely caused by AJAX events that were started before calling `injectTestHelpers()`.", Test.pendingAjaxRequests !== 0);
-                Test.pendingAjaxRequests--;
-            });
-        });
-
-
-        function visit(app, url) {
-            app.__container__.lookup('router:main').location.setURL(url);
-            Ember.run(app, app.handleURL, url);
-            return wait(app);
-        }
-
-        function click(app, selector, context) {
-            var $el = findWithAssert(app, selector, context);
-            Ember.run($el, 'mousedown');
-
-            if ($el.is(':input')) {
-                var type = $el.prop('type');
-                if (type !== 'checkbox' && type !== 'radio' && type !== 'hidden') {
-                    Ember.run($el, function(){
-                        // Firefox does not trigger the `focusin` event if the window
-                        // does not have focus. If the document doesn't have focus just
-                        // use trigger('focusin') instead.
-                        if (!document.hasFocus || document.hasFocus()) {
-                            this.focus();
-                        } else {
-                            this.trigger('focusin');
-                        }
-                    });
-                }
-            }
-
-            Ember.run($el, 'mouseup');
-            Ember.run($el, 'click');
-
-            return wait(app);
-        }
-
-        function keyEvent(app, selector, context, type, keyCode) {
-            var $el;
-            if (typeof keyCode === 'undefined') {
-                keyCode = type;
-                type = context;
-                context = null;
-            }
-            $el = findWithAssert(app, selector, context);
-            var event = Ember.$.Event(type, { keyCode: keyCode });
-            Ember.run($el, 'trigger', event);
-            return wait(app);
-        }
-
-        function fillIn(app, selector, context, text) {
-            var $el;
-            if (typeof text === 'undefined') {
-                text = context;
-                context = null;
-            }
-            $el = findWithAssert(app, selector, context);
-            Ember.run(function() {
-                $el.val(text).change();
-            });
-            return wait(app);
-        }
-
-        function findWithAssert(app, selector, context) {
-            var $el = find(app, selector, context);
-            if ($el.length === 0) {
-                throw new Ember.Error("Element " + selector + " not found.");
-            }
-            return $el;
-        }
-
-        function find(app, selector, context) {
-            var $el;
-            context = context || get(app, 'rootElement');
-            $el = app.$(selector, context);
-
-            return $el;
-        }
-
-        function andThen(app, callback) {
-            return wait(app, callback(app));
-        }
-
-        function wait(app, value) {
-            return Test.promise(function(resolve) {
-                // If this is the first async promise, kick off the async test
-                if (++countAsync === 1) {
-                    Test.adapter.asyncStart();
-                }
-
-                // Every 10ms, poll for the async thing to have finished
-                var watcher = setInterval(function() {
-                    // 1. If the router is loading, keep polling
-                    var routerIsLoading = app.__container__.lookup('router:main').router.isLoading;
-                    if (routerIsLoading) { return; }
-
-                    // 2. If there are pending Ajax requests, keep polling
-                    if (Test.pendingAjaxRequests) { return; }
-
-                    // 3. If there are scheduled timers or we are inside of a run loop, keep polling
-                    if (Ember.run.hasScheduledTimers() || Ember.run.currentRunLoop) { return; }
-                    if (Ember.FEATURES.isEnabled("ember-testing-wait-hooks")) {
-                        if (Test.waiters && Test.waiters.any(function(waiter) {
-                            var context = waiter[0];
-                            var callback = waiter[1];
-                            return !callback.apply(context);
-                        })) { return; }
-                    }
-                    // Stop polling
-                    clearInterval(watcher);
-
-                    // If this is the last async promise, end the async test
-                    if (--countAsync === 0) {
-                        Test.adapter.asyncEnd();
-                    }
-
-                    // Synchronously resolve the promise
-                    Ember.run(null, resolve, value);
-                }, 10);
-            });
-
-        }
-
-
-        /**
-         * Loads a route, sets up any controllers, and renders any templates associated
-         * with the route as though a real user had triggered the route change while
-         * using your app.
-         *
-         * Example:
-         *
-         * ```
-         * visit('posts/index').then(function() {
-*   // assert something
-* });
-         * ```
-         *
-         * @method visit
-         * @param {String} url the name of the route
-         * @return {RSVP.Promise}
-         */
-        asyncHelper('visit', visit);
-
-        /**
-         * Clicks an element and triggers any actions triggered by the element's `click`
-         * event.
-         *
-         * Example:
-         *
-         * ```
-         * click('.some-jQuery-selector').then(function() {
-*  // assert something
-* });
-         * ```
-         *
-         * @method click
-         * @param {String} selector jQuery selector for finding element on the DOM
-         * @return {RSVP.Promise}
-         */
-        asyncHelper('click', click);
-
-        /**
-         * Simulates a key event, e.g. `keypress`, `keydown`, `keyup` with the desired keyCode
-         *
-         * Example:
-         *
-         * ```
-         * keyEvent('.some-jQuery-selector', 'keypress', 13).then(function() {
-*  // assert something
-* });
-         * ```
-         *
-         * @method keyEvent
-         * @param {String} selector jQuery selector for finding element on the DOM
-         * @param {String} the type of key event, e.g. `keypress`, `keydown`, `keyup`
-         * @param {Number} the keyCode of the simulated key event
-         * @return {RSVP.Promise}
-         */
-        asyncHelper('keyEvent', keyEvent);
-
-        /**
-         * Fills in an input element with some text.
-         *
-         * Example:
-         *
-         * ```
-         * fillIn('#email', 'you@example.com').then(function() {
-*   // assert something
-* });
-         * ```
-         *
-         * @method fillIn
-         * @param {String} selector jQuery selector finding an input element on the DOM
-         * to fill text with
-         * @param {String} text text to place inside the input element
-         * @return {RSVP.Promise}
-         */
-        asyncHelper('fillIn', fillIn);
-
-        /**
-         * Finds an element in the context of the app's container element. A simple alias
-         * for `app.$(selector)`.
-         *
-         * Example:
-         *
-         * ```
-         * var $el = find('.my-selector);
-         * ```
-         *
-         * @method find
-         * @param {String} selector jQuery string selector for element lookup
-         * @return {Object} jQuery object representing the results of the query
-         */
-        helper('find', find);
-
-        /**
-         *
-         * Like `find`, but throws an error if the element selector returns no results
-         *
-         * Example:
-         *
-         * ```
-         * var $el = findWithAssert('.doesnt-exist'); // throws error
-         * ```
-         *
-         * @method findWithAssert
-         * @param {String} selector jQuery selector string for finding an element within
-         * the DOM
-         * @return {Object} jQuery object representing the results of the query
-         * @throws {Error} throws error if jQuery object returned has a length of 0
-         */
-        helper('findWithAssert', findWithAssert);
-
-        /**
-         Causes the run loop to process any pending events. This is used to ensure that
-         any async operations from other helpers (or your assertions) have been processed.
-
-         This is most often used as the return value for the helper functions (see 'click',
-         'fillIn','visit',etc).
-
-         Example:
-
-         ```
-         Ember.Test.registerAsyncHelper('loginUser', function(app, username, password) {
-    visit('secured/path/here')
-    .fillIn('#username', username)
-    .fillIn('#password', username)
-    .click('.submit')
-
-    return wait();
-  });
-
-         @method wait
-         @param {Object} value The value to be returned.
-         @return {RSVP.Promise}
-         ```
-         */
-        asyncHelper('wait', wait);
-        asyncHelper('andThen', andThen);
-
-    })();
-
-
-
-    (function() {
-        /**
-         Ember Testing
-
-         @module ember
-         @submodule ember-testing
-         @requires ember-application
-         */
-
-    })();
-
-    (function() {
-        /**
-         Ember
-
-         @module ember
-         */
-
-        function throwWithMessage(msg) {
-            return function() {
-                throw new Ember.Error(msg);
-            };
-        }
-
-        function generateRemovedClass(className) {
-            var msg = " has been moved into a plugin: https://github.com/emberjs/ember-states";
-
-            return {
-                extend: throwWithMessage(className + msg),
-                create: throwWithMessage(className + msg)
-            };
-        }
-
-        Ember.StateManager = generateRemovedClass("Ember.StateManager");
-
-        /**
-         This was exported to ember-states plugin for v 1.0.0 release. See: https://github.com/emberjs/ember-states
-
-         @class StateManager
-         @namespace Ember
-         */
-
-        Ember.State = generateRemovedClass("Ember.State");
-
-        /**
-         This was exported to ember-states plugin for v 1.0.0 release. See: https://github.com/emberjs/ember-states
-
-         @class State
-         @namespace Ember
-         */
-
-    })();
-
 
 })();
+
+
+if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    Ember.Logger.warn("You are running a production build of Ember on localhost and won't receive detailed error messages. "+
+        "If you want full error messages please use the non-minified build provided on the Ember website.");
+}
 },{}],27:[function(require,module,exports){
 /*
 
@@ -57452,6 +55300,7 @@ var DisqusView = Ember.View.extend({
     didInsertElement: function(){
         var arr = window.location.hash.split('/');
         var id = arr[arr.length-1];
+        try{
         DISQUS.reset({
             reload: true,
             config: function () {
@@ -57459,6 +55308,11 @@ var DisqusView = Ember.View.extend({
                 this.page.url = "http://myalin.ru/shri/#!"+id;
             }
         });
+        }
+        catch (e)
+        {
+            console.log(e.message);
+        }
     }
 });
 
@@ -57529,717 +55383,729 @@ module.exports = StudentsView;
 var TwitterView = Ember.View.extend({
     didInsertElement: function () {
         //содержимое widget.js
-        if (!window.__twttrlr) {
-            (function (e, t) {
-                function y(e) {
-                    for (var t = 1, n; n = arguments[t]; t++)for (var r in n)e[r] = n[r];
-                    return e
-                }
-
-                function b(e) {
-                    return Array.prototype.slice.call(e)
-                }
-
-                function E(e, t) {
-                    for (var n = 0, r; r = e[n]; n++)if (t == r)return n;
-                    return-1
-                }
-
-                function S() {
-                    var e = b(arguments), t = [];
-                    for (var n = 0, r = e.length; n < r; n++)e[n].length > 0 && t.push(e[n].replace(/\/$/, ""));
-                    return t.join("/")
-                }
-
-                function x(e, t, n) {
-                    var r = t.split("/"), i = e;
-                    while (r.length > 1) {
-                        var s = r.shift();
-                        i = i[s] = i[s] || {}
-                    }
-                    i[r[0]] = n
-                }
-
-                function T() {
-                }
-
-                function N(e, t) {
-                    this.id = this.path = e, this.force = !!t
-                }
-
-                function C(e, t) {
-                    this.id = e, this.body = t, typeof t == "undefined" && (this.path = this.resolvePath(e))
-                }
-
-                function k(e, t) {
-                    this.deps = e, this.collectResults = t, this.deps.length == 0 && this.complete()
-                }
-
-                function L(e, t) {
-                    this.deps = e, this.collectResults = t
-                }
-
-                function A() {
-                    for (var e in r)if (r[e].readyState == "interactive")return c[r[e].id]
-                }
-
-                function O(e, t) {
-                    var r;
-                    return!e && n && (r = l || A()), r ? (delete c[r.scriptId], r.body = t, r.execute()) : (f = r = new C(e, t), a[r.id] = r), r
-                }
-
-                function M() {
-                    var e = b(arguments), t, n;
-                    return typeof e[0] == "string" && (t = e.shift()), n = e.shift(), O(t, n)
-                }
-
-                function _(e, t) {
-                    var n = t.id || "", r = n.split("/");
-                    r.pop();
-                    var i = r.join("/");
-                    return e.replace(/^\./, i)
-                }
-
-                function D(e, t) {
-                    function r(e) {
-                        return C.exports[_(e, t)]
+        try {
+            if (!window.__twttrlr) {
+                (function (e, t) {
+                    function y(e) {
+                        for (var t = 1, n; n = arguments[t]; t++)for (var r in n)e[r] = n[r];
+                        return e
                     }
 
-                    var n = [];
-                    for (var i = 0, s = e.length; i < s; i++) {
-                        if (e[i] == "require") {
-                            n.push(r);
-                            continue
+                    function b(e) {
+                        return Array.prototype.slice.call(e)
+                    }
+
+                    function E(e, t) {
+                        for (var n = 0, r; r = e[n]; n++)if (t == r)return n;
+                        return-1
+                    }
+
+                    function S() {
+                        var e = b(arguments), t = [];
+                        for (var n = 0, r = e.length; n < r; n++)e[n].length > 0 && t.push(e[n].replace(/\/$/, ""));
+                        return t.join("/")
+                    }
+
+                    function x(e, t, n) {
+                        var r = t.split("/"), i = e;
+                        while (r.length > 1) {
+                            var s = r.shift();
+                            i = i[s] = i[s] || {}
                         }
-                        if (e[i] == "exports") {
-                            t.exports = t.exports || {}, n.push(t.exports);
-                            continue
-                        }
-                        n.push(r(e[i]))
+                        i[r[0]] = n
                     }
-                    return n
-                }
 
-                function P() {
-                    var e = b(arguments), t = [], n, r;
-                    return typeof e[0] == "string" && (n = e.shift()), w(e[0]) && (t = e.shift()), r = e.shift(), O(n, function (e) {
-                        function s() {
-                            var i = D(b(t), n), s;
-                            typeof r == "function" ? s = r.apply(n, i) : s = r, typeof s == "undefined" && (s = n.exports), e(s)
+                    function T() {
+                    }
+
+                    function N(e, t) {
+                        this.id = this.path = e, this.force = !!t
+                    }
+
+                    function C(e, t) {
+                        this.id = e, this.body = t, typeof t == "undefined" && (this.path = this.resolvePath(e))
+                    }
+
+                    function k(e, t) {
+                        this.deps = e, this.collectResults = t, this.deps.length == 0 && this.complete()
+                    }
+
+                    function L(e, t) {
+                        this.deps = e, this.collectResults = t
+                    }
+
+                    function A() {
+                        for (var e in r)if (r[e].readyState == "interactive")return c[r[e].id]
+                    }
+
+                    function O(e, t) {
+                        var r;
+                        return!e && n && (r = l || A()), r ? (delete c[r.scriptId], r.body = t, r.execute()) : (f = r = new C(e, t), a[r.id] = r), r
+                    }
+
+                    function M() {
+                        var e = b(arguments), t, n;
+                        return typeof e[0] == "string" && (t = e.shift()), n = e.shift(), O(t, n)
+                    }
+
+                    function _(e, t) {
+                        var n = t.id || "", r = n.split("/");
+                        r.pop();
+                        var i = r.join("/");
+                        return e.replace(/^\./, i)
+                    }
+
+                    function D(e, t) {
+                        function r(e) {
+                            return C.exports[_(e, t)]
                         }
 
-                        var n = this, i = [];
-                        for (var o = 0, u = t.length; o < u; o++) {
-                            var a = t[o];
-                            E(["require", "exports"], a) == -1 && i.push(_(a, n))
+                        var n = [];
+                        for (var i = 0, s = e.length; i < s; i++) {
+                            if (e[i] == "require") {
+                                n.push(r);
+                                continue
+                            }
+                            if (e[i] == "exports") {
+                                t.exports = t.exports || {}, n.push(t.exports);
+                                continue
+                            }
+                            n.push(r(e[i]))
                         }
-                        i.length > 0 ? H.apply(this, i.concat(s)) : s()
-                    })
-                }
-
-                function H() {
-                    var e = b(arguments), t, n;
-                    typeof e[e.length - 1] == "function" && (t = e.pop()), typeof e[e.length - 1] == "boolean" && (n = e.pop());
-                    var r = new k(B(e, n), n);
-                    return t && r.then(t), r
-                }
-
-                function B(e, t) {
-                    var n = [];
-                    for (var r = 0, i; i = e[r]; r++)typeof i == "string" && (i = j(i)), w(i) && (i = new L(B(i, t), t)), n.push(i);
-                    return n
-                }
-
-                function j(e) {
-                    var t, n;
-                    for (var r = 0, i; i = H.matchers[r]; r++) {
-                        var s = i[0], o = i[1];
-                        if (t = e.match(s))return o(e)
-                    }
-                    throw new Error(e + " was not recognised by loader")
-                }
-
-                function I() {
-                    return e.using = h, e.provide = p, e.define = d, e.loadrunner = v, F
-                }
-
-                function q(e) {
-                    for (var t = 0; t < H.bundles.length; t++)for (var n in H.bundles[t])if (n != e && E(H.bundles[t][n], e) > -1)return n
-                }
-
-                var n = e.attachEvent && !e.opera, r = t.getElementsByTagName("script"), i = 0, s, o = t.createElement("script"), u = {}, a = {}, f, l, c = {}, h = e.using, p = e.provide, d = e.define, v = e.loadrunner;
-                for (var m = 0, g; g = r[m]; m++)if (g.src.match(/loadrunner\.js(\?|#|$)/)) {
-                    s = g;
-                    break
-                }
-                var w = Array.isArray || function (e) {
-                    return e.constructor == Array
-                };
-                T.prototype.then = function (t) {
-                    var n = this;
-                    return this.started || (this.started = !0, this.start()), this.completed ? t.apply(e, this.results) : (this.callbacks = this.callbacks || [], this.callbacks.push(t)), this
-                }, T.prototype.start = function () {
-                }, T.prototype.complete = function () {
-                    if (!this.completed) {
-                        this.results = b(arguments), this.completed = !0;
-                        if (this.callbacks)for (var t = 0, n; n = this.callbacks[t]; t++)n.apply(e, this.results)
-                    }
-                }, N.loaded = [], N.prototype = new T, N.prototype.start = function () {
-                    var e = this, t, n, r;
-                    return(r = a[this.id]) ? (r.then(function () {
-                        e.complete()
-                    }), this) : ((t = u[this.id]) ? t.then(function () {
-                        e.loaded()
-                    }) : !this.force && E(N.loaded, this.id) > -1 ? this.loaded() : (n = q(this.id)) ? H(n, function () {
-                        e.loaded()
-                    }) : this.load(), this)
-                }, N.prototype.load = function () {
-                    var t = this;
-                    u[this.id] = t;
-                    var n = o.cloneNode(!1);
-                    this.scriptId = n.id = "LR" + ++i, n.type = "text/javascript", n.async = !0, n.onerror = function () {
-                        throw new Error(t.path + " not loaded")
-                    }, n.onreadystatechange = n.onload = function (n) {
-                        n = e.event || n;
-                        if (n.type == "load" || E(["loaded", "complete"], this.readyState) > -1)this.onreadystatechange = null, t.loaded()
-                    }, n.src = this.path, l = this, r[0].parentNode.insertBefore(n, r[0]), l = null, c[n.id] = this
-                }, N.prototype.loaded = function () {
-                    this.complete()
-                }, N.prototype.complete = function () {
-                    E(N.loaded, this.id) == -1 && N.loaded.push(this.id), delete u[this.id], T.prototype.complete.apply(this, arguments)
-                }, C.exports = {}, C.prototype = new N, C.prototype.resolvePath = function (e) {
-                    return S(H.path, e + ".js")
-                }, C.prototype.start = function () {
-                    var e, t, n = this, r;
-                    this.body ? this.execute() : (e = C.exports[this.id]) ? this.exp(e) : (t = a[this.id]) ? t.then(function (e) {
-                        n.exp(e)
-                    }) : (bundle = q(this.id)) ? H(bundle, function () {
-                        n.start()
-                    }) : (a[this.id] = this, this.load())
-                }, C.prototype.loaded = function () {
-                    var e, t, r = this;
-                    n ? (t = C.exports[this.id]) ? this.exp(t) : (e = a[this.id]) && e.then(function (e) {
-                        r.exp(e)
-                    }) : (e = f, f = null, e.id = e.id || this.id, e.then(function (e) {
-                        r.exp(e)
-                    }))
-                }, C.prototype.complete = function () {
-                    delete a[this.id], N.prototype.complete.apply(this, arguments)
-                }, C.prototype.execute = function () {
-                    var e = this;
-                    typeof this.body == "object" ? this.exp(this.body) : typeof this.body == "function" && this.body.apply(window, [function (t) {
-                        e.exp(t)
-                    }])
-                }, C.prototype.exp = function (e) {
-                    this.complete(this.exports = C.exports[this.id] = e || {})
-                }, k.prototype = new T, k.prototype.start = function () {
-                    function t() {
-                        var t = [];
-                        e.collectResults && (t[0] = {});
-                        for (var n = 0, r; r = e.deps[n]; n++) {
-                            if (!r.completed)return;
-                            r.results.length > 0 && (e.collectResults ? r instanceof L ? y(t[0], r.results[0]) : x(t[0], r.id, r.results[0]) : t = t.concat(r.results))
-                        }
-                        e.complete.apply(e, t)
+                        return n
                     }
 
-                    var e = this;
-                    for (var n = 0, r; r = this.deps[n]; n++)r.then(t);
-                    return this
-                }, L.prototype = new T, L.prototype.start = function () {
-                    var e = this, t = 0, n = [];
-                    return e.collectResults && (n[0] = {}), function r() {
-                        var i = e.deps[t++];
-                        i ? i.then(function (t) {
-                            i.results.length > 0 && (e.collectResults ? i instanceof L ? y(n[0], i.results[0]) : x(n[0], i.id, i.results[0]) : n.push(i.results[0])), r()
-                        }) : e.complete.apply(e, n)
-                    }(), this
-                }, P.amd = {};
-                var F = function (e) {
-                    return e(H, M, F, define)
-                };
-                F.Script = N, F.Module = C, F.Collection = k, F.Sequence = L, F.Dependency = T, F.noConflict = I, e.loadrunner = F, e.using = H, e.provide = M, e.define = P, H.path = "", H.matchers = [], H.matchers.add = function (e, t) {
-                    this.unshift([e, t])
-                }, H.matchers.add(/(^script!|\.js$)/, function (e) {
-                    var t = new N(e.replace(/^\$/, H.path.replace(/\/$/, "") + "/").replace(/^script!/, ""), !1);
-                    return t.id = e, t
-                }), H.matchers.add(/^[a-zA-Z0-9_\-\/]+$/, function (e) {
-                    return new C(e)
-                }), H.bundles = [], s && (H.path = s.getAttribute("data-path") || s.src.split(/loadrunner\.js/)[0] || "", (main = s.getAttribute("data-main")) && H.apply(e, main.split(/\s*,\s*/)).then(function () {
-                }))
-            })(this, document);
-            (window.__twttrlr = loadrunner.noConflict());
-        }
-        __twttrlr(function (using, provide, loadrunner, define) {
-            provide("util/util", function (e) {
-                function t(e) {
-                    return s(arguments, function (t) {
-                        i(t, function (t, n) {
-                            e[t] = n
+                    function P() {
+                        var e = b(arguments), t = [], n, r;
+                        return typeof e[0] == "string" && (n = e.shift()), w(e[0]) && (t = e.shift()), r = e.shift(), O(n, function (e) {
+                            function s() {
+                                var i = D(b(t), n), s;
+                                typeof r == "function" ? s = r.apply(n, i) : s = r, typeof s == "undefined" && (s = n.exports), e(s)
+                            }
+
+                            var n = this, i = [];
+                            for (var o = 0, u = t.length; o < u; o++) {
+                                var a = t[o];
+                                E(["require", "exports"], a) == -1 && i.push(_(a, n))
+                            }
+                            i.length > 0 ? H.apply(this, i.concat(s)) : s()
                         })
-                    }), e
-                }
-
-                function n(e) {
-                    return i(e, function (t, r) {
-                        v(r) && (n(r), m(r) && delete e[t]), (r === undefined || r === null || r === "") && delete e[t]
-                    }), e
-                }
-
-                function r(e, t) {
-                    if (!e)return-1;
-                    if (e.indexOf)return e.indexOf(t);
-                    for (var n = 0, r = e.length; n < r; n++)if (t == e[n])return n;
-                    return-1
-                }
-
-                function i(e, t) {
-                    for (var n in e)(!e.hasOwnProperty || e.hasOwnProperty(n)) && t(n, e[n]);
-                    return e
-                }
-
-                function s(e, t) {
-                    if (!e)return;
-                    if (!t)return;
-                    if (e.forEach)return e.forEach(t);
-                    for (var n = 0, r = e.length; n < r; n++)t(e[n], n)
-                }
-
-                function o(e, t) {
-                    if (!e)return null;
-                    if (e.filter)return e.filter.apply(e, [t]);
-                    if (!t)return e;
-                    var n = [], r = 0, i = e.length;
-                    for (; r < i; r++)t(e[r]) && n.push(e[r]);
-                    return n
-                }
-
-                function u(e, t) {
-                    if (!e)return null;
-                    if (e.map)return e.map(t);
-                    if (!t)return e;
-                    var n = [], r = 0, i = e.length;
-                    for (; r < i; r++)n.push(t(e[r]));
-                    return n
-                }
-
-                function a(e) {
-                    return e && e.replace(/(^\s+|\s+$)/g, "")
-                }
-
-                function f(e) {
-                    return{}.toString.call(e).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
-                }
-
-                function l(e, t) {
-                    return e == f(t)
-                }
-
-                function c(e) {
-                    return e && String(e).toLowerCase().indexOf("[native code]") > -1
-                }
-
-                function h(e, t) {
-                    if (e.contains)return e.contains(t);
-                    var n = t.parentNode;
-                    while (n) {
-                        if (n === e)return!0;
-                        n = n.parentNode
-                    }
-                    return!1
-                }
-
-                function p(e, t, n) {
-                    return n = n || [], function () {
-                        var r = u(arguments, function (e) {
-                            return e
-                        });
-                        return e.apply(t, n.concat(r))
-                    }
-                }
-
-                function d(e) {
-                    function t() {
                     }
 
-                    return typeof Object.create == "function" ? Object.create(e) : (t.prototype = e, new t)
-                }
-
-                function v(e) {
-                    return e === Object(e)
-                }
-
-                function m(e) {
-                    if (!v(e))return!1;
-                    if (Object.keys)return!Object.keys(e).length;
-                    for (var t in e)if (e.hasOwnProperty(t))return!1;
-                    return!0
-                }
-
-                e({aug: t, compact: n, containsElement: h, forIn: i, forEach: s, filter: o, map: u, trim: a, indexOf: r, isNative: c, isObject: v, isEmptyObject: m, createObject: d, bind: p, toType: f, isType: l})
-            });
-            provide("util/events", function (e) {
-                using("util/util", function (t) {
-                    function r() {
-                        this.completed = !1, this.callbacks = []
+                    function H() {
+                        var e = b(arguments), t, n;
+                        typeof e[e.length - 1] == "function" && (t = e.pop()), typeof e[e.length - 1] == "boolean" && (n = e.pop());
+                        var r = new k(B(e, n), n);
+                        return t && r.then(t), r
                     }
 
-                    var n = {bind: function (e, t) {
-                        return this._handlers = this._handlers || {}, this._handlers[e] = this._handlers[e] || [], this._handlers[e].push(t)
-                    }, unbind: function (e, n) {
-                        if (!this._handlers[e])return;
-                        if (n) {
-                            var r = t.indexOf(this._handlers[e], n);
-                            r >= 0 && this._handlers[e].splice(r, 1)
-                        } else this._handlers[e] = []
-                    }, trigger: function (e, t) {
-                        var n = this._handlers && this._handlers[e];
-                        t.type = e;
-                        if (n)for (var r = 0, i; i = n[r]; r++)i.call(this, t)
-                    }};
-                    r.prototype.addCallback = function (e) {
-                        this.completed ? e.apply(this, this.results) : this.callbacks.push(e)
-                    }, r.prototype.complete = function () {
-                        this.results = makeArray(arguments), this.completed = !0;
-                        for (var e = 0, t; t = this.callbacks[e]; e++)t.apply(this, this.results)
-                    }, e({Emitter: n, Promise: r})
-                })
-            });
-            provide("util/querystring", function (e) {
-                function t(e) {
-                    return encodeURIComponent(e).replace(/\+/g, "%2B")
-                }
-
-                function n(e) {
-                    return decodeURIComponent(e)
-                }
-
-                function r(e) {
-                    var n = [], r;
-                    for (r in e)e[r] !== null && typeof e[r] != "undefined" && n.push(t(r) + "=" + t(e[r]));
-                    return n.sort().join("&")
-                }
-
-                function i(e) {
-                    var t = {}, r, i, s, o;
-                    if (e) {
-                        r = e.split("&");
-                        for (o = 0; s = r[o]; o++)i = s.split("="), i.length == 2 && (t[n(i[0])] = n(i[1]))
-                    }
-                    return t
-                }
-
-                function s(e, t) {
-                    var n = r(t);
-                    return n.length > 0 ? e.indexOf("?") >= 0 ? e + "&" + r(t) : e + "?" + r(t) : e
-                }
-
-                function o(e) {
-                    var t = e && e.split("?");
-                    return t.length == 2 ? i(t[1]) : {}
-                }
-
-                e({url: s, decodeURL: o, decode: i, encode: r, encodePart: t, decodePart: n})
-            });
-            provide("util/twitter", function (e) {
-                using("util/querystring", function (t) {
-                    function o(e) {
-                        return typeof e == "string" && n.test(e) && RegExp.$1.length <= 20
+                    function B(e, t) {
+                        var n = [];
+                        for (var r = 0, i; i = e[r]; r++)typeof i == "string" && (i = j(i)), w(i) && (i = new L(B(i, t), t)), n.push(i);
+                        return n
                     }
 
-                    function u(e) {
-                        if (o(e))return RegExp.$1
+                    function j(e) {
+                        var t, n;
+                        for (var r = 0, i; i = H.matchers[r]; r++) {
+                            var s = i[0], o = i[1];
+                            if (t = e.match(s))return o(e)
+                        }
+                        throw new Error(e + " was not recognised by loader")
+                    }
+
+                    function I() {
+                        return e.using = h, e.provide = p, e.define = d, e.loadrunner = v, F
+                    }
+
+                    function q(e) {
+                        for (var t = 0; t < H.bundles.length; t++)for (var n in H.bundles[t])if (n != e && E(H.bundles[t][n], e) > -1)return n
+                    }
+
+                    var n = e.attachEvent && !e.opera, r = t.getElementsByTagName("script"), i = 0, s, o = t.createElement("script"), u = {}, a = {}, f, l, c = {}, h = e.using, p = e.provide, d = e.define, v = e.loadrunner;
+                    for (var m = 0, g; g = r[m]; m++)if (g.src.match(/loadrunner\.js(\?|#|$)/)) {
+                        s = g;
+                        break
+                    }
+                    var w = Array.isArray || function (e) {
+                        return e.constructor == Array
+                    };
+                    T.prototype.then = function (t) {
+                        var n = this;
+                        return this.started || (this.started = !0, this.start()), this.completed ? t.apply(e, this.results) : (this.callbacks = this.callbacks || [], this.callbacks.push(t)), this
+                    }, T.prototype.start = function () {
+                    }, T.prototype.complete = function () {
+                        if (!this.completed) {
+                            this.results = b(arguments), this.completed = !0;
+                            if (this.callbacks)for (var t = 0, n; n = this.callbacks[t]; t++)n.apply(e, this.results)
+                        }
+                    }, N.loaded = [], N.prototype = new T, N.prototype.start = function () {
+                        var e = this, t, n, r;
+                        return(r = a[this.id]) ? (r.then(function () {
+                            e.complete()
+                        }), this) : ((t = u[this.id]) ? t.then(function () {
+                            e.loaded()
+                        }) : !this.force && E(N.loaded, this.id) > -1 ? this.loaded() : (n = q(this.id)) ? H(n, function () {
+                            e.loaded()
+                        }) : this.load(), this)
+                    }, N.prototype.load = function () {
+                        var t = this;
+                        u[this.id] = t;
+                        var n = o.cloneNode(!1);
+                        this.scriptId = n.id = "LR" + ++i, n.type = "text/javascript", n.async = !0, n.onerror = function () {
+                            throw new Error(t.path + " not loaded")
+                        }, n.onreadystatechange = n.onload = function (n) {
+                            n = e.event || n;
+                            if (n.type == "load" || E(["loaded", "complete"], this.readyState) > -1)this.onreadystatechange = null, t.loaded()
+                        }, n.src = this.path, l = this, r[0].parentNode.insertBefore(n, r[0]), l = null, c[n.id] = this
+                    }, N.prototype.loaded = function () {
+                        this.complete()
+                    }, N.prototype.complete = function () {
+                        E(N.loaded, this.id) == -1 && N.loaded.push(this.id), delete u[this.id], T.prototype.complete.apply(this, arguments)
+                    }, C.exports = {}, C.prototype = new N, C.prototype.resolvePath = function (e) {
+                        return S(H.path, e + ".js")
+                    }, C.prototype.start = function () {
+                        var e, t, n = this, r;
+                        this.body ? this.execute() : (e = C.exports[this.id]) ? this.exp(e) : (t = a[this.id]) ? t.then(function (e) {
+                            n.exp(e)
+                        }) : (bundle = q(this.id)) ? H(bundle, function () {
+                            n.start()
+                        }) : (a[this.id] = this, this.load())
+                    }, C.prototype.loaded = function () {
+                        var e, t, r = this;
+                        n ? (t = C.exports[this.id]) ? this.exp(t) : (e = a[this.id]) && e.then(function (e) {
+                            r.exp(e)
+                        }) : (e = f, f = null, e.id = e.id || this.id, e.then(function (e) {
+                            r.exp(e)
+                        }))
+                    }, C.prototype.complete = function () {
+                        delete a[this.id], N.prototype.complete.apply(this, arguments)
+                    }, C.prototype.execute = function () {
+                        var e = this;
+                        typeof this.body == "object" ? this.exp(this.body) : typeof this.body == "function" && this.body.apply(window, [function (t) {
+                            e.exp(t)
+                        }])
+                    }, C.prototype.exp = function (e) {
+                        this.complete(this.exports = C.exports[this.id] = e || {})
+                    }, k.prototype = new T, k.prototype.start = function () {
+                        function t() {
+                            var t = [];
+                            e.collectResults && (t[0] = {});
+                            for (var n = 0, r; r = e.deps[n]; n++) {
+                                if (!r.completed)return;
+                                r.results.length > 0 && (e.collectResults ? r instanceof L ? y(t[0], r.results[0]) : x(t[0], r.id, r.results[0]) : t = t.concat(r.results))
+                            }
+                            e.complete.apply(e, t)
+                        }
+
+                        var e = this;
+                        for (var n = 0, r; r = this.deps[n]; n++)r.then(t);
+                        return this
+                    }, L.prototype = new T, L.prototype.start = function () {
+                        var e = this, t = 0, n = [];
+                        return e.collectResults && (n[0] = {}), function r() {
+                            var i = e.deps[t++];
+                            i ? i.then(function (t) {
+                                i.results.length > 0 && (e.collectResults ? i instanceof L ? y(n[0], i.results[0]) : x(n[0], i.id, i.results[0]) : n.push(i.results[0])), r()
+                            }) : e.complete.apply(e, n)
+                        }(), this
+                    }, P.amd = {};
+                    var F = function (e) {
+                        return e(H, M, F, define)
+                    };
+                    F.Script = N, F.Module = C, F.Collection = k, F.Sequence = L, F.Dependency = T, F.noConflict = I, e.loadrunner = F, e.using = H, e.provide = M, e.define = P, H.path = "", H.matchers = [], H.matchers.add = function (e, t) {
+                        this.unshift([e, t])
+                    }, H.matchers.add(/(^script!|\.js$)/, function (e) {
+                        var t = new N(e.replace(/^\$/, H.path.replace(/\/$/, "") + "/").replace(/^script!/, ""), !1);
+                        return t.id = e, t
+                    }), H.matchers.add(/^[a-zA-Z0-9_\-\/]+$/, function (e) {
+                        return new C(e)
+                    }), H.bundles = [], s && (H.path = s.getAttribute("data-path") || s.src.split(/loadrunner\.js/)[0] || "", (main = s.getAttribute("data-main")) && H.apply(e, main.split(/\s*,\s*/)).then(function () {
+                    }))
+                })(this, document);
+                (window.__twttrlr = loadrunner.noConflict());
+            }
+            __twttrlr(function (using, provide, loadrunner, define) {
+                provide("util/util", function (e) {
+                    function t(e) {
+                        return s(arguments, function (t) {
+                            i(t, function (t, n) {
+                                e[t] = n
+                            })
+                        }), e
+                    }
+
+                    function n(e) {
+                        return i(e, function (t, r) {
+                            v(r) && (n(r), m(r) && delete e[t]), (r === undefined || r === null || r === "") && delete e[t]
+                        }), e
+                    }
+
+                    function r(e, t) {
+                        if (!e)return-1;
+                        if (e.indexOf)return e.indexOf(t);
+                        for (var n = 0, r = e.length; n < r; n++)if (t == e[n])return n;
+                        return-1
+                    }
+
+                    function i(e, t) {
+                        for (var n in e)(!e.hasOwnProperty || e.hasOwnProperty(n)) && t(n, e[n]);
+                        return e
+                    }
+
+                    function s(e, t) {
+                        if (!e)return;
+                        if (!t)return;
+                        if (e.forEach)return e.forEach(t);
+                        for (var n = 0, r = e.length; n < r; n++)t(e[n], n)
+                    }
+
+                    function o(e, t) {
+                        if (!e)return null;
+                        if (e.filter)return e.filter.apply(e, [t]);
+                        if (!t)return e;
+                        var n = [], r = 0, i = e.length;
+                        for (; r < i; r++)t(e[r]) && n.push(e[r]);
+                        return n
+                    }
+
+                    function u(e, t) {
+                        if (!e)return null;
+                        if (e.map)return e.map(t);
+                        if (!t)return e;
+                        var n = [], r = 0, i = e.length;
+                        for (; r < i; r++)n.push(t(e[r]));
+                        return n
                     }
 
                     function a(e) {
-                        var n = t.decodeURL(e);
-                        n.screen_name = u(e);
-                        if (n.screen_name)return t.url("https://twitter.com/intent/user", n)
+                        return e && e.replace(/(^\s+|\s+$)/g, "")
                     }
 
                     function f(e) {
-                        return typeof e == "string" && s.test(e)
+                        return{}.toString.call(e).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
                     }
 
                     function l(e, t) {
-                        t = t === undefined ? !0 : t;
-                        if (f(e))return(t ? "#" : "") + RegExp.$1
+                        return e == f(t)
                     }
 
                     function c(e) {
-                        return typeof e == "string" && r.test(e)
+                        return e && String(e).toLowerCase().indexOf("[native code]") > -1
                     }
 
-                    function h(e) {
-                        return c(e) && RegExp.$1
+                    function h(e, t) {
+                        if (e.contains)return e.contains(t);
+                        var n = t.parentNode;
+                        while (n) {
+                            if (n === e)return!0;
+                            n = n.parentNode
+                        }
+                        return!1
                     }
 
-                    function p(e) {
-                        return i.test(e)
+                    function p(e, t, n) {
+                        return n = n || [], function () {
+                            var r = u(arguments, function (e) {
+                                return e
+                            });
+                            return e.apply(t, n.concat(r))
+                        }
                     }
 
-                    var n = /(?:^|(?:https?\:)?\/\/(?:www\.)?twitter\.com(?:\:\d+)?(?:\/intent\/(?:follow|user)\/?\?screen_name=|(?:\/#!)?\/))@?([\w]+)(?:\?|&|$)/i, r = /(?:^|(?:https?\:)?\/\/(?:www\.)?twitter\.com(?:\:\d+)?\/(?:#!\/)?[\w_]+\/status(?:es)?\/)(\d+)/i, i = /^http(s?):\/\/((www\.)?)twitter\.com\//, s = /^#?([^.,<>!\s\/#\-\(\)\'\"]+)$/;
-                    e({isHashTag: f, hashTag: l, isScreenName: o, screenName: u, isStatus: c, status: h, intentForProfileURL: a, isTwitterURL: p, regexen: {profile: n}})
-                })
-            });
-            provide("util/uri", function (e) {
-                using("util/querystring", "util/util", "util/twitter", function (t, n, r) {
-                    function i(e, t) {
-                        var n, r;
-                        return t = t || location, /^https?:\/\//.test(e) ? e : /^\/\//.test(e) ? t.protocol + e : (n = t.host + (t.port.length ? ":" + t.port : ""), e.indexOf("/") !== 0 && (r = t.pathname.split("/"), r.pop(), r.push(e), e = "/" + r.join("/")), [t.protocol, "//", n, e].join(""))
+                    function d(e) {
+                        function t() {
+                        }
+
+                        return typeof Object.create == "function" ? Object.create(e) : (t.prototype = e, new t)
                     }
 
-                    function s() {
-                        var e = document.getElementsByTagName("link"), t = 0, n;
-                        for (; n = e[t]; t++)if (n.rel == "canonical")return i(n.href)
+                    function v(e) {
+                        return e === Object(e)
                     }
 
-                    function o() {
-                        var e = document.getElementsByTagName("a"), t = document.getElementsByTagName("link"), n = [e, t], i, s, o = 0, u = 0, a = /\bme\b/, f;
-                        for (; i = n[o]; o++)for (u = 0; s = i[u]; u++)if (a.test(s.rel) && (f = r.screenName(s.href)))return f
+                    function m(e) {
+                        if (!v(e))return!1;
+                        if (Object.keys)return!Object.keys(e).length;
+                        for (var t in e)if (e.hasOwnProperty(t))return!1;
+                        return!0
                     }
 
-                    e({absolutize: i, getCanonicalURL: s, getScreenNameFromPage: o})
-                })
-            });
-            provide("util/typevalidator", function (e) {
-                using("util/util", function (t) {
+                    e({aug: t, compact: n, containsElement: h, forIn: i, forEach: s, filter: o, map: u, trim: a, indexOf: r, isNative: c, isObject: v, isEmptyObject: m, createObject: d, bind: p, toType: f, isType: l})
+                });
+                provide("util/events", function (e) {
+                    using("util/util", function (t) {
+                        function r() {
+                            this.completed = !1, this.callbacks = []
+                        }
+
+                        var n = {bind: function (e, t) {
+                            return this._handlers = this._handlers || {}, this._handlers[e] = this._handlers[e] || [], this._handlers[e].push(t)
+                        }, unbind: function (e, n) {
+                            if (!this._handlers[e])return;
+                            if (n) {
+                                var r = t.indexOf(this._handlers[e], n);
+                                r >= 0 && this._handlers[e].splice(r, 1)
+                            } else this._handlers[e] = []
+                        }, trigger: function (e, t) {
+                            var n = this._handlers && this._handlers[e];
+                            t.type = e;
+                            if (n)for (var r = 0, i; i = n[r]; r++)i.call(this, t)
+                        }};
+                        r.prototype.addCallback = function (e) {
+                            this.completed ? e.apply(this, this.results) : this.callbacks.push(e)
+                        }, r.prototype.complete = function () {
+                            this.results = makeArray(arguments), this.completed = !0;
+                            for (var e = 0, t; t = this.callbacks[e]; e++)t.apply(this, this.results)
+                        }, e({Emitter: n, Promise: r})
+                    })
+                });
+                provide("util/querystring", function (e) {
+                    function t(e) {
+                        return encodeURIComponent(e).replace(/\+/g, "%2B")
+                    }
+
                     function n(e) {
-                        return e !== undefined && e !== null && e !== ""
+                        return decodeURIComponent(e)
                     }
 
                     function r(e) {
-                        return s(e) && e % 1 === 0
+                        var n = [], r;
+                        for (r in e)e[r] !== null && typeof e[r] != "undefined" && n.push(t(r) + "=" + t(e[r]));
+                        return n.sort().join("&")
                     }
 
                     function i(e) {
-                        return s(e) && !r(e)
+                        var t = {}, r, i, s, o;
+                        if (e) {
+                            r = e.split("&");
+                            for (o = 0; s = r[o]; o++)i = s.split("="), i.length == 2 && (t[n(i[0])] = n(i[1]))
+                        }
+                        return t
                     }
 
-                    function s(e) {
-                        return n(e) && !isNaN(e)
+                    function s(e, t) {
+                        var n = r(t);
+                        return n.length > 0 ? e.indexOf("?") >= 0 ? e + "&" + r(t) : e + "?" + r(t) : e
                     }
 
                     function o(e) {
-                        return n(e) && t.toType(e) == "array"
+                        var t = e && e.split("?");
+                        return t.length == 2 ? i(t[1]) : {}
                     }
 
-                    function u(e) {
-                        if (!n(e))return!1;
-                        switch (e) {
-                            case"on":
-                            case"ON":
-                            case"true":
-                            case"TRUE":
-                                return!0;
-                            case"off":
-                            case"OFF":
-                            case"false":
-                            case"FALSE":
-                                return!1;
-                            default:
-                                return!!e
-                        }
-                    }
-
-                    function a(e) {
-                        if (s(e))return e
-                    }
-
-                    function f(e) {
-                        if (i(e))return e
-                    }
-
-                    function l(e) {
-                        if (r(e))return e
-                    }
-
-                    e({hasValue: n, isInt: r, isFloat: i, isNumber: s, isArray: o, asInt: l, asFloat: f, asNumber: a, asBoolean: u})
-                })
-            });
-            provide("tfw/util/globals", function (e) {
-                using("util/typevalidator", function (t) {
-                    function r() {
-                        var e = document.getElementsByTagName("meta"), t, r, i = 0;
-                        n = {};
-                        for (; t = e[i]; i++) {
-                            if (!/^twitter:/.test(t.name))continue;
-                            r = t.name.replace(/^twitter:/, ""), n[r] = t.content
-                        }
-                    }
-
-                    function i(e) {
-                        return n[e]
-                    }
-
-                    function s(e) {
-                        return t.asBoolean(e) && (n.dnt = !0), t.asBoolean(n.dnt)
-                    }
-
-                    var n;
-                    r(), e({init: r, val: i, dnt: s})
-                })
-            });
-            provide("util/logger", function (e) {
-                function n(e, n, r, i, s) {
-                    window[t] && window[t].log && window[t].log(e, n, r, i, s)
-                }
-
-                function r(e, n, r, i, s) {
-                    window[t] && window[t].warn && window[t].warn(e, n, r, i, s)
-                }
-
-                function i(e, n, r, i, s) {
-                    window[t] && window[t].error && window[t].error(e, n, r, i, s)
-                }
-
-                var t = ["con", "sole"].join("");
-                e({info: n, warn: r, error: i})
-            });
-            provide("util/domready", function (e) {
-                function l() {
-                    t = 1;
-                    for (var e = 0, r = n.length; e < r; e++)n[e]()
-                }
-
-                var t = 0, n = [], r, i, s = !1, o = document.createElement("a"), u = "DOMContentLoaded", a = "addEventListener", f = "onreadystatechange";
-                /^loade|c/.test(document.readyState) && (t = 1), document[a] && document[a](u, i = function () {
-                    document.removeEventListener(u, i, s), l()
-                }, s), o.doScroll && document.attachEvent(f, r = function () {
-                    /^c/.test(document.readyState) && (document.detachEvent(f, r), l())
+                    e({url: s, decodeURL: o, decode: i, encode: r, encodePart: t, decodePart: n})
                 });
-                var c = o.doScroll ? function (e) {
-                    self != top ? t ? e() : n.push(e) : !function () {
-                        try {
-                            o.doScroll("left")
-                        } catch (t) {
-                            return setTimeout(function () {
-                                c(e)
-                            }, 50)
+                provide("util/twitter", function (e) {
+                    using("util/querystring", function (t) {
+                        function o(e) {
+                            return typeof e == "string" && n.test(e) && RegExp.$1.length <= 20
                         }
-                        e()
-                    }()
-                } : function (e) {
-                    t ? e() : n.push(e)
-                };
-                e(c)
-            });
-            provide("util/env", function (e) {
-                using("util/domready", "util/typevalidator", "util/logger", "tfw/util/globals", function (t, n, r, i) {
-                    function f() {
-                        return window.devicePixelRatio ? window.devicePixelRatio >= 1.5 : window.matchMedia ? window.matchMedia("only screen and (min-resolution: 144dpi)").matches : !1
+
+                        function u(e) {
+                            if (o(e))return RegExp.$1
+                        }
+
+                        function a(e) {
+                            var n = t.decodeURL(e);
+                            n.screen_name = u(e);
+                            if (n.screen_name)return t.url("https://twitter.com/intent/user", n)
+                        }
+
+                        function f(e) {
+                            return typeof e == "string" && s.test(e)
+                        }
+
+                        function l(e, t) {
+                            t = t === undefined ? !0 : t;
+                            if (f(e))return(t ? "#" : "") + RegExp.$1
+                        }
+
+                        function c(e) {
+                            return typeof e == "string" && r.test(e)
+                        }
+
+                        function h(e) {
+                            return c(e) && RegExp.$1
+                        }
+
+                        function p(e) {
+                            return i.test(e)
+                        }
+
+                        var n = /(?:^|(?:https?\:)?\/\/(?:www\.)?twitter\.com(?:\:\d+)?(?:\/intent\/(?:follow|user)\/?\?screen_name=|(?:\/#!)?\/))@?([\w]+)(?:\?|&|$)/i, r = /(?:^|(?:https?\:)?\/\/(?:www\.)?twitter\.com(?:\:\d+)?\/(?:#!\/)?[\w_]+\/status(?:es)?\/)(\d+)/i, i = /^http(s?):\/\/((www\.)?)twitter\.com\//, s = /^#?([^.,<>!\s\/#\-\(\)\'\"]+)$/;
+                        e({isHashTag: f, hashTag: l, isScreenName: o, screenName: u, isStatus: c, status: h, intentForProfileURL: a, isTwitterURL: p, regexen: {profile: n}})
+                    })
+                });
+                provide("util/uri", function (e) {
+                    using("util/querystring", "util/util", "util/twitter", function (t, n, r) {
+                        function i(e, t) {
+                            var n, r;
+                            return t = t || location, /^https?:\/\//.test(e) ? e : /^\/\//.test(e) ? t.protocol + e : (n = t.host + (t.port.length ? ":" + t.port : ""), e.indexOf("/") !== 0 && (r = t.pathname.split("/"), r.pop(), r.push(e), e = "/" + r.join("/")), [t.protocol, "//", n, e].join(""))
+                        }
+
+                        function s() {
+                            var e = document.getElementsByTagName("link"), t = 0, n;
+                            for (; n = e[t]; t++)if (n.rel == "canonical")return i(n.href)
+                        }
+
+                        function o() {
+                            var e = document.getElementsByTagName("a"), t = document.getElementsByTagName("link"), n = [e, t], i, s, o = 0, u = 0, a = /\bme\b/, f;
+                            for (; i = n[o]; o++)for (u = 0; s = i[u]; u++)if (a.test(s.rel) && (f = r.screenName(s.href)))return f
+                        }
+
+                        e({absolutize: i, getCanonicalURL: s, getScreenNameFromPage: o})
+                    })
+                });
+                provide("util/typevalidator", function (e) {
+                    using("util/util", function (t) {
+                        function n(e) {
+                            return e !== undefined && e !== null && e !== ""
+                        }
+
+                        function r(e) {
+                            return s(e) && e % 1 === 0
+                        }
+
+                        function i(e) {
+                            return s(e) && !r(e)
+                        }
+
+                        function s(e) {
+                            return n(e) && !isNaN(e)
+                        }
+
+                        function o(e) {
+                            return n(e) && t.toType(e) == "array"
+                        }
+
+                        function u(e) {
+                            if (!n(e))return!1;
+                            switch (e) {
+                                case"on":
+                                case"ON":
+                                case"true":
+                                case"TRUE":
+                                    return!0;
+                                case"off":
+                                case"OFF":
+                                case"false":
+                                case"FALSE":
+                                    return!1;
+                                default:
+                                    return!!e
+                            }
+                        }
+
+                        function a(e) {
+                            if (s(e))return e
+                        }
+
+                        function f(e) {
+                            if (i(e))return e
+                        }
+
+                        function l(e) {
+                            if (r(e))return e
+                        }
+
+                        e({hasValue: n, isInt: r, isFloat: i, isNumber: s, isArray: o, asInt: l, asFloat: f, asNumber: a, asBoolean: u})
+                    })
+                });
+                provide("tfw/util/globals", function (e) {
+                    using("util/typevalidator", function (t) {
+                        function r() {
+                            var e = document.getElementsByTagName("meta"), t, r, i = 0;
+                            n = {};
+                            for (; t = e[i]; i++) {
+                                if (!/^twitter:/.test(t.name))continue;
+                                r = t.name.replace(/^twitter:/, ""), n[r] = t.content
+                            }
+                        }
+
+                        function i(e) {
+                            return n[e]
+                        }
+
+                        function s(e) {
+                            return t.asBoolean(e) && (n.dnt = !0), t.asBoolean(n.dnt)
+                        }
+
+                        var n;
+                        r(), e({init: r, val: i, dnt: s})
+                    })
+                });
+                provide("util/logger", function (e) {
+                    function n(e, n, r, i, s) {
+                        window[t] && window[t].log && window[t].log(e, n, r, i, s)
                     }
 
+                    function r(e, n, r, i, s) {
+                        window[t] && window[t].warn && window[t].warn(e, n, r, i, s)
+                    }
+
+                    function i(e, n, r, i, s) {
+                        window[t] && window[t].error && window[t].error(e, n, r, i, s)
+                    }
+
+                    var t = ["con", "sole"].join("");
+                    e({info: n, warn: r, error: i})
+                });
+                provide("util/domready", function (e) {
                     function l() {
-                        return/MSIE \d/.test(s)
+                        t = 1;
+                        for (var e = 0, r = n.length; e < r; e++)n[e]()
                     }
 
-                    function c() {
-                        return/MSIE 6/.test(s)
-                    }
-
-                    function h() {
-                        return/MSIE 7/.test(s)
-                    }
-
-                    function p() {
-                        return o
-                    }
-
-                    function d() {
-                        return"ontouchstart"in window || /Opera Mini/.test(s) || navigator.msMaxTouchPoints > 0
-                    }
-
-                    function v() {
-                        var e = document.body.style;
-                        return e.transition !== undefined || e.webkitTransition !== undefined || e.mozTransition !== undefined || e.oTransition !== undefined || e.msTransition !== undefined
-                    }
-
-                    var s = window.navigator.userAgent, o = !1, u = !1, a = "twitter-csp-test";
-                    window.twttr = window.twttr || {}, twttr.verifyCSP = function (e) {
-                        var t = document.getElementById(a);
-                        u = !0, o = !!e, t && t.parentNode.removeChild(t)
-                    }, t(function () {
-                        var e;
-                        if (c() || h())return o = !1;
-                        if (n.asBoolean(i.val("widgets:csp")))return o = !0;
-                        e = document.createElement("script"), e.id = a, e.text = "twttr.verifyCSP(false);", document.body.appendChild(e), window.setTimeout(function () {
-                            if (u)return;
-                            r.warn('TWITTER: Content Security Policy restrictions may be applied to your site. Add <meta name="twitter:widgets:csp" content="on"> to supress this warning.'), r.warn("TWITTER: Please note: Not all embedded timeline and embedded Tweet functionality is supported when CSP is applied.")
-                        }, 5e3)
-                    }), e({retina: f, anyIE: l, ie6: c, ie7: h, cspEnabled: p, touch: d, cssTransitions: v})
-                })
-            });
-            provide("dom/delegate", function (e) {
-                using("util/env", function (t) {
-                    function i(e) {
-                        var t = e.getAttribute("data-twitter-event-id");
-                        return t ? t : (e.setAttribute("data-twitter-event-id", ++r), r)
-                    }
-
-                    function s(e, t, n) {
-                        var r = 0, i = e && e.length || 0;
-                        for (r = 0; r < i; r++)e[r].call(t, n)
-                    }
-
-                    function o(e, t, n) {
-                        var r = n || e.target || e.srcElement, i = r.className.split(" "), u = 0, a, f = i.length;
-                        for (; u < f; u++)s(t["." + i[u]], r, e);
-                        s(t[r.tagName], r, e);
-                        if (e.cease)return;
-                        r !== this && o.call(this, e, t, r.parentElement || r.parentNode)
-                    }
-
-                    function u(e, t, n) {
-                        if (e.addEventListener) {
-                            e.addEventListener(t, function (r) {
-                                o.call(e, r, n[t])
-                            }, !1);
-                            return
+                    var t = 0, n = [], r, i, s = !1, o = document.createElement("a"), u = "DOMContentLoaded", a = "addEventListener", f = "onreadystatechange";
+                    /^loade|c/.test(document.readyState) && (t = 1), document[a] && document[a](u, i = function () {
+                        document.removeEventListener(u, i, s), l()
+                    }, s), o.doScroll && document.attachEvent(f, r = function () {
+                        /^c/.test(document.readyState) && (document.detachEvent(f, r), l())
+                    });
+                    var c = o.doScroll ? function (e) {
+                        self != top ? t ? e() : n.push(e) : !function () {
+                            try {
+                                o.doScroll("left")
+                            } catch (t) {
+                                return setTimeout(function () {
+                                    c(e)
+                                }, 50)
+                            }
+                            e()
+                        }()
+                    } : function (e) {
+                        t ? e() : n.push(e)
+                    };
+                    e(c)
+                });
+                provide("util/env", function (e) {
+                    using("util/domready", "util/typevalidator", "util/logger", "tfw/util/globals", function (t, n, r, i) {
+                        function f() {
+                            return window.devicePixelRatio ? window.devicePixelRatio >= 1.5 : window.matchMedia ? window.matchMedia("only screen and (min-resolution: 144dpi)").matches : !1
                         }
-                        e.attachEvent && e.attachEvent("on" + t, function () {
-                            o.call(e, e.ownerDocument.parentWindow.event, n[t])
-                        })
-                    }
 
-                    function a(e, t, r, s) {
-                        var o = i(e);
-                        n[o] = n[o] || {}, n[o][t] || (n[o][t] = {}, u(e, t, n[o])), n[o][t][r] = n[o][t][r] || [], n[o][t][r].push(s)
-                    }
+                        function l() {
+                            return/MSIE \d/.test(s)
+                        }
 
-                    function f(e, t, n) {
-                        e.addEventListener ? e.addEventListener(t, n, !1) : e.attachEvent("on" + t, function () {
-                            n(window.event)
-                        })
-                    }
+                        function c() {
+                            return/MSIE 6/.test(s)
+                        }
 
-                    function l(e, t, r) {
-                        var s = i(t), u = n[s] && n[s];
-                        o.call(t, {target: r}, u[e])
-                    }
+                        function h() {
+                            return/MSIE 7/.test(s)
+                        }
 
-                    function c(e) {
-                        return p(e), h(e), !1
-                    }
+                        function p() {
+                            return o
+                        }
 
-                    function h(e) {
-                        e && e.preventDefault ? e.preventDefault() : e.returnValue = !1
-                    }
+                        function d() {
+                            return"ontouchstart"in window || /Opera Mini/.test(s) || navigator.msMaxTouchPoints > 0
+                        }
 
-                    function p(e) {
-                        e && (e.cease = !0) && e.stopPropagation ? e.stopPropagation() : e.cancelBubble = !0
-                    }
+                        function v() {
+                            var e = document.body.style;
+                            return e.transition !== undefined || e.webkitTransition !== undefined || e.mozTransition !== undefined || e.oTransition !== undefined || e.msTransition !== undefined
+                        }
 
-                    var n = {}, r = -1;
-                    e({stop: c, stopPropagation: p, preventDefault: h, delegate: a, on: f, simulate: l})
-                })
-            });
-            provide("tfw/util/article", function (e) {
-                using("dom/delegate", "tfw/util/globals", "util/uri", function (t, n, r) {
-                    function o() {
-                        i = r.getCanonicalURL() || "" + document.location;
-                        if (!window.top.postMessage)return;
-                        if (window == window.top) {
+                        var s = window.navigator.userAgent, o = !1, u = !1, a = "twitter-csp-test";
+                        window.twttr = window.twttr || {}, twttr.verifyCSP = function (e) {
+                            var t = document.getElementById(a);
+                            u = !0, o = !!e, t && t.parentNode.removeChild(t)
+                        }, t(function () {
+                            var e;
+                            if (c() || h())return o = !1;
+                            if (n.asBoolean(i.val("widgets:csp")))return o = !0;
+                            e = document.createElement("script"), e.id = a, e.text = "twttr.verifyCSP(false);", document.body.appendChild(e), window.setTimeout(function () {
+                                if (u)return;
+                                r.warn('TWITTER: Content Security Policy restrictions may be applied to your site. Add <meta name="twitter:widgets:csp" content="on"> to supress this warning.'), r.warn("TWITTER: Please note: Not all embedded timeline and embedded Tweet functionality is supported when CSP is applied.")
+                            }, 5e3)
+                        }), e({retina: f, anyIE: l, ie6: c, ie7: h, cspEnabled: p, touch: d, cssTransitions: v})
+                    })
+                });
+                provide("dom/delegate", function (e) {
+                    using("util/env", function (t) {
+                        function i(e) {
+                            var t = e.getAttribute("data-twitter-event-id");
+                            return t ? t : (e.setAttribute("data-twitter-event-id", ++r), r)
+                        }
+
+                        function s(e, t, n) {
+                            var r = 0, i = e && e.length || 0;
+                            for (r = 0; r < i; r++)e[r].call(t, n)
+                        }
+
+                        function o(e, t, n) {
+                            var r = n || e.target || e.srcElement, i = r.className.split(" "), u = 0, a, f = i.length;
+                            for (; u < f; u++)s(t["." + i[u]], r, e);
+                            s(t[r.tagName], r, e);
+                            if (e.cease)return;
+                            r !== this && o.call(this, e, t, r.parentElement || r.parentNode)
+                        }
+
+                        function u(e, t, n) {
+                            if (e.addEventListener) {
+                                e.addEventListener(t, function (r) {
+                                    o.call(e, r, n[t])
+                                }, !1);
+                                return
+                            }
+                            e.attachEvent && e.attachEvent("on" + t, function () {
+                                o.call(e, e.ownerDocument.parentWindow.event, n[t])
+                            })
+                        }
+
+                        function a(e, t, r, s) {
+                            var o = i(e);
+                            n[o] = n[o] || {}, n[o][t] || (n[o][t] = {}, u(e, t, n[o])), n[o][t][r] = n[o][t][r] || [], n[o][t][r].push(s)
+                        }
+
+                        function f(e, t, n) {
+                            e.addEventListener ? e.addEventListener(t, n, !1) : e.attachEvent("on" + t, function () {
+                                n(window.event)
+                            })
+                        }
+
+                        function l(e, t, r) {
+                            var s = i(t), u = n[s] && n[s];
+                            o.call(t, {target: r}, u[e])
+                        }
+
+                        function c(e) {
+                            return p(e), h(e), !1
+                        }
+
+                        function h(e) {
+                            e && e.preventDefault ? e.preventDefault() : e.returnValue = !1
+                        }
+
+                        function p(e) {
+                            e && (e.cease = !0) && e.stopPropagation ? e.stopPropagation() : e.cancelBubble = !0
+                        }
+
+                        var n = {}, r = -1;
+                        e({stop: c, stopPropagation: p, preventDefault: h, delegate: a, on: f, simulate: l})
+                    })
+                });
+                provide("tfw/util/article", function (e) {
+                    using("dom/delegate", "tfw/util/globals", "util/uri", function (t, n, r) {
+                        function o() {
+                            i = r.getCanonicalURL() || "" + document.location;
+                            if (!window.top.postMessage)return;
+                            if (window == window.top) {
+                                t.on(window, "message", function (e) {
+                                    var t;
+                                    if (e.data && e.data[0] != "{")return;
+                                    try {
+                                        t = JSON.parse(e.data)
+                                    } catch (r) {
+                                    }
+                                    t && t.name == "twttr:private:requestArticleUrl" && e.source.postMessage(JSON.stringify({name: "twttr:private:provideArticleUrl", data: {url: i, dnt: n.dnt()}}), "*")
+                                });
+                                return
+                            }
                             t.on(window, "message", function (e) {
                                 var t;
                                 if (e.data && e.data[0] != "{")return;
@@ -58247,1684 +56113,1678 @@ var TwitterView = Ember.View.extend({
                                     t = JSON.parse(e.data)
                                 } catch (r) {
                                 }
-                                t && t.name == "twttr:private:requestArticleUrl" && e.source.postMessage(JSON.stringify({name: "twttr:private:provideArticleUrl", data: {url: i, dnt: n.dnt()}}), "*")
-                            });
-                            return
+                                t && t.name == "twttr:private:provideArticleUrl" && (i = t.data && t.data.url, n.dnt(t.data.dnt), s = document.location.href)
+                            }), window.top.postMessage(JSON.stringify({name: "twttr:private:requestArticleUrl"}), "*")
                         }
-                        t.on(window, "message", function (e) {
-                            var t;
-                            if (e.data && e.data[0] != "{")return;
-                            try {
-                                t = JSON.parse(e.data)
-                            } catch (r) {
-                            }
-                            t && t.name == "twttr:private:provideArticleUrl" && (i = t.data && t.data.url, n.dnt(t.data.dnt), s = document.location.href)
-                        }), window.top.postMessage(JSON.stringify({name: "twttr:private:requestArticleUrl"}), "*")
-                    }
 
-                    var i, s = "";
-                    o(), e({url: function () {
-                        return i
-                    }, frameUrl: function () {
-                        return s
-                    }})
-                })
-            });
-            provide("util/promise", function (e) {
-                using("util/util", function (t) {
-                    var n = function (e, t) {
-                        setTimeout(function () {
-                            e.call(t)
-                        }, 1)
-                    }, r = function (e) {
-                        try {
-                            var t = e.then;
-                            if (typeof t == "function")return!0
-                        } catch (n) {
-                        }
-                        return!1
-                    }, i = function (e) {
-                        Error.call(this, e)
-                    };
-                    i.prototype = t.createObject(Error.prototype);
-                    var s = function () {
-                        var e = [];
-                        return e.pump = function (t) {
-                            n(function () {
-                                var n = e.length, r = 0;
-                                while (r < n)r++, e.shift()(t)
-                            })
-                        }, e
-                    }, o = function (e, t, i, s, o, u) {
-                        var a = !1, f = this, l = function (e) {
-                            n(function () {
-                                u("fulfilled"), s(e), t.pump(e)
-                            })
-                        }, c = function (e) {
-                            n(function () {
-                                u("rejected"), o(e), i.pump(e)
-                            })
-                        }, h = function (e) {
-                            if (r(e)) {
-                                e.then(h, c);
-                                return
+                        var i, s = "";
+                        o(), e({url: function () {
+                            return i
+                        }, frameUrl: function () {
+                            return s
+                        }})
+                    })
+                });
+                provide("util/promise", function (e) {
+                    using("util/util", function (t) {
+                        var n = function (e, t) {
+                            setTimeout(function () {
+                                e.call(t)
+                            }, 1)
+                        }, r = function (e) {
+                            try {
+                                var t = e.then;
+                                if (typeof t == "function")return!0
+                            } catch (n) {
                             }
-                            l(e)
-                        }, p = function (e, t) {
-                            return function (t) {
-                                a || (a = !0, e(t))
-                            }
+                            return!1
+                        }, i = function (e) {
+                            Error.call(this, e)
                         };
-                        this.resolve = p(h, "resolve"), this.fulfill = p(l, "fulfill"), this.reject = p(c, "reject"), this.cancel = function () {
-                            f.reject(new Error("Cancel"))
-                        }, this.timeout = function () {
-                            f.reject(new Error("Timeout"))
-                        }, u("pending")
-                    }, u = function (e) {
-                        var t = new s, n = new s, r, i, u = "pending";
-                        this._addAcceptCallback = function (e) {
-                            t.push(e), u == "fulfilled" && t.pump(r)
-                        }, this._addRejectCallback = function (e) {
-                            n.push(e), u == "rejected" && n.pump(i)
-                        };
-                        var a = new o(this, t, n, function (e) {
-                            r = e
-                        }, function (e) {
-                            i = e
-                        }, function (e) {
-                            u = e
-                        });
-                        try {
-                            e && e(a)
-                        } catch (f) {
-                            a.reject(f)
-                        }
-                    }, a = function (e) {
-                        return typeof e == "function"
-                    }, f = function (e, n, r) {
-                        return a(e) ? function () {
-                            try {
-                                var t = e.apply(null, arguments);
-                                n.resolve(t)
-                            } catch (r) {
-                                n.reject(r)
-                            }
-                        } : t.bind(n[r], n)
-                    }, l = function (e, t, n) {
-                        return a(e) && n._addAcceptCallback(e), a(t) && n._addRejectCallback(t), n
-                    };
-                    t.aug(u.prototype, {then: function (e, t) {
-                        var n = this;
-                        return new u(function (r) {
-                            l(f(e, r, "resolve"), f(t, r, "reject"), n)
-                        })
-                    }, "catch": function (e) {
-                        var t = this;
-                        return new u(function (n) {
-                            l(null, f(e, n, "reject"), t)
-                        })
-                    }}), u.isThenable = r;
-                    var c = function (e) {
-                        return t.map(e, u.resolve)
-                    };
-                    u.any = function () {
-                        var e = c(arguments);
-                        return new u(function (n) {
-                            if (!e.length)n.reject("No futures passed to Promise.any()"); else {
-                                var r = !1, i = function (e) {
-                                    if (r)return;
-                                    r = !0, n.resolve(e)
-                                }, s = function (e) {
-                                    if (r)return;
-                                    r = !0, n.reject(e)
-                                };
-                                t.forEach(e, function (e, t) {
-                                    e.then(i, s)
+                        i.prototype = t.createObject(Error.prototype);
+                        var s = function () {
+                            var e = [];
+                            return e.pump = function (t) {
+                                n(function () {
+                                    var n = e.length, r = 0;
+                                    while (r < n)r++, e.shift()(t)
                                 })
-                            }
-                        })
-                    }, u.every = function () {
-                        var e = c(arguments);
-                        return new u(function (n) {
-                            if (!e.length)n.reject("No futures passed to Promise.every()"); else {
-                                var r = new Array(e.length), i = 0, s = function (t, s) {
-                                    i++, r[t] = s, i == e.length && n.resolve(r)
-                                };
-                                t.forEach(e, function (e, r) {
-                                    e.then(t.bind(s, null, [r]), n.reject)
+                            }, e
+                        }, o = function (e, t, i, s, o, u) {
+                            var a = !1, f = this, l = function (e) {
+                                n(function () {
+                                    u("fulfilled"), s(e), t.pump(e)
                                 })
-                            }
-                        })
-                    }, u.some = function () {
-                        var e = c(arguments);
-                        return new u(function (n) {
-                            if (!e.length)n.reject("No futures passed to Promise.some()"); else {
-                                var r = 0, i = function (t) {
-                                    r++, r == e.length && n.reject()
-                                };
-                                t.forEach(e, function (e, t) {
-                                    e.then(n.resolve, i)
+                            }, c = function (e) {
+                                n(function () {
+                                    u("rejected"), o(e), i.pump(e)
                                 })
-                            }
-                        })
-                    }, u.fulfill = function (e) {
-                        return new u(function (t) {
-                            t.fulfill(e)
-                        })
-                    }, u.resolve = function (e) {
-                        return new u(function (t) {
-                            t.resolve(e)
-                        })
-                    }, u.reject = function (e) {
-                        return new u(function (t) {
-                            t.reject(e)
-                        })
-                    }, e(u)
-                })
-            });
-            provide("util/layout", function (e) {
-                using("util/promise", "util/logger", function (t, n) {
-                    function s() {
-                    }
-
-                    var r = [], i;
-                    s.prototype.enqueue = function (e, n) {
-                        return new t(function (t) {
-                            r.push({action: e, resolver: t, note: n})
-                        })
-                    }, s.prototype.exec = function () {
-                        var e = r, t;
-                        if (!e.length)return;
-                        r = [];
-                        while (e.length)t = e.shift(), t && t.action ? t.resolver.fulfill(t.action()) : t.resolver.reject()
-                    }, s.prototype.delayedExec = function () {
-                        i && window.clearTimeout(i), i = window.setTimeout(this.exec, 100)
-                    }, e(s)
-                })
-            });
-            provide("util/iframe", function (e) {
-                using("util/util", function (t) {
-                    e(function (e, n, r) {
-                        var i;
-                        r = r || document, e = e || {}, n = n || {};
-                        if (e.name) {
-                            try {
-                                i = r.createElement('<iframe name="' + e.name + '"></iframe>')
-                            } catch (s) {
-                                i = r.createElement("iframe"), i.name = e.name
-                            }
-                            delete e.name
-                        } else i = r.createElement("iframe");
-                        return e.id && (i.id = e.id, delete e.id), i.allowtransparency = "true", i.scrolling = "no", i.setAttribute("frameBorder", 0), i.setAttribute("allowTransparency", !0), t.forIn(e, function (e, t) {
-                            i.setAttribute(e, t)
-                        }), t.forIn(n, function (e, t) {
-                            i.style[e] = t
-                        }), i
-                    })
-                })
-            });
-            provide("dom/get", function (e) {
-                using("util/util", function (t) {
-                    function n(e, n, r, i) {
-                        var s, o, u = [], a, f, l, c, h, p;
-                        n = n || document;
-                        if (t.isNative(n.getElementsByClassName))return u = t.filter(n.getElementsByClassName(e), function (e) {
-                            return!r || e.tagName.toLowerCase() == r.toLowerCase()
-                        }), [].slice.call(u, 0, i || u.length);
-                        a = e.split(" "), c = a.length, s = n.getElementsByTagName(r || "*"), p = s.length;
-                        for (l = 0; l < c && p > 0; l++) {
-                            u = [], f = a[l];
-                            for (h = 0; h < p; h++) {
-                                o = s[h], ~t.indexOf(o.className.split(" "), f) && u.push(o);
-                                if (l + 1 == c && u.length === i)break
-                            }
-                            s = u, p = s.length
-                        }
-                        return u
-                    }
-
-                    function r(e, t, r) {
-                        return n(e, t, r, 1)[0]
-                    }
-
-                    function i(e, n, r) {
-                        var s = n && n.parentNode, o;
-                        if (!s || s === r)return;
-                        return s.tagName == e ? s : (o = s.className.split(" "), 0 === e.indexOf(".") && ~t.indexOf(o, e.slice(1)) ? s : i(e, s, r))
-                    }
-
-                    e({all: n, one: r, ancestor: i})
-                })
-            });
-            provide("tfw/widget/base", function (e) {
-                using("dom/get", "util/domready", "util/iframe", "util/layout", "util/promise", "util/querystring", "util/typevalidator", "util/util", "tfw/util/globals", function (t, n, r, i, s, o, u, a, f) {
-                    function g(e) {
-                        var t;
-                        if (!e)return;
-                        e.ownerDocument ? (this.srcEl = e, this.classAttr = e.className.split(" ")) : (this.srcOb = e, this.classAttr = []), t = this.params(), this.id = this.generateId(), this.setLanguage(), this.related = t.related || this.dataAttr("related"), this.partner = t.partner || this.dataAttr("partner") || f.val("partner"), this.dnt = t.dnt || this.dataAttr("dnt") || f.dnt() || "", this.styleAttr = [], this.targetEl = e.targetEl
-                    }
-
-                    function y() {
-                        a.forEach(p, function (e) {
-                            e()
-                        }), g.doLayout()
-                    }
-
-                    function b(e) {
-                        if (!e)return;
-                        return e.lang ? e.lang : b(e.parentNode)
-                    }
-
-                    var l = 0, c, h = {list: [], byId: {}}, p = [], d = new i, v = "data-twttr-rendered", m = {ar: {"%{followers_count} followers": "عدد المتابعين %{followers_count}", "100K+": "+100 ألف", "10k unit": "10 آلاف وحدة", Follow: "تابِع", "Follow %{screen_name}": "تابِع %{screen_name}", K: "ألف", M: "مليون", Tweet: "غرِّد", "Tweet %{hashtag}": "غرِّد %{hashtag}", "Tweet to %{name}": "غرِّد لـ %{name}", "Twitter Stream": "خطّ تويتر الزمنيّ"}, da: {"%{followers_count} followers": "%{followers_count} følgere", "10k unit": "10k enhed", Follow: "Følg", "Follow %{screen_name}": "Følg %{screen_name}", "Tweet to %{name}": "Tweet til %{name}", "Twitter Stream": "Twitter-strøm"}, de: {"%{followers_count} followers": "%{followers_count} Follower", "100K+": "100Tsd+", "10k unit": "10tsd-Einheit", Follow: "Folgen", "Follow %{screen_name}": "%{screen_name} folgen", K: "Tsd", Tweet: "Twittern", "Tweet to %{name}": "Tweet an %{name}"}, es: {"%{followers_count} followers": "%{followers_count} seguidores", "10k unit": "10k unidad", Follow: "Seguir", "Follow %{screen_name}": "Seguir a %{screen_name}", Tweet: "Twittear", "Tweet %{hashtag}": "Twittear %{hashtag}", "Tweet to %{name}": "Twittear a %{name}", "Twitter Stream": "Cronología de Twitter"}, fa: {"%{followers_count} followers": "%{followers_count} دنبال‌کننده", "100K+": ">۱۰۰هزار", "10k unit": "۱۰هزار واحد", Follow: "دنبال کردن", "Follow %{screen_name}": "دنبال کردن %{screen_name}", K: "هزار", M: "میلیون", Tweet: "توییت", "Tweet %{hashtag}": "توییت کردن %{hashtag}", "Tweet to %{name}": "به %{name} توییت کنید", "Twitter Stream": "جریان توییت‌ها"}, fi: {"%{followers_count} followers": "%{followers_count} seuraajaa", "100K+": "100 000+", "10k unit": "10 000 yksikköä", Follow: "Seuraa", "Follow %{screen_name}": "Seuraa käyttäjää %{screen_name}", K: "tuhatta", M: "milj.", Tweet: "Twiittaa", "Tweet %{hashtag}": "Twiittaa %{hashtag}", "Tweet to %{name}": "Twiittaa käyttäjälle %{name}", "Twitter Stream": "Twitter-virta"}, fil: {"%{followers_count} followers": "%{followers_count} mga tagasunod", "10k unit": "10k yunit", Follow: "Sundan", "Follow %{screen_name}": "Sundan si %{screen_name}", Tweet: "I-tweet", "Tweet %{hashtag}": "I-tweet ang %{hashtag}", "Tweet to %{name}": "Mag-Tweet kay %{name}", "Twitter Stream": "Stream ng Twitter"}, fr: {"%{followers_count} followers": "%{followers_count} abonnés", "10k unit": "unité de 10k", Follow: "Suivre", "Follow %{screen_name}": "Suivre %{screen_name}", Tweet: "Tweeter", "Tweet %{hashtag}": "Tweeter %{hashtag}", "Tweet to %{name}": "Tweeter à %{name}", "Twitter Stream": "Flux Twitter"}, he: {"%{followers_count} followers": "%{followers_count} עוקבים", "100K+": "מאות אלפים", "10k unit": "עשרות אלפים", Follow: "מעקב", "Follow %{screen_name}": "לעקוב אחר %{screen_name}", K: "אלף", M: "מיליון", Tweet: "ציוץ", "Tweet %{hashtag}": "צייצו %{hashtag}", "Tweet to %{name}": "ציוץ אל %{name}", "Twitter Stream": "התזרים של טוויטר"}, hi: {"%{followers_count} followers": "%{followers_count} फ़ॉलोअर्स", "100K+": "1 लाख+", "10k unit": "10 हजार इकाईयां", Follow: "फ़ॉलो", "Follow %{screen_name}": "%{screen_name} को फ़ॉलो करें", K: "हजार", M: "मिलियन", Tweet: "ट्वीट", "Tweet %{hashtag}": "ट्वीट %{hashtag}", "Tweet to %{name}": "%{name} को ट्वीट करें", "Twitter Stream": "ट्विटर स्ट्रीम"}, hu: {"%{followers_count} followers": "%{followers_count} követő", "100K+": "100E+", "10k unit": "10E+", Follow: "Követés", "Follow %{screen_name}": "%{screen_name} követése", K: "E", "Tweet %{hashtag}": "%{hashtag} tweetelése", "Tweet to %{name}": "Tweet küldése neki: %{name}", "Twitter Stream": "Twitter Hírfolyam"}, id: {"%{followers_count} followers": "%{followers_count} pengikut", "100K+": "100 ribu+", "10k unit": "10 ribu unit", Follow: "Ikuti", "Follow %{screen_name}": "Ikuti %{screen_name}", K: "&nbsp;ribu", M: "&nbsp;juta", "Tweet to %{name}": "Tweet ke %{name}", "Twitter Stream": "Aliran Twitter"}, it: {"%{followers_count} followers": "%{followers_count} follower", "10k unit": "10k unità", Follow: "Segui", "Follow %{screen_name}": "Segui %{screen_name}", "Tweet %{hashtag}": "Twitta %{hashtag}", "Tweet to %{name}": "Twitta a %{name}"}, ja: {"%{followers_count} followers": "%{followers_count}人のフォロワー", "100K+": "100K以上", "10k unit": "万", Follow: "フォローする", "Follow %{screen_name}": "%{screen_name}さんをフォロー", Tweet: "ツイート", "Tweet %{hashtag}": "%{hashtag} をツイートする", "Tweet to %{name}": "%{name}さんへツイートする", "Twitter Stream": "Twitterストリーム"}, ko: {"%{followers_count} followers": "%{followers_count}명의 팔로워", "100K+": "100만 이상", "10k unit": "만 단위", Follow: "팔로우", "Follow %{screen_name}": "%{screen_name} 님 팔로우하기", K: "천", M: "백만", Tweet: "트윗", "Tweet %{hashtag}": "%{hashtag} 관련 트윗하기", "Tweet to %{name}": "%{name}님에게 트윗하기", "Twitter Stream": "트위터 스트림"}, msa: {"%{followers_count} followers": "%{followers_count} pengikut", "100K+": "100 ribu+", "10k unit": "10 ribu unit", Follow: "Ikut", "Follow %{screen_name}": "Ikut %{screen_name}", K: "ribu", M: "juta", "Tweet to %{name}": "Tweet kepada %{name}", "Twitter Stream": "Strim Twitter"}, nl: {"%{followers_count} followers": "%{followers_count} volgers", "100K+": "100k+", "10k unit": "10k-eenheid", Follow: "Volgen", "Follow %{screen_name}": "%{screen_name} volgen", K: "k", M: " mln.", Tweet: "Tweeten", "Tweet %{hashtag}": "%{hashtag} tweeten", "Tweet to %{name}": "Tweeten naar %{name}"}, no: {"%{followers_count} followers": "%{followers_count} følgere", "100K+": "100 K+", "10k unit": "10 K-enhet", Follow: "Følg", "Follow %{screen_name}": "Følg %{screen_name}", "Tweet to %{name}": "Send en tweet til %{name}", "Twitter Stream": "Twitter-strøm"}, pl: {"%{followers_count} followers": "%{followers_count} obserwujących", "100K+": "100 tys.+", "10k unit": "10 tys.", Follow: "Obserwuj", "Follow %{screen_name}": "Obserwuj %{screen_name}", K: "tys.", M: "mln", Tweet: "Tweetnij", "Tweet %{hashtag}": "Tweetnij %{hashtag}", "Tweet to %{name}": "Tweetnij do %{name}", "Twitter Stream": "Strumień Twittera"}, pt: {"%{followers_count} followers": "%{followers_count} seguidores", "100K+": "+100 mil", "10k unit": "10 mil unidades", Follow: "Seguir", "Follow %{screen_name}": "Seguir %{screen_name}", K: "Mil", Tweet: "Tweetar", "Tweet %{hashtag}": "Tweetar %{hashtag}", "Tweet to %{name}": "Tweetar para %{name}", "Twitter Stream": "Transmissões do Twitter"}, ru: {"%{followers_count} followers": "Читатели: %{followers_count} ", "100K+": "100 тыс.+", "10k unit": "блок 10k", Follow: "Читать", "Follow %{screen_name}": "Читать %{screen_name}", K: "тыс.", M: "млн.", Tweet: "Твитнуть", "Tweet %{hashtag}": "Твитнуть %{hashtag}", "Tweet to %{name}": "Твитнуть %{name}", "Twitter Stream": "Поток в Твиттере"}, sv: {"%{followers_count} followers": "%{followers_count} följare", "10k unit": "10k", Follow: "Följ", "Follow %{screen_name}": "Följ %{screen_name}", Tweet: "Tweeta", "Tweet %{hashtag}": "Tweeta %{hashtag}", "Tweet to %{name}": "Tweeta till %{name}", "Twitter Stream": "Twitterflöde"}, th: {"%{followers_count} followers": "%{followers_count} ผู้ติดตาม", "100K+": "100พัน+", "10k unit": "หน่วย 10พัน", Follow: "ติดตาม", "Follow %{screen_name}": "ติดตาม %{screen_name}", K: "พัน", M: "ล้าน", Tweet: "ทวีต", "Tweet %{hashtag}": "ทวีต %{hashtag}", "Tweet to %{name}": "ทวีตถึง %{name}", "Twitter Stream": "ทวิตเตอร์สตรีม"}, tr: {"%{followers_count} followers": "%{followers_count} takipçi", "100K+": "+100 bin", "10k unit": "10 bin birim", Follow: "Takip et", "Follow %{screen_name}": "Takip et: %{screen_name}", K: "bin", M: "milyon", Tweet: "Tweetle", "Tweet %{hashtag}": "Tweetle: %{hashtag}", "Tweet to %{name}": "Tweetle: %{name}", "Twitter Stream": "Twitter Akışı"}, ur: {"%{followers_count} followers": "%{followers_count} فالورز", "100K+": "ایک لاکھ سے زیادہ", "10k unit": "دس ہزار یونٹ", Follow: "فالو کریں", "Follow %{screen_name}": "%{screen_name} کو فالو کریں", K: "ہزار", M: "ملین", Tweet: "ٹویٹ کریں", "Tweet %{hashtag}": "%{hashtag} ٹویٹ کریں", "Tweet to %{name}": "%{name} کو ٹویٹ کریں", "Twitter Stream": "ٹوئٹر سٹریم"}, "zh-cn": {"%{followers_count} followers": "%{followers_count} 关注者", "100K+": "10万+", "10k unit": "1万单元", Follow: "关注", "Follow %{screen_name}": "关注 %{screen_name}", K: "千", M: "百万", Tweet: "发推", "Tweet %{hashtag}": "以 %{hashtag} 发推", "Tweet to %{name}": "发推给 %{name}", "Twitter Stream": "Twitter 信息流"}, "zh-tw": {"%{followers_count} followers": "%{followers_count} 位跟隨者", "100K+": "超過十萬", "10k unit": "1萬 單位", Follow: "跟隨", "Follow %{screen_name}": "跟隨 %{screen_name}", K: "千", M: "百萬", Tweet: "推文", "Tweet %{hashtag}": "推文%{hashtag}", "Tweet to %{name}": "推文給%{name}", "Twitter Stream": "Twitter 資訊流"}};
-                    a.aug(g.prototype, {setLanguage: function (e) {
-                        var t;
-                        e || (e = this.params().lang || this.dataAttr("lang") || b(this.srcEl)), e = e && e.toLowerCase();
-                        if (!e)return this.lang = "en";
-                        if (m[e])return this.lang = e;
-                        t = e.replace(/[\-_].*/, "");
-                        if (m[t])return this.lang = t;
-                        this.lang = "en"
-                    }, _: function (e, t) {
-                        var n = this.lang;
-                        t = t || {};
-                        if (!n || !m.hasOwnProperty(n))n = this.lang = "en";
-                        return e = m[n] && m[n][e] || e, this.ringo(e, t, /%\{([\w_]+)\}/g)
-                    }, ringo: function (e, t, n) {
-                        return n = n || /\{\{([\w_]+)\}\}/g, e.replace(n, function (e, n) {
-                            return t[n] !== undefined ? t[n] : e
-                        })
-                    }, add: function (e) {
-                        h.list.push(this), h.byId[this.id] = e
-                    }, create: function (e, t, n) {
-                        var i = this, o;
-                        return n[v] = !0, o = r(a.aug({id: this.id, src: e, "class": this.classAttr.join(" ")}, n), t, this.targetEl && this.targetEl.ownerDocument), this.srcEl ? this.layout(function () {
-                            return i.srcEl.parentNode.replaceChild(o, i.srcEl), o
-                        }) : this.targetEl ? this.layout(function () {
-                            return i.targetEl.appendChild(o), o
-                        }) : s.reject("Did not append widget")
-                    }, params: function () {
-                        var e, t;
-                        return this.srcOb ? t = this.srcOb : (e = this.srcEl && this.srcEl.href && this.srcEl.href.split("?")[1], t = e ? o.decode(e) : {}), this.params = function () {
-                            return t
-                        }, t
-                    }, dataAttr: function (e) {
-                        return this.srcEl && this.srcEl.getAttribute("data-" + e)
-                    }, attr: function (e) {
-                        return this.srcEl && this.srcEl.getAttribute(e)
-                    }, layout: function (e) {
-                        return d.enqueue(e)
-                    }, styles: {base: [
-                        ["font", "normal normal normal 11px/18px 'Helvetica Neue', Arial, sans-serif"],
-                        ["margin", "0"],
-                        ["padding", "0"],
-                        ["whiteSpace", "nowrap"]
-                    ], button: [
-                        ["fontWeight", "bold"],
-                        ["textShadow", "0 1px 0 rgba(255,255,255,.5)"]
-                    ], large: [
-                        ["fontSize", "13px"],
-                        ["lineHeight", "26px"]
-                    ], vbubble: [
-                        ["fontSize", "16px"]
-                    ]}, width: function () {
-                        throw new Error(name + " not implemented")
-                    }, height: function () {
-                        return this.size == "m" ? 20 : 28
-                    }, minWidth: function () {
-                    }, maxWidth: function () {
-                    }, minHeight: function () {
-                    }, maxHeight: function () {
-                    }, dimensions: function () {
-                        function e(e) {
-                            switch (typeof e) {
-                                case"string":
-                                    return e;
-                                case"undefined":
-                                    return;
-                                default:
-                                    return e + "px"
-                            }
-                        }
-
-                        var t = {width: this.width(), height: this.height()};
-                        return this.minWidth() && (t["min-width"] = this.minWidth()), this.maxWidth() && (t["max-width"] = this.maxWidth()), this.minHeight() && (t["min-height"] = this.minHeight()), this.maxHeight() && (t["max-height"] = this.maxHeight()), a.forIn(t, function (n, r) {
-                            t[n] = e(r)
-                        }), t
-                    }, generateId: function () {
-                        return this.srcEl && this.srcEl.id || "twitter-widget-" + l++
-                    }}), g.afterLoad = function (e) {
-                        p.push(e)
-                    }, g.doLayout = function () {
-                        d.exec()
-                    }, g.doLayoutAsync = function () {
-                        d.delayedExec()
-                    }, g.init = function (e) {
-                        c = e
-                    }, g.find = function (e) {
-                        return e && h.byId[e] ? h.byId[e].element : null
-                    }, g.embed = function (e) {
-                        var n = c.widgets, r = [];
-                        u.isArray(e) || (e = [e || document]), a.forEach(e, function (e) {
-                            a.forIn(n, function (n, i) {
-                                var s, o;
-                                n.match(/\./) ? (s = n.split("."), o = t.all(s[1], e, s[0])) : o = e.getElementsByTagName(n), a.forEach(o, function (e) {
-                                    if (e.getAttribute(v))return;
-                                    e.setAttribute(v, "true"), r.push(new i(e))
-                                })
-                            })
-                        }), g.doLayout(), a.forEach(r, function (e) {
-                            h.byId[e.id] = e, h.list.push(e), e.render(c)
-                        }), g.doLayoutAsync(), y()
-                    }, window.setInterval(function () {
-                        g.doLayout()
-                    }, 500), e(g)
-                })
-            });
-            provide("tfw/widget/intent", function (e) {
-                using("tfw/widget/base", "util/util", "util/querystring", "util/uri", function (t, n, r, i) {
-                    function h(e) {
-                        var t = Math.round(l / 2 - u / 2), n = 0;
-                        f > a && (n = Math.round(f / 2 - a / 2)), window.open(e, undefined, [o, "width=" + u, "height=" + a, "left=" + t, "top=" + n].join(","))
-                    }
-
-                    function p(e, t) {
-                        using("tfw/hub/client", function (n) {
-                            n.openIntent(e, t)
-                        })
-                    }
-
-                    function d(e) {
-                        var t = "original_referer=" + location.href;
-                        return[e, t].join(e.indexOf("?") == -1 ? "?" : "&")
-                    }
-
-                    function v(e) {
-                        var t, r, i, o;
-                        e = e || window.event, t = e.target || e.srcElement;
-                        if (e.altKey || e.metaKey || e.shiftKey)return;
-                        while (t) {
-                            if (~n.indexOf(["A", "AREA"], t.nodeName))break;
-                            t = t.parentNode
-                        }
-                        t && t.href && (r = t.href.match(s), r && (o = d(t.href), o = o.replace(/^http[:]/, "https:"), o = o.replace(/^\/\//, "https://"), m(o, t), e.returnValue = !1, e.preventDefault && e.preventDefault()))
-                    }
-
-                    function m(e, t) {
-                        if (twttr.events.hub && t) {
-                            var n = new g(c.generateId(), t);
-                            c.add(n), p(e, t), twttr.events.trigger("click", {target: t, region: "intent", type: "click", data: {}})
-                        } else h(e)
-                    }
-
-                    function g(e, t) {
-                        this.id = e, this.element = this.srcEl = t
-                    }
-
-                    function y(e) {
-                        this.srcEl = [], this.element = e
-                    }
-
-                    var s = /twitter\.com(\:\d{2,4})?\/intent\/(\w+)/, o = "scrollbars=yes,resizable=yes,toolbar=no,location=yes", u = 550, a = 520, f = screen.height, l = screen.width, c;
-                    y.prototype = new t, n.aug(y.prototype, {render: function (e) {
-                        c = this, window.__twitterIntentHandler || (document.addEventListener ? document.addEventListener("click", v, !1) : document.attachEvent && document.attachEvent("onclick", v), window.__twitterIntentHandler = !0)
-                    }}), y.open = m, e(y)
-                })
-            });
-            provide("dom/classname", function (e) {
-                function t(e) {
-                    return new RegExp("\\b" + e + "\\b", "g")
-                }
-
-                function n(e, n) {
-                    if (e.classList) {
-                        e.classList.add(n);
-                        return
-                    }
-                    t(n).test(e.className) || (e.className += " " + n)
-                }
-
-                function r(e, n) {
-                    if (e.classList) {
-                        e.classList.remove(n);
-                        return
-                    }
-                    e.className = e.className.replace(t(n), " ")
-                }
-
-                function i(e, t, i) {
-                    return e.classList && e.classList.toggle ? e.classList.toggle(t, i) : (i ? n(e, t) : r(e, t), i)
-                }
-
-                function s(e, i, s) {
-                    if (e.classList && o(e, i)) {
-                        r(e, i), n(e, s);
-                        return
-                    }
-                    e.className = e.className.replace(t(i), s)
-                }
-
-                function o(e, n) {
-                    return e.classList ? e.classList.contains(n) : t(n).test(e.className)
-                }
-
-                e({add: n, remove: r, replace: s, toggle: i, present: o})
-            });
-            provide("util/throttle", function (e) {
-                function t(e, t, n) {
-                    function o() {
-                        var n = +(new Date);
-                        window.clearTimeout(s);
-                        if (n - i > t) {
-                            i = n, e.call(r);
-                            return
-                        }
-                        s = window.setTimeout(o, t)
-                    }
-
-                    var r = n || this, i = 0, s;
-                    return o
-                }
-
-                e(t)
-            });
-            provide("util/css", function (e) {
-                using("util/util", function (t) {
-                    e({sanitize: function (e, n, r) {
-                        var i = /^[\w ,%\/"'\-_#]+$/, s = e && t.map(e.split(";"), function (e) {
-                            return t.map(e.split(":").slice(0, 2), function (e) {
-                                return t.trim(e)
-                            })
-                        }), o = 0, u, a = [], f = r ? "!important" : "";
-                        n = n || /^(font|text\-|letter\-|color|line\-)[\w\-]*$/;
-                        for (; s && (u = s[o]); o++)u[0].match(n) && u[1].match(i) && a.push(u.join(":") + f);
-                        return a.join(";")
-                    }})
-                })
-            });
-            provide("tfw/util/params", function (e) {
-                using("util/querystring", "util/twitter", function (t, n) {
-                    e(function (e, r) {
-                        return function (i) {
-                            var s, o = "data-tw-params", u, a = i.innerHTML;
-                            if (!i)return;
-                            if (!n.isTwitterURL(i.href))return;
-                            if (i.getAttribute(o))return;
-                            i.setAttribute(o, !0);
-                            if (typeof r == "function") {
-                                s = r.call(this, i);
-                                for (u in s)s.hasOwnProperty(u) && (e[u] = s[u])
-                            }
-                            i.href = t.url(i.href, e), i.innerHTML = a
-                        }
-                    })
-                })
-            });
-            provide("$xd/json2.js", function (exports) {
-                window.JSON || (window.JSON = {}), function () {
-                    function f(e) {
-                        return e < 10 ? "0" + e : e
-                    }
-
-                    function quote(e) {
-                        return escapable.lastIndex = 0, escapable.test(e) ? '"' + e.replace(escapable, function (e) {
-                            var t = meta[e];
-                            return typeof t == "string" ? t : "\\u" + ("0000" + e.charCodeAt(0).toString(16)).slice(-4)
-                        }) + '"' : '"' + e + '"'
-                    }
-
-                    function str(e, t) {
-                        var n, r, i, s, o = gap, u, a = t[e];
-                        a && typeof a == "object" && typeof a.toJSON == "function" && (a = a.toJSON(e)), typeof rep == "function" && (a = rep.call(t, e, a));
-                        switch (typeof a) {
-                            case"string":
-                                return quote(a);
-                            case"number":
-                                return isFinite(a) ? String(a) : "null";
-                            case"boolean":
-                            case"null":
-                                return String(a);
-                            case"object":
-                                if (!a)return"null";
-                                gap += indent, u = [];
-                                if (Object.prototype.toString.apply(a) === "[object Array]") {
-                                    s = a.length;
-                                    for (n = 0; n < s; n += 1)u[n] = str(n, a) || "null";
-                                    return i = u.length === 0 ? "[]" : gap ? "[\n" + gap + u.join(",\n" + gap) + "\n" + o + "]" : "[" + u.join(",") + "]", gap = o, i
-                                }
-                                if (rep && typeof rep == "object") {
-                                    s = rep.length;
-                                    for (n = 0; n < s; n += 1)r = rep[n], typeof r == "string" && (i = str(r, a), i && u.push(quote(r) + (gap ? ": " : ":") + i))
-                                } else for (r in a)Object.hasOwnProperty.call(a, r) && (i = str(r, a), i && u.push(quote(r) + (gap ? ": " : ":") + i));
-                                return i = u.length === 0 ? "{}" : gap ? "{\n" + gap + u.join(",\n" + gap) + "\n" + o + "}" : "{" + u.join(",") + "}", gap = o, i
-                        }
-                    }
-
-                    typeof Date.prototype.toJSON != "function" && (Date.prototype.toJSON = function (e) {
-                        return isFinite(this.valueOf()) ? this.getUTCFullYear() + "-" + f(this.getUTCMonth() + 1) + "-" + f(this.getUTCDate()) + "T" + f(this.getUTCHours()) + ":" + f(this.getUTCMinutes()) + ":" + f(this.getUTCSeconds()) + "Z" : null
-                    }, String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function (e) {
-                        return this.valueOf()
-                    });
-                    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, gap, indent, meta = {"\b": "\\b", "	": "\\t", "\n": "\\n", "\f": "\\f", "\r": "\\r", '"': '\\"', "\\": "\\\\"}, rep;
-                    typeof JSON.stringify != "function" && (JSON.stringify = function (e, t, n) {
-                        var r;
-                        gap = "", indent = "";
-                        if (typeof n == "number")for (r = 0; r < n; r += 1)indent += " "; else typeof n == "string" && (indent = n);
-                        rep = t;
-                        if (!t || typeof t == "function" || typeof t == "object" && typeof t.length == "number")return str("", {"": e});
-                        throw new Error("JSON.stringify")
-                    }), typeof JSON.parse != "function" && (JSON.parse = function (text, reviver) {
-                        function walk(e, t) {
-                            var n, r, i = e[t];
-                            if (i && typeof i == "object")for (n in i)Object.hasOwnProperty.call(i, n) && (r = walk(i, n), r !== undefined ? i[n] = r : delete i[n]);
-                            return reviver.call(e, t, i)
-                        }
-
-                        var j;
-                        cx.lastIndex = 0, cx.test(text) && (text = text.replace(cx, function (e) {
-                            return"\\u" + ("0000" + e.charCodeAt(0).toString(16)).slice(-4)
-                        }));
-                        if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, "")))return j = eval("(" + text + ")"), typeof reviver == "function" ? walk({"": j}, "") : j;
-                        throw new SyntaxError("JSON.parse")
-                    })
-                }();
-                exports();
-                loadrunner.Script.loaded.push("$xd/json2.js")
-            });
-            provide("util/params", function (e) {
-                using("util/querystring", function (t) {
-                    var n = function (e) {
-                        var n = e.search.substr(1);
-                        return t.decode(n)
-                    }, r = function (e) {
-                        var n = e.href, r = n.indexOf("#"), i = r < 0 ? "" : n.substring(r + 1);
-                        return t.decode(i)
-                    }, i = function (e) {
-                        var t = {}, i = n(e), s = r(e);
-                        for (var o in i)i.hasOwnProperty(o) && (t[o] = i[o]);
-                        for (var o in s)s.hasOwnProperty(o) && (t[o] = s[o]);
-                        return t
-                    };
-                    e({combined: i, fromQuery: n, fromFragment: r})
-                })
-            });
-            provide("tfw/util/env", function (e) {
-                using("util/params", function (t) {
-                    function r() {
-                        var e = 36e5, r = t.combined(document.location)._;
-                        return n !== undefined ? n : (n = !1, r && /^\d+$/.test(r) && (n = +(new Date) - parseInt(r) < e), n)
-                    }
-
-                    var n;
-                    e({isDynamicWidget: r})
-                })
-            });
-            provide("util/decider", function (e) {
-                function n(e) {
-                    var n = t[e] || !1;
-                    if (!n)return!1;
-                    if (n === !0 || n === 100)return!0;
-                    var r = Math.random() * 100, i = n >= r;
-                    return t[e] = i, i
-                }
-
-                var t = {force_new_cookie: 100, rufous_pixel: 100, decider_fixture: 12.34};
-                e({isAvailable: n})
-            });
-            provide("dom/cookie", function (e) {
-                using("util/util", function (t) {
-                    e(function (e, n, r) {
-                        var i = t.aug({}, r);
-                        if (arguments.length > 1 && String(n) !== "[object Object]") {
-                            if (n === null || n === undefined)i.expires = -1;
-                            if (typeof i.expires == "number") {
-                                var s = i.expires, o = new Date((new Date).getTime() + s * 60 * 1e3);
-                                i.expires = o
-                            }
-                            return n = String(n), document.cookie = [encodeURIComponent(e), "=", i.raw ? n : encodeURIComponent(n), i.expires ? "; expires=" + i.expires.toUTCString() : "", i.path ? "; path=" + i.path : "", i.domain ? "; domain=" + i.domain : "", i.secure ? "; secure" : ""].join("")
-                        }
-                        i = n || {};
-                        var u, a = i.raw ? function (e) {
-                            return e
-                        } : decodeURIComponent;
-                        return(u = (new RegExp("(?:^|; )" + encodeURIComponent(e) + "=([^;]*)")).exec(document.cookie)) ? a(u[1]) : null
-                    })
-                })
-            });
-            provide("util/donottrack", function (e) {
-                using("dom/cookie", function (t) {
-                    e(function (e) {
-                        var n = /\.(gov|mil)(:\d+)?$/i, r = /https?:\/\/([^\/]+).*/i;
-                        return e = e || document.referrer, e = r.test(e) && r.exec(e)[1], t("dnt") ? !0 : n.test(document.location.host) ? !0 : e && n.test(e) ? !0 : document.navigator ? document.navigator["doNotTrack"] == 1 : navigator ? navigator["doNotTrack"] == 1 || navigator["msDoNotTrack"] == 1 : !1
-                    })
-                })
-            });
-            provide("tfw/util/guest_cookie", function (e) {
-                using("dom/cookie", "util/donottrack", "util/decider", function (t, n, r) {
-                    function s() {
-                        var e = t(i) || !1;
-                        if (!e)return;
-                        e.match(/^v3\:/) || o()
-                    }
-
-                    function o() {
-                        t(i) && t(i, null, {domain: ".twitter.com", path: "/"})
-                    }
-
-                    function u() {
-                        n() && o()
-                    }
-
-                    var i = "pid";
-                    e({set: u, destroy: o, forceNewCookie: s, guest_id_cookie: i})
-                })
-            });
-            provide("sandbox/baseframe", function (e) {
-                using("util/domready", "util/env", "util/iframe", "util/promise", "util/util", function (t, n, r, i, s) {
-                    function u(e, t, n, o) {
-                        var u;
-                        this.readyPromise = new i(s.bind(function (e) {
-                            this.resolver = e
-                        }, this)), this.attrs = e || {}, this.styles = t || {}, this.appender = n || function (e) {
-                            document.body.appendChild(e)
-                        }, this.layout = o || function (e) {
-                            return new i(function (t) {
-                                return t.fulfill(e())
-                            })
-                        }, this.frame = u = r(this.attrs, this.styles), u.onreadystatechange = u.onload = this.getCallback(this.onLoad), this.layout(s.bind(function () {
-                            this.appender(u)
-                        }, this))
-                    }
-
-                    var o = 0;
-                    window.twttr = window.twttr || {}, window.twttr.sandbox = window.twttr.sandbox || {}, u.prototype.getCallback = function (e) {
-                        var t = this, n = !1;
-                        return function () {
-                            n || (n = !0, e.call(t))
-                        }
-                    }, u.prototype.registerCallback = function (e) {
-                        var t = "cb" + o++;
-                        return window.twttr.sandbox[t] = e, t
-                    }, u.prototype.onLoad = function () {
-                        try {
-                            this.document = this.frame.contentWindow.document
-                        } catch (e) {
-                            this.setDocDomain();
-                            return
-                        }
-                        this.writeStandardsDoc(), this.resolver.fulfill(this)
-                    }, u.prototype.ready = function () {
-                        return this.readyPromise
-                    }, u.prototype.setDocDomain = function () {
-                        var e = r(this.attrs, this.styles), t = this.registerCallback(this.getCallback(this.onLoad));
-                        e.src = ["javascript:", 'document.write("");', "try { window.parent.document; }", "catch (e) {", 'document.domain="' + document.domain + '";', "}", 'window.parent.twttr.sandbox["' + t + '"]();'].join(""), this.layout(s.bind(function () {
-                            this.frame.parentNode.removeChild(this.frame), this.frame = null, this.appender ? this.appender(e) : document.body.appendChild(e), this.frame = e
-                        }, this))
-                    }, u.prototype.writeStandardsDoc = function () {
-                        if (!n.anyIE() || n.cspEnabled())return;
-                        var e = ["<!DOCTYPE html>", "<html>", "<head>", "<scr", "ipt>", "try { window.parent.document; }", 'catch (e) {document.domain="' + document.domain + '";}', "</scr", "ipt>", "</head>", "<body></body>", "</html>"].join("");
-                        this.document.write(e), this.document.close()
-                    }, e(u)
-                })
-            });
-            provide("sandbox/minimal", function (e) {
-                using("sandbox/baseframe", "util/env", "util/promise", "util/util", function (t, n, r, i) {
-                    function s(e, t) {
-                        if (!e)return;
-                        this._frame = e, this._win = e.contentWindow, this._doc = this._win.document, this._body = this._doc.body, this._head = this._body.parentNode.children[0], this.layout = t
-                    }
-
-                    i.aug(s.prototype, {createElement: function (e) {
-                        return this._doc.createElement(e)
-                    }, createDocumentFragment: function () {
-                        return this._doc.createDocumentFragment()
-                    }, appendChild: function (e) {
-                        return this.layout(i.bind(function () {
-                            return this._body.appendChild(e)
-                        }, this))
-                    }, setBaseTarget: function (e) {
-                        var t = this._doc.createElement("base");
-                        return t.target = e, this.layout(i.bind(function () {
-                            return this._head.appendChild(t)
-                        }, this))
-                    }, element: function () {
-                        return this._frame
-                    }, document: function () {
-                        return this._doc
-                    }}), s.createSandbox = function (e, n, r, i) {
-                        var o = new t(e, n, r, i);
-                        return o.ready().then(function (e) {
-                            return new s(e.frame, e.layout)
-                        })
-                    }, e(s)
-                })
-            });
-            provide("tfw/util/tracking", function (e) {
-                using("dom/cookie", "dom/delegate", "sandbox/minimal", "util/donottrack", "util/promise", "tfw/util/guest_cookie", "tfw/util/env", "util/iframe", "util/util", "$xd/json2.js", function (t, n, r, i, s, o, u, a, f) {
-                    function S() {
-                        return b ? b : b = r.createSandbox({id: "rufous-sandbox"}, {display: "none"}).then(f.bind(function (e) {
-                            y = e, d = D(), v = P();
-                            while (m[0])k.apply(this, m.shift());
-                            return g ? L() : [d, v]
-                        }, this))
-                    }
-
-                    function x(e, t, n, r) {
-                        var i = !f.isObject(e), s = t ? !f.isObject(t) : !1, o, u;
-                        if (i || s)return;
-                        if (/Firefox/.test(navigator.userAgent))return;
-                        o = O(e), u = M(t, !!n, !!r), C(o, u, !0)
-                    }
-
-                    function T(e, n, r, s) {
-                        var a = c[n], l, h, p = o.guest_id_cookie;
-                        if (!a)return;
-                        e = e || {}, s = !!s, r = !!r, h = e.original_redirect_referrer || document.referrer, s = s || i(h), l = f.aug({}, e), r || (N(l, "referrer", h), N(l, "widget", +u.isDynamicWidget()), N(l, "hask", +!!t("k")), N(l, "li", +!!t("twid")), N(l, p, t(p) || "")), s && (N(l, "dnt", 1), B(l)), H(a + "?" + _(l))
-                    }
-
-                    function N(e, t, n) {
-                        var r = l + t;
-                        if (!e)return;
-                        return e[r] = n, e
-                    }
-
-                    function C(e, t, n) {
-                        var r, i, s, o, u = w + "?";
-                        if (!f.isObject(e) || !f.isObject(t))return;
-                        s = f.aug({}, t, {event_namespace: e}), n ? (u += _({l: j(s)}), H(u)) : (r = d.firstChild, r.value = +r.value || +s.dnt, o = j(s), i = y.createElement("input"), i.type = "hidden", i.name = "l", i.value = o, d.appendChild(i))
-                    }
-
-                    function k(e, t, n, r) {
-                        var i = !f.isObject(e), s = t ? !f.isObject(t) : !1, o, u;
-                        if (i || s)return;
-                        if (!y || !d) {
-                            m.push([e, t, n, r]);
-                            return
-                        }
-                        o = O(e), u = M(t, !!n, !!r), C(o, u)
-                    }
-
-                    function L() {
-                        if (!d)return g = !0, b || s.reject();
-                        if (d.children.length <= 2)return s.reject();
-                        var e = s.every(y.appendChild(d), y.appendChild(v)).then(function (e) {
-                            var t = e[0], r = e[1];
-                            return n.on(r, "load", function () {
-                                window.setTimeout(A(t, r), 0)
-                            }), t.submit(), e
-                        });
-                        return d = D(), v = P(), e
-                    }
-
-                    function A(e, t) {
-                        return function () {
-                            var n = e.parentNode;
-                            if (!n)return;
-                            n.removeChild(e), n.removeChild(t)
-                        }
-                    }
-
-                    function O(e) {
-                        return f.aug({client: "tfw"}, e || {})
-                    }
-
-                    function M(e, t, n) {
-                        var r = {_category_: "tfw_client_event"}, s, o;
-                        return t = !!t, n = !!n, s = f.aug(r, e || {}), o = s.widget_origin || document.referrer, s.format_version = 1, s.dnt = n = n || i(o), s.triggered_on = s.triggered_on || +(new Date), t || (s.widget_origin = o), n && B(s), s
-                    }
-
-                    function _(e) {
-                        var t = [], n, r, i;
-                        for (n in e)e.hasOwnProperty(n) && (r = encodeURIComponent(n), i = encodeURIComponent(e[n]), i = i.replace(/'/g, "%27"), t.push(r + "=" + i));
-                        return t.join("&")
-                    }
-
-                    function D() {
-                        var e = y.createElement("form"), t = y.createElement("input"), n = y.createElement("input");
-                        return p++, e.action = w, e.method = "POST", e.target = "rufous-frame-" + p, e.id = "rufous-form-" + p, t.type = "hidden", t.name = "dnt", t.value = 0, n.type = "hidden", n.name = "tfw_redirect", n.value = E, e.appendChild(t), e.appendChild(n), e
-                    }
-
-                    function P() {
-                        var e = "rufous-frame-" + p;
-                        return a({id: e, name: e, width: 0, height: 0, border: 0}, {display: "none"}, y.document())
-                    }
-
-                    function H(e) {
-                        var t = document.createElement("img");
-                        t.src = e, t.alt = "", t.style.position = "absolute", t.style.height = "1px", t.style.width = "1px", t.style.top = "-9999px", t.style.left = "-9999px", document.body.appendChild(t)
-                    }
-
-                    function B(e) {
-                        f.forIn(e, function (t) {
-                            ~f.indexOf(h, t) && delete e[t]
-                        })
-                    }
-
-                    function j(e) {
-                        var t = Array.prototype.toJSON, n;
-                        return delete Array.prototype.toJSON, n = JSON.stringify(e), t && (Array.prototype.toJSON = t), n
-                    }
-
-                    var l = "twttr_", c = {tweetbutton: "//p.twitter.com/t.gif", followbutton: "//p.twitter.com/f.gif", tweetembed: "//p.twitter.com/e.gif"}, h = ["hask", "li", "logged_in", "pid", "user_id", o.guest_id_cookie, l + "hask", l + "li", l + o.guest_id_cookie], p = 0, d, v, m = [], g, y, b, w = "https://twitter.com/i/jot", E = "https://platform.twitter.com/jot.html";
-                    o.forceNewCookie(), e({enqueue: k, flush: L, initPostLogging: S, addPixel: x, addLegacyPixel: T, addVar: N})
-                })
-            });
-            provide("tfw/util/data", function (e) {
-                using("util/logger", "util/util", "util/querystring", function (t, n, r) {
-                    function c(e) {
-                        return function (n) {
-                            n.error ? e.error && e.error(n) : n.headers && n.headers.status != 200 ? (e.error && e.error(n), t.warn(n.headers.message)) : e.success && e.success(n), e.complete && e.complete(n), h(e)
-                        }
-                    }
-
-                    function h(e) {
-                        var t = e.script;
-                        t && (t.onload = t.onreadystatechange = null, t.parentNode && t.parentNode.removeChild(t), e.script = undefined, t = undefined), e.callbackName && twttr.tfw.callbacks[e.callbackName] && delete twttr.tfw.callbacks[e.callbackName]
-                    }
-
-                    function p(e) {
-                        var t = {};
-                        return e.success && n.isType("function", e.success) && (t.success = e.success), e.error && n.isType("function", e.error) && (t.error = e.error), e.complete && n.isType("function", e.complete) && (t.complete = e.complete), t
-                    }
-
-                    window.twttr = window.twttr || {}, twttr.tfw = twttr.tfw || {}, twttr.tfw.callbacks = twttr.tfw.callbacks || {};
-                    var i = "twttr.tfw.callbacks", s = twttr.tfw.callbacks, o = "cb", u = 0, a = !1, f = {}, l = {tweets: "https://syndication.twitter.com/tweets.json", timeline: "https://cdn.syndication.twimg.com/widgets/timelines/", timelinePoll: "https://syndication.twimg.com/widgets/timelines/paged/", timelinePreview: "https://syndication.twimg.com/widgets/timelines/preview/"};
-                    twttr.widgets && twttr.widgets.endpoints && n.aug(l, twttr.widgets.endpoints), f.jsonp = function (e, t, n) {
-                        var f = n || o + u, l = i + "." + f, h = document.createElement("script"), p = {callback: l, suppress_response_codes: !0};
-                        s[f] = c(t);
-                        if (a || !/^https?\:$/.test(window.location.protocol))e = e.replace(/^\/\//, "https://");
-                        h.src = r.url(e, p), h.async = "async", document.body.appendChild(h), t.script = h, t.callbackName = f, n || u++
-                    }, f.config = function (e) {
-                        if (e.forceSSL === !0 || e.forceSSL === !1)a = e.forceSSL
-                    }, f.tweets = function (e) {
-                        var t = arguments[0], n = p(t), i = {ids: e.ids.join(","), lang: e.lang}, s = r.url(l.tweets, i);
-                        this.jsonp(s, n)
-                    }, f.timeline = function (e) {
-                        var t = arguments[0], i = p(t), s, o = 9e5, u = Math.floor(+(new Date) / o), a = {lang: e.lang, t: u, domain: window.location.host, dnt: e.dnt, override_type: e.overrideType, override_id: e.overrideId, override_name: e.overrideName, override_owner_id: e.overrideOwnerId, override_owner_name: e.overrideOwnerName, with_replies: e.withReplies};
-                        n.compact(a), s = r.url(l.timeline + e.id, a), this.jsonp(s, i, "tl_" + e.id + "_" + e.instanceId)
-                    }, f.timelinePoll = function (e) {
-                        var t = arguments[0], i = p(t), s = {lang: e.lang, since_id: e.sinceId, max_id: e.maxId, min_position: e.minPosition, max_position: e.maxPosition, domain: window.location.host, dnt: e.dnt, override_type: e.overrideType, override_id: e.overrideId, override_name: e.overrideName, override_owner_id: e.overrideOwnerId, override_owner_name: e.overrideOwnerName, with_replies: e.withReplies}, o;
-                        n.compact(s), o = r.url(l.timelinePoll + e.id, s), this.jsonp(o, i, "tlPoll_" + e.id + "_" + e.instanceId + "_" + (e.sinceId || e.maxId || e.maxPosition || e.minPosition))
-                    }, f.timelinePreview = function (e) {
-                        var t = arguments[0], n = p(t), i = e.params, s = r.url(l.timelinePreview, i);
-                        this.jsonp(s, n)
-                    }, e(f)
-                })
-            });
-            provide("anim/transition", function (e) {
-                function t(e, t) {
-                    var n;
-                    return t = t || window, n = t.requestAnimationFrame || t.webkitRequestAnimationFrame || t.mozRequestAnimationFrame || t.msRequestAnimationFrame || t.oRequestAnimationFrame || function (n) {
-                        t.setTimeout(function () {
-                            e(+(new Date))
-                        }, 1e3 / 60)
-                    }, n(e)
-                }
-
-                function n(e, t) {
-                    return Math.sin(Math.PI / 2 * t) * e
-                }
-
-                function r(e, n, r, i, s) {
-                    function a() {
-                        var u = +(new Date), f = u - o, l = Math.min(f / r, 1), c = i ? i(n, l) : n * l;
-                        e(c);
-                        if (l == 1)return;
-                        t(a, s)
-                    }
-
-                    var o = +(new Date), u;
-                    t(a)
-                }
-
-                e({animate: r, requestAnimationFrame: t, easeOut: n})
-            });
-            provide("util/datetime", function (e) {
-                using("util/util", function (t) {
-                    function h(e) {
-                        return e < 10 ? "0" + e : e
-                    }
-
-                    function p(e) {
-                        function i(e, n) {
-                            return t && t[e] && (e = t[e]), e.replace(/%\{([\w_]+)\}/g, function (e, t) {
-                                return n[t] !== undefined ? n[t] : e
-                            })
-                        }
-
-                        var t = e && e.phrases, n = e && e.months || s, r = e && e.formats || o;
-                        this.timeAgo = function (e) {
-                            var t = p.parseDate(e), s = +(new Date), o = s - t, h;
-                            return t ? isNaN(o) || o < u * 2 ? i("now") : o < a ? (h = Math.floor(o / u), i(r.abbr, {number: h, symbol: i(c, {abbr: i("s"), expanded: h > 1 ? i("seconds") : i("second")})})) : o < f ? (h = Math.floor(o / a), i(r.abbr, {number: h, symbol: i(c, {abbr: i("m"), expanded: h > 1 ? i("minutes") : i("minute")})})) : o < l ? (h = Math.floor(o / f), i(r.abbr, {number: h, symbol: i(c, {abbr: i("h"), expanded: h > 1 ? i("hours") : i("hour")})})) : o < l * 365 ? i(r.shortdate, {day: t.getDate(), month: i(n[t.getMonth()])}) : i(r.longdate, {day: t.getDate(), month: i(n[t.getMonth()]), year: t.getFullYear().toString().slice(2)}) : ""
-                        }, this.localTimeStamp = function (e) {
-                            var t = p.parseDate(e), s = t && t.getHours();
-                            return t ? i(r.full, {day: t.getDate(), month: i(n[t.getMonth()]), year: t.getFullYear(), hours24: h(s), hours12: s < 13 ? s ? s : "12" : s - 12, minutes: h(t.getMinutes()), seconds: h(t.getSeconds()), amPm: s < 12 ? i("AM") : i("PM")}) : ""
-                        }
-                    }
-
-                    var n = /(\d{4})-?(\d{2})-?(\d{2})T(\d{2}):?(\d{2}):?(\d{2})(Z|[\+\-]\d{2}:?\d{2})/, r = /[a-z]{3,4} ([a-z]{3}) (\d{1,2}) (\d{1,2}):(\d{2}):(\d{2}) ([\+\-]\d{2}:?\d{2}) (\d{4})/i, i = /^\d+$/, s = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], o = {abbr: "%{number}%{symbol}", shortdate: "%{day} %{month}", longdate: "%{day} %{month} %{year}", full: "%{hours12}:%{minutes} %{amPm} - %{day} %{month} %{year}"}, u = 1e3, a = u * 60, f = a * 60, l = f * 24, c = '<abbr title="%{expanded}">%{abbr}</abbr>';
-                    p.parseDate = function (e) {
-                        var o = e || "", u = o.toString(), a, f;
-                        return a = function () {
-                            var e;
-                            if (i.test(u))return parseInt(u, 10);
-                            if (e = u.match(r))return Date.UTC(e[7], t.indexOf(s, e[1]), e[2], e[3], e[4], e[5]);
-                            if (e = u.match(n))return Date.UTC(e[1], e[2] - 1, e[3], e[4], e[5], e[6])
-                        }(), a ? (f = new Date(a), !isNaN(f.getTime()) && f) : !1
-                    }, e(p)
-                })
-            });
-            provide("sandbox/frame", function (e) {
-                using("sandbox/baseframe", "sandbox/minimal", "util/env", "util/promise", "util/util", function (t, n, r, i, s) {
-                    function h() {
-                        var e, t;
-                        a = {};
-                        if (f)return;
-                        e = document.body.offsetHeight, t = document.body.offsetWidth;
-                        if (e == c && t == l)return;
-                        s.forEach(u, function (e) {
-                            e.dispatchFrameResize(l, c)
-                        }), c = e, l = t
-                    }
-
-                    function p(e) {
-                        var t;
-                        return e.id ? e.id : (t = e.getAttribute("data-twttr-id")) ? t : (t = "twttr-sandbox-" + o++, e.setAttribute("data-twttr-id", t), t)
-                    }
-
-                    function d(e, t) {
-                        n.apply(this, [e, t]), this._resizeHandlers = [], u.push(this), this._win.addEventListener ? this._win.addEventListener("resize", s.bind(function () {
-                            this.dispatchFrameResize()
-                        }, this), !0) : this._win.attachEvent("onresize", s.bind(function () {
-                            this.dispatchFrameResize(this._win.event)
-                        }, this))
-                    }
-
-                    var o = 0, u = [], a = {}, f, l = 0, c = 0;
-                    window.addEventListener ? window.addEventListener("resize", h, !0) : document.body.attachEvent("onresize", function () {
-                        h(window.event)
-                    }), d.prototype = new n, s.aug(d.prototype, {dispatchFrameResize: function () {
-                        var e = this._frame.parentNode, t = p(e), n = a[t];
-                        f = !0;
-                        if (!this._resizeHandlers.length)return;
-                        n || (n = a[t] = {w: this._frame.offsetWidth, h: this._frame.offsetHeight});
-                        if (this._frameWidth == n.w && this._frameHeight == n.h)return;
-                        this._frameWidth = n.w, this._frameHeight = n.h, s.forEach(this._resizeHandlers, function (e) {
-                            e(n.w, n.h)
-                        }), window.setTimeout(function () {
-                            a = {}
-                        }, 50)
-                    }, appendStyleSheet: function (e) {
-                        var t = this._doc.createElement("link");
-                        return t.type = "text/css", t.rel = "stylesheet", t.href = e, this.layout(s.bind(function () {
-                            return this._head.appendChild(t)
-                        }, this))
-                    }, appendCss: function (e) {
-                        var t;
-                        return r.cspEnabled() ? i.reject("CSP enabled; cannot embed inline styles.") : (t = this._doc.createElement("style"), t.type = "text/css", t.styleSheet ? t.styleSheet.cssText = e : t.appendChild(this._doc.createTextNode(e)), this.layout(s.bind(function () {
-                            return this._head.appendChild(t)
-                        }, this)))
-                    }, style: function (e) {
-                        return this.layout(s.bind(function () {
-                            s.forIn(e, s.bind(function (e, t) {
-                                this._frame.style[e] = t
-                            }, this))
-                        }, this))
-                    }, onresize: function (e) {
-                        this._resizeHandlers.push(e)
-                    }, width: function (e) {
-                        return e !== undefined && (this._frame.width = e), this._frame.offsetWidth
-                    }, height: function (e) {
-                        return e !== undefined && (this._frame.height = e), this._frame.offsetHeight
-                    }}), d.createSandbox = function (e, n, r, i) {
-                        var s = new t(e, n, r, i);
-                        return s.ready().then(function (e) {
-                            return new d(e.frame, e.layout)
-                        })
-                    }, e(d)
-                })
-            });
-            provide("tfw/util/assets", function (e) {
-                using("util/env", function (t) {
-                    function r(e, r) {
-                        var i = n[e], s;
-                        return t.retina() ? s = "2x" : t.ie6() || t.ie7() ? s = "gif" : s = "default", r && (s += ".rtl"), i[s]
-                    }
-
-                    var n = {"embed/timeline.css": {"default": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.default.css", "2x": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.2x.css", gif: "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.gif.css", "default.rtl": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.default.rtl.css", "2x.rtl": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.2x.rtl.css", "gif.rtl": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.gif.rtl.css"}};
-                    e(r)
-                })
-            });
-            provide("tfw/widget/syndicatedbase", function (e) {
-                using("tfw/widget/base", "tfw/widget/intent", "tfw/util/assets", "tfw/util/globals", "dom/classname", "dom/get", "dom/delegate", "sandbox/frame", "util/env", "util/promise", "util/twitter", "util/util", function (t, n, r, i, s, o, u, a, f, l, c, h) {
-                    function w() {
-                        g = E.VALID_COLOR.test(i.val("widgets:link-color")) && RegExp.$1, b = E.VALID_COLOR.test(i.val("widgets:border-color")) && RegExp.$1, y = i.val("widgets:theme")
-                    }
-
-                    function E(e) {
-                        if (!e)return;
-                        var n;
-                        this.readyPromise = new l(h.bind(function (e) {
-                            this.readyResolver = e
-                        }, this)), this.renderedPromise = new l(h.bind(function (e) {
-                            this.renderResolver = e
-                        }, this)), t.apply(this, [e]), n = this.params(), this.targetEl = this.srcEl && this.srcEl.parentNode || n.targetEl || document.body, this.predefinedWidth = E.VALID_UNIT.test(n.width || this.attr("width")) && RegExp.$1, this.layout(h.bind(function () {
-                            return this.containerWidth = this.targetEl && this.targetEl.offsetWidth
-                        }, this)).then(h.bind(function (e) {
-                            var t = this.predefinedWidth || e || this.dimensions.DEFAULT_WIDTH;
-                            this.height = E.VALID_UNIT.test(n.height || this.attr("height")) && RegExp.$1, this.width = Math.max(this.dimensions.MIN_WIDTH, Math.min(t, this.dimensions.DEFAULT_WIDTH))
-                        }, this)), E.VALID_COLOR.test(n.linkColor || this.dataAttr("link-color")) ? this.linkColor = RegExp.$1 : this.linkColor = g, E.VALID_COLOR.test(n.borderColor || this.dataAttr("border-color")) ? this.borderColor = RegExp.$1 : this.borderColor = b, this.theme = n.theme || this.attr("data-theme") || y, this.theme = /(dark|light)/.test(this.theme) ? this.theme : "", this.classAttr.push(f.touch() ? "is-touch" : "not-touch"), a.createSandbox({"class": this.renderedClassNames, id: this.id, title: this.a11yTitle}, {width: "1px", height: "0px", border: "none", position: "absolute", visibility: "hidden"}, h.bind(function (e) {
-                            this.srcEl ? this.targetEl.insertBefore(e, this.srcEl) : this.targetEl.appendChild(e)
-                        }, this), this.layout).then(h.bind(function (e) {
-                            this.setupSandbox(e)
-                        }, this))
-                    }
-
-                    var p = [".customisable", ".customisable:link", ".customisable:visited", ".customisable:hover", ".customisable:focus", ".customisable:active", ".customisable-highlight:hover", ".customisable-highlight:focus", "a:hover .customisable-highlight", "a:focus .customisable-highlight"], d = ["a:hover .ic-mask", "a:focus .ic-mask"], v = [".customisable-border"], m = [".timeline-header h1.summary", ".timeline-header h1.summary a:link", ".timeline-header h1.summary a:visited"], g, y, b;
-                    E.prototype = new t, h.aug(E.prototype, {setupSandbox: function (e) {
-                        this.sandbox = e, l.some(e.appendCss("body{display:none}"), e.setBaseTarget("_blank"), e.appendStyleSheet(twttr.widgets.config.assetUrl() + "/" + r("embed/timeline.css"))).then(h.bind(function () {
-                            this.readyResolver.fulfill(e)
-                        }, this))
-                    }, ready: function () {
-                        return this.readyPromise
-                    }, rendered: function () {
-                        return this.renderedPromise
-                    }, contentWidth: function (e) {
-                        var t = this.dimensions, n = this.fullBleedPhoto ? 0 : this.chromeless && this.narrow ? t.NARROW_MEDIA_PADDING_CL : this.chromeless ? t.WIDE_MEDIA_PADDING_CL : this.narrow ? t.NARROW_MEDIA_PADDING : t.WIDE_MEDIA_PADDING;
-                        return(e || this.width) - n
-                    }, addSiteStyles: function () {
-                        var e = h.bind(function (e) {
-                            return(this.theme == "dark" ? ".thm-dark " : "") + e
-                        }, this), t = [];
-                        this.headingStyle && t.push(h.map(m, e).join(",") + "{" + this.headingStyle + "}"), this.linkColor && (t.push(h.map(p, e).join(",") + "{color:" + this.linkColor + "}"), t.push(h.map(d, e).join(",") + "{background-color:" + this.linkColor + "}")), this.borderColor && t.push(h.map(v, e).concat(this.theme == "dark" ? [".thm-dark.customisable-border"] : []).join(",") + "{border-color:" + this.borderColor + "}");
-                        if (!t.length)return;
-                        return this.sandbox.appendCss(t.join(""))
-                    }, setNarrow: function () {
-                        var e = this.narrow;
-                        return this.narrow = this.width < this.dimensions.NARROW_WIDTH, e != this.narrow ? this.layout(h.bind(function () {
-                            return s.toggle(this.element, "var-narrow", this.narrow)
-                        }, this)) : l.fulfill(this.narrow)
-                    }, bindIntentHandlers: function () {
-                        var e = this, t = this.element;
-                        u.delegate(t, "click", ".profile", function (t) {
-                            var r;
-                            e.addUrlParams(this), r = c.intentForProfileURL(this.href);
-                            if (t.altKey || t.metaKey || t.shiftKey)return;
-                            r && (n.open(r, e.sandbox.frame), u.preventDefault(t))
-                        }), u.delegate(t, "click", ".web-intent", function (t) {
-                            e.addUrlParams(this);
-                            if (t.altKey || t.metaKey || t.shiftKey)return;
-                            n.open(this.href, e.sandbox.frame), u.preventDefault(t)
-                        })
-                    }, constrainMedia: function (e, t) {
-                        var n = 0, r = this.fullBleedPhoto ? 500 : 375;
-                        e = e || this.element, t = t || this.contentWidth();
-                        if (!e)return;
-                        return h.forEach(o.all("autosized-media", e), h.bind(function (e) {
-                            var i = E.scaleDimensions(e.getAttribute("data-width"), e.getAttribute("data-height"), t, r);
-                            this.layout(function () {
-                                i.width > 0 && (e.width = i.width), i.height > 0 && (e.height = i.height)
-                            }), n = i.height > n ? i.height : n
-                        }, this)), n
-                    }}), E.VALID_UNIT = /^([0-9]+)( ?px)?$/, E.VALID_COLOR = /^(#(?:[0-9a-f]{3}|[0-9a-f]{6}))$/i, E.retinize = function (e) {
-                        if (!f.retina())return;
-                        h.forEach(e.getElementsByTagName("IMG"), function (e) {
-                            var t = e.getAttribute("data-src-2x");
-                            t && (e.src = t)
-                        })
-                    }, E.scaleDimensions = function (e, t, n, r) {
-                        return t > e && t > r && (e *= r / t, t = r), e > n && (t *= n / e, e = n, t > r && (e *= r / t, t = r)), {width: Math.ceil(e), height: Math.ceil(t)}
-                    }, w(), e(E)
-                })
-            });
-            provide("tfw/widget/timeline", function (e) {
-                using("tfw/widget/base", "tfw/widget/syndicatedbase", "util/datetime", "util/promise", "anim/transition", "tfw/util/article", "tfw/util/data", "tfw/util/tracking", "tfw/util/params", "util/css", "util/env", "util/throttle", "util/twitter", "util/querystring", "util/typevalidator", "util/util", "dom/delegate", "dom/classname", "dom/get", function (t, n, r, i, s, o, u, a, f, l, c, h, p, d, v, m, g, y, b) {
-                    function I(e) {
-                        if (!e)return;
-                        var t, r, i, s, o, u, a, f;
-                        this.a11yTitle = this._("Twitter Timeline Widget"), n.apply(this, [e]), t = this.params(), r = (t.chrome || this.dataAttr("chrome") || "").split(" "), this.preview = t.previewParams, this.widgetId = t.widgetId || this.dataAttr("widget-id"), this.instanceId = ++F, this.cursors = {maxPosition: 0, minPosition: 0}, (s = t.screenName || this.dataAttr("screen-name")) || (o = t.userId || this.dataAttr("user-id")) ? this.override = {overrideType: "user", overrideId: o, overrideName: s, withReplies: v.asBoolean(t.showReplies || this.dataAttr("show-replies")) ? "true" : "false"} : (s = t.favoritesScreenName || this.dataAttr("favorites-screen-name")) || (o = t.favoritesUserId || this.dataAttr("favorites-user-id")) ? this.override = {overrideType: "favorites", overrideId: o, overrideName: s} : ((s = t.listOwnerScreenName || this.dataAttr("list-owner-screen-name")) || (o = t.listOwnerId || this.dataAttr("list-owner-id"))) && ((u = t.listId || this.dataAttr("list-id")) || (a = t.listSlug || this.dataAttr("list-slug"))) ? this.override = {overrideType: "list", overrideOwnerId: o, overrideOwnerName: s, overrideId: u, overrideName: a} : (f = t.customTimelineId || this.dataAttr("custom-timeline-id")) ? this.override = {overrideType: "custom", overrideId: f} : this.override = {}, this.tweetLimit = v.asInt(t.tweetLimit || this.dataAttr("tweet-limit")), this.staticTimeline = this.tweetLimit > 0, r.length && (i = ~m.indexOf(r, "none"), this.chromeless = i || ~m.indexOf(r, "transparent"), this.headerless = i || ~m.indexOf(r, "noheader"), this.footerless = i || ~m.indexOf(r, "nofooter"), this.borderless = i || ~m.indexOf(r, "noborders"), this.noscrollbar = ~m.indexOf(r, "noscrollbar")), this.headingStyle = l.sanitize(t.headingStyle || this.dataAttr("heading-style"), undefined, !0), this.classAttr.push("twitter-timeline-rendered"), this.ariaPolite = t.ariaPolite || this.dataAttr("aria-polite")
-                    }
-
-                    var w = "1.0", E = {CLIENT_SIDE_USER: 0, CLIENT_SIDE_APP: 2}, S = "timeline", x = "new-tweets-bar", T = "timeline-header", N = "timeline-footer", C = "stream", k = "h-feed", L = "tweet", A = "expanded", O = "detail-expander", M = "expand", _ = "permalink", D = "twitter-follow-button", P = "no-more-pane", H = "pending-scroll-in", B = "pending-new-tweet", j = "pending-new-tweet-display", F = 0;
-                    I.prototype = new n, m.aug(I.prototype, {renderedClassNames: "twitter-timeline twitter-timeline-rendered", dimensions: {DEFAULT_HEIGHT: "600", DEFAULT_WIDTH: "520", NARROW_WIDTH: "320", MIN_WIDTH: "180", MIN_HEIGHT: "200", WIDE_MEDIA_PADDING: 81, NARROW_MEDIA_PADDING: 16, WIDE_MEDIA_PADDING_CL: 60, NARROW_MEDIA_PADDING_CL: 12}, create: function (e) {
-                        var t = this.sandbox.createElement("div"), r, i, s = [], u;
-                        t.innerHTML = e.body, r = t.children[0] || !1;
-                        if (!r)return;
-                        return this.reconfigure(e.config), this.discardStaticOverflow(r), this.augmentWidgets(r), n.retinize(r), this.constrainMedia(r), this.searchQuery = r.getAttribute("data-search-query"), this.profileId = r.getAttribute("data-profile-id"), u = this.getTweetDetails(t), m.forIn(u, function (e) {
-                            s.push(e)
-                        }), a.enqueue({page: "timeline", component: "timeline", element: "initial", action: s.length ? "results" : "no_results"}, {widget_id: this.widgetId, widget_origin: o.url(), item_ids: s, item_details: u, client_version: w, message: this.partner, query: this.searchQuery, profile_id: this.profileId}, !0, this.dnt), a.flush(), this.ariaPolite == "assertive" && (i = b.one(x, r, "DIV"), i.setAttribute("aria-polite", "assertive")), r.id = this.id, r.className += " " + this.classAttr.join(" "), r.lang = this.lang, twttr.widgets.load(r), this.ready().then(m.bind(function (e) {
-                            e.appendChild(r), e.style({cssText: "", border: "none", maxWidth: "100%", minWidth: this.dimensions.MIN_WIDTH + "px"}), this.layout(m.bind(function () {
-                                this.srcEl && this.srcEl.parentNode && this.srcEl.parentNode.removeChild(this.srcEl), this.predefinedWidth = this.width, this.width = e.width(this.width), this.predefinedHeight = this.height, this.height = e.height(this.height)
-                            }, this)), this.setNarrow().then(m.bind(function () {
-                                this.sandbox.onresize(m.bind(this.handleResize, this)), this.renderResolver.fulfill(this.sandbox)
-                            }, this))
-                        }, this)), r
-                    }, render: function (e, n) {
-                        var r, s;
-                        return!this.preview && !this.widgetId ? i.reject(400) : (s = new i(function (e) {
-                            r = e
-                        }), this.staticTimeline ? this.rendered().then(m.bind(function (e) {
-                            this.layout(m.bind(function () {
-                                e.height(this.height = this.element.offsetHeight)
-                            }, this)), t.doLayoutAsync()
-                        }, this)) : this.rendered().then(m.bind(function () {
-                            this.recalculateStreamHeight(), t.doLayoutAsync()
-                        }, this)), this.preview ? this.getPreviewTimeline(r) : this.getTimeline(r), n && s.then(n), s)
-                    }, getPreviewTimeline: function (e) {
-                        u.timelinePreview({success: m.bind(function (n) {
-                            this.ready().then(m.bind(function () {
-                                this.element = this.create(n), this.readTranslations(), this.bindInteractions(), this.updateCursors(n.headers, {initial: !0}), t.doLayoutAsync(), e.fulfill(this.element)
-                            }, this))
-                        }, this), error: function (t) {
-                            if (!t || !t.headers)return;
-                            e.reject(t.headers.status)
-                        }, params: this.preview})
-                    }, getTimeline: function (e) {
-                        a.initPostLogging(), u.timeline(m.aug({id: this.widgetId, instanceId: this.instanceId, dnt: this.dnt, lang: this.lang, success: m.bind(function (n) {
-                            this.ready().then(m.bind(function () {
-                                this.element = this.create(n), this.readTranslations(), this.bindInteractions(), this.updateTimeStamps(), this.updateCursors(n.headers, {initial: !0}), n.headers.xPolling && /\d/.test(n.headers.xPolling) && (this.pollInterval = n.headers.xPolling * 1e3), this.staticTimeline || this.schedulePolling(), t.doLayoutAsync(), e.fulfill(this.sandbox.element())
-                            }, this))
-                        }, this), error: function (t) {
-                            if (!t || !t.headers)return;
-                            e.reject(t.headers.status)
-                        }}, this.override))
-                    }, reconfigure: function (e) {
-                        this.lang = e.lang, this.theme || (this.theme = e.theme), this.theme == "dark" && this.classAttr.push("thm-dark"), this.chromeless && this.classAttr.push("var-chromeless"), this.borderless && this.classAttr.push("var-borderless"), this.headerless && this.classAttr.push("var-headerless"), this.footerless && this.classAttr.push("var-footerless"), this.staticTimeline && this.classAttr.push("var-static"), !this.linkColor && e.linkColor && n.VALID_COLOR.test(e.linkColor) && (this.linkColor = RegExp.$1), !this.height && n.VALID_UNIT.test(e.height) && (this.height = RegExp.$1), this.height = Math.max(this.dimensions.MIN_HEIGHT, this.height ? this.height : this.dimensions.DEFAULT_HEIGHT), this.preview && this.classAttr.push("var-preview"), this.narrow = this.width <= this.dimensions.NARROW_WIDTH, this.narrow && this.classAttr.push("var-narrow"), this.addSiteStyles()
-                    }, getTweetDetails: function (e) {
-                        var t = b.one(k, e), n, r = {}, i, s, o, u, a = {TWEET: 0, RETWEET: 10}, f = 0;
-                        n = t && t.children || [];
-                        for (; i = n[f]; f++)s = b.one(_, i, "A"), o = i.getAttribute("data-rendered-tweet-id") || p.status(s.href), u = i.getAttribute("data-tweet-id"), o === u ? r[o] = {item_type: a.TWEET} : r[o] = {item_type: a.RETWEET, target_type: a.TWEET, target_id: u};
-                        return r
-                    }, bindInteractions: function () {
-                        var e = this, t = this.element, n = !0;
-                        this.bindIntentHandlers(), g.delegate(t, "click", ".load-tweets", function (t) {
-                            n && (n = !1, e.forceLoad(), g.stop(t))
-                        }), g.delegate(t, "click", ".display-sensitive-image", function (n) {
-                            e.showNSFW(b.ancestor("." + L, this, t)), g.stop(n)
-                        }), g.delegate(t, "mouseover", "." + S, function () {
-                            e.mouseOver = !0
-                        }), g.delegate(t, "mouseout", "." + S, function () {
-                            e.mouseOver = !1
-                        }), g.delegate(t, "mouseover", "." + x, function () {
-                            e.mouseOverNotifier = !0
-                        }), g.delegate(t, "mouseout", "." + x, function () {
-                            e.mouseOverNotifier = !1, window.setTimeout(function () {
-                                e.hideNewTweetNotifier()
-                            }, 3e3)
-                        });
-                        if (this.staticTimeline)return;
-                        g.delegate(t, "click", "." + M, function (n) {
-                            if (n.altKey || n.metaKey || n.shiftKey)return;
-                            e.toggleExpando(b.ancestor("." + L, this, t)), g.stop(n)
-                        }), g.delegate(t, "click", "A", function (e) {
-                            g.stopPropagation(e)
-                        }), g.delegate(t, "click", ".with-expansion", function (t) {
-                            e.toggleExpando(this), g.stop(t)
-                        }), g.delegate(t, "click", ".load-more", function () {
-                            e.loadMore()
-                        }), g.delegate(t, "click", "." + x, function () {
-                            e.scrollToTop(), e.hideNewTweetNotifier(!0)
-                        })
-                    }, scrollToTop: function () {
-                        var e = b.one(C, this.element, "DIV");
-                        e.scrollTop = 0, e.focus()
-                    }, update: function () {
-                        var e = this, t = b.one(L, this.element, "LI"), n = t && t.getAttribute("data-tweet-id");
-                        this.updateTimeStamps(), this.requestTweets(n, !0, function (t) {
-                            t.childNodes.length > 0 && e.insertNewTweets(t)
-                        })
-                    }, loadMore: function () {
-                        var e = this, t = b.all(L, this.element, "LI").pop(), n = t && t.getAttribute("data-tweet-id");
-                        this.requestTweets(n, !1, function (t) {
-                            var r = b.one(P, e.element, "P"), i = t.childNodes[0];
-                            r.style.cssText = "", i && i.getAttribute("data-tweet-id") == n && t.removeChild(i);
-                            if (t.childNodes.length > 0) {
-                                e.appendTweets(t);
-                                return
-                            }
-                            y.add(e.element, "no-more"), r.focus()
-                        })
-                    }, forceLoad: function () {
-                        var e = this, t = !!b.all(k, this.element, "OL").length;
-                        this.requestTweets(1, !0, function (n) {
-                            n.childNodes.length && (e[t ? "insertNewTweets" : "appendTweets"](n), y.add(e.element, "has-tweets"))
-                        })
-                    }, schedulePolling: function (e) {
-                        var t = this;
-                        if (this.pollInterval === null)return;
-                        e = twttr.widgets.poll || e || this.pollInterval || 1e4, e > -1 && window.setTimeout(function () {
-                            this.isUpdating || t.update(), t.schedulePolling()
-                        }, e)
-                    }, updateCursors: function (e, t) {
-                        (t || {}).initial ? (this.cursors.maxPosition = e.maxPosition, this.cursors.minPosition = e.minPosition) : (t || {}).newer ? this.cursors.maxPosition = e.maxPosition || this.cursors.maxPosition : this.cursors.minPosition = e.minPosition || this.cursors.minPosition
-                    }, requestTweets: function (e, t, r) {
-                        var i = this, s = {id: this.widgetId, instanceId: this.instanceId, screenName: this.widgetScreenName, userId: this.widgetUserId, withReplies: this.widgetShowReplies, dnt: this.dnt, lang: this.lang};
-                        t && this.cursors.maxPosition ? s.minPosition = this.cursors.maxPosition : !t && this.cursors.minPosition ? s.maxPosition = this.cursors.minPosition : t ? s.sinceId = e : s.maxId = e, s.complete = function () {
-                            this.isUpdating = !1
-                        }, s.error = function (e) {
-                            if (e && e.headers) {
-                                if (e.headers.status == "404") {
-                                    i.pollInterval = null;
+                            }, h = function (e) {
+                                if (r(e)) {
+                                    e.then(h, c);
                                     return
                                 }
-                                if (e.headers.status == "503") {
-                                    i.pollInterval *= 1.5;
-                                    return
+                                l(e)
+                            }, p = function (e, t) {
+                                return function (t) {
+                                    a || (a = !0, e(t))
                                 }
-                            }
-                        }, s.success = function (e) {
-                            var s = i.sandbox.createDocumentFragment(), u = i.sandbox.createElement("div"), f = [], l, c;
-                            i.updateCursors(e.headers, {newer: t}), e && e.headers && e.headers.xPolling && /\d+/.test(e.headers.xPolling) && (i.pollInterval = e.headers.xPolling * 1e3);
-                            if (e && e.body !== undefined) {
-                                u.innerHTML = e.body;
-                                if (u.children[0] && u.children[0].tagName != "LI")return;
-                                l = i.getTweetDetails(u);
-                                for (c in l)l.hasOwnProperty(c) && f.push(c);
-                                f.length && (a.enqueue({page: "timeline", component: "timeline", element: t ? "newer" : "older", action: "results"}, {widget_id: i.widgetId, widget_origin: o.url(), item_ids: f, item_details: l, client_version: w, message: i.partner, query: i.searchQuery, profile_id: i.profileId, event_initiator: t ? E.CLIENT_SIDE_APP : E.CLIENT_SIDE_USER}, !0, i.dnt), a.flush()), n.retinize(u), i.constrainMedia(u);
-                                while (u.children[0])s.appendChild(u.children[0]);
-                                r(s)
-                            }
-                        }, u.timelinePoll(m.aug(s, this.override))
-                    }, insertNewTweets: function (e) {
-                        var t = this, n = b.one(C, this.element, "DIV"), r = b.one(k, n, "OL"), i = r.offsetHeight, o;
-                        this.updateTimeStamps(), r.insertBefore(e, r.firstChild), o = r.offsetHeight - i;
-                        if (n.scrollTop > 40 || this.mouseIsOver()) {
-                            n.scrollTop = n.scrollTop + o, this.showNewTweetNotifier();
-                            return
-                        }
-                        y.remove(this.element, H), r.style.cssText = "margin-top: -" + o + "px", window.setTimeout(function () {
-                            n.scrollTop = 0, y.add(t.element, H), c.cssTransitions() ? r.style.cssText = "" : s.animate(function (e) {
-                                e < o ? r.style.cssText = "margin-top: -" + (o - e) + "px" : r.style.cssText = ""
-                            }, o, 500, s.easeOut)
-                        }, 500), this.gcTweets(50)
-                    }, appendTweets: function (e) {
-                        var t = b.one(C, this.element, "DIV"), n = b.one(k, t, "OL");
-                        this.updateTimeStamps(), n.appendChild(e)
-                    }, gcTweets: function (e) {
-                        var t = b.one(k, this.element, "OL"), n = t.children.length, r;
-                        e = e || 50;
-                        for (; n > e && (r = t.children[n - 1]); n--)t.removeChild(r)
-                    }, showNewTweetNotifier: function () {
-                        var e = this, t = b.one(x, this.element, "DIV"), n = t.children[0];
-                        t.style.cssText = "", t.removeChild(n), t.appendChild(n), y.add(this.element, j), window.setTimeout(function () {
-                            y.add(e.element, B)
-                        }, 10), this.newNoticeDisplayTime = +(new Date), window.setTimeout(function () {
-                            e.hideNewTweetNotifier()
-                        }, 5e3)
-                    }, hideNewTweetNotifier: function (e) {
-                        var t = this;
-                        if (!e && this.mouseOverNotifier)return;
-                        y.remove(this.element, B), window.setTimeout(function () {
-                            y.remove(t.element, j)
-                        }, 500)
-                    }, augmentWidgets: function (e) {
-                        var t = b.all(D, e, "A"), n = 0, r;
-                        for (; r = t[n]; n++)r.setAttribute("data-related", this.related), r.setAttribute("data-partner", this.partner), r.setAttribute("data-dnt", this.dnt), r.setAttribute("data-search-query", this.searchQuery), r.setAttribute("data-profile-id", this.profileId), this.width < 250 && r.setAttribute("data-show-screen-name", "false")
-                    }, discardStaticOverflow: function (e) {
-                        var t = b.one(k, e, "OL"), n;
-                        if (this.staticTimeline) {
-                            this.height = 0;
-                            while (n = t.children[this.tweetLimit])t.removeChild(n)
-                        }
-                    }, hideStreamScrollBar: function () {
-                        var e = b.one(C, this.element, "DIV"), t = b.one(k, this.element, "OL"), n;
-                        e.style.width = "", n = this.element.offsetWidth - t.offsetWidth, n > 0 && (e.style.width = this.element.offsetWidth + n + "px")
-                    }, readTranslations: function () {
-                        var e = this.element, t = "data-dt-";
-                        this.datetime = new r(m.compact({phrases: {now: e.getAttribute(t + "now"), s: e.getAttribute(t + "s"), m: e.getAttribute(t + "m"), h: e.getAttribute(t + "h"), second: e.getAttribute(t + "second"), seconds: e.getAttribute(t + "seconds"), minute: e.getAttribute(t + "minute"), minutes: e.getAttribute(t + "minutes"), hour: e.getAttribute(t + "hour"), hours: e.getAttribute(t + "hours")}, months: e.getAttribute(t + "months").split("|"), formats: {abbr: e.getAttribute(t + "abbr"), shortdate: e.getAttribute(t + "short"), longdate: e.getAttribute(t + "long")}}))
-                    }, updateTimeStamps: function () {
-                        var e = b.all(_, this.element, "A"), t, n, r = 0, i, s;
-                        for (; t = e[r]; r++) {
-                            i = t.getAttribute("data-datetime"), s = i && this.datetime.timeAgo(i, this.i18n), n = t.getElementsByTagName("TIME")[0];
-                            if (!s)continue;
-                            if (n && n.innerHTML) {
-                                n.innerHTML = s;
-                                continue
-                            }
-                            t.innerHTML = s
-                        }
-                    }, mouseIsOver: function () {
-                        return this.mouseOver
-                    }, addUrlParams: function (e) {
-                        var t = this, n = {tw_w: this.widgetId, related: this.related, partner: this.partner, query: this.searchQuery, profile_id: this.profileId, original_referer: o.url(), tw_p: "embeddedtimeline"};
-                        return this.addUrlParams = f(n, function (e) {
-                            var n = b.ancestor("." + L, e, t.element);
-                            return n && {tw_i: n.getAttribute("data-tweet-id")}
-                        }), this.addUrlParams(e)
-                    }, showNSFW: function (e) {
-                        var t = b.one("nsfw", e, "DIV"), r, i, s = 0, o, u, a, f;
-                        if (!t)return;
-                        i = n.scaleDimensions(t.getAttribute("data-width"), t.getAttribute("data-height"), this.contentWidth(), t.getAttribute("data-height")), r = !!(u = t.getAttribute("data-player")), r ? a = this.sandbox.createElement("iframe") : (a = this.sandbox.createElement("img"), u = t.getAttribute(c.retina() ? "data-image-2x" : "data-image"), a.alt = t.getAttribute("data-alt"), f = this.sandbox.createElement("a"), f.href = t.getAttribute("data-href"), f.appendChild(a)), a.title = t.getAttribute("data-title"), a.src = u, a.width = i.width, a.height = i.height, o = b.ancestor("." + O, t, e), s = i.height - t.offsetHeight, t.parentNode.replaceChild(r ? a : f, t), o.style.cssText = "height:" + (o.offsetHeight + s) + "px"
-                    }, toggleExpando: function (e) {
-                        var r = b.one(O, e, "DIV"), i = r && r.children[0], s = i && i.getAttribute("data-expanded-media"), o, u = 0, a = b.one(M, e, "A"), f = a && a.getElementsByTagName("B")[0], l = f && (f.innerText || f.textContent), c;
-                        if (!f)return;
-                        this.layout(function () {
-                            f.innerHTML = a.getAttribute("data-toggled-text"), a.setAttribute("data-toggled-text", l)
-                        });
-                        if (y.present(e, A)) {
-                            this.layout(function () {
-                                y.remove(e, A)
-                            });
-                            if (!r) {
-                                t.doLayout();
-                                return
-                            }
-                            this.layout(function () {
-                                r.style.cssText = "", i.innerHTML = ""
-                            }), t.doLayout();
-                            return
-                        }
-                        s && (o = this.sandbox.createElement("DIV"), o.innerHTML = s, n.retinize(o), u = this.constrainMedia(o), this.layout(function () {
-                            i.appendChild(o)
-                        })), r && this.layout(function () {
-                            c = Math.max(i.offsetHeight, u), r.style.cssText = "height:" + c + "px"
-                        }), this.layout(function () {
-                            y.add(e, A)
-                        }), t.doLayout()
-                    }, recalculateStreamHeight: function (e) {
-                        var t = b.one(T, this.element, "DIV"), n = b.one(N, this.element, "DIV"), r = b.one(C, this.element, "DIV");
-                        this.layout(m.bind(function () {
-                            var i = t.offsetHeight + (n ? n.offsetHeight : 0), s = e || this.sandbox.height();
-                            r.style.cssText = "height:" + (s - i - 2) + "px", this.noscrollbar && this.hideStreamScrollBar()
-                        }, this))
-                    }, handleResize: function (e, n) {
-                        var r = Math.min(this.dimensions.DEFAULT_WIDTH, Math.max(this.dimensions.MIN_WIDTH, Math.min(this.predefinedWidth || this.dimensions.DEFAULT_WIDTH, e)));
-                        if (r == this.width && n == this.height)return;
-                        this.width = r, this.height = n, this.setNarrow(), this.constrainMedia(this.element, this.contentWidth(r)), this.staticTimeline ? this.layout(m.bind(function () {
-                            this.height = this.element.offsetHeight, this.sandbox.height(this.height)
-                        }, this)) : this.recalculateStreamHeight(n), t.doLayoutAsync()
-                    }}), e(I)
-                })
-            });
-            provide("tfw/widget/embed", function (e) {
-                using("tfw/widget/base", "tfw/widget/syndicatedbase", "util/datetime", "tfw/util/params", "dom/classname", "dom/get", "util/env", "util/promise", "util/util", "util/throttle", "util/twitter", "tfw/util/article", "tfw/util/data", "tfw/util/tracking", function (t, n, r, i, s, o, u, a, f, l, c, h, p, d) {
-                    function w(e, t, n) {
-                        var r = o.one("subject", e, "BLOCKQUOTE"), i = o.one("reply", e, "BLOCKQUOTE"), s = r && r.getAttribute("data-tweet-id"), u = i && i.getAttribute("data-tweet-id"), a = {}, f = {};
-                        if (!s)return;
-                        a[s] = {item_type: 0}, d.enqueue({page: "tweet", section: "subject", component: "tweet", action: "results"}, {client_version: v, widget_origin: h.url(), widget_frame: h.frameUrl(), message: t, item_ids: [s], item_details: a}, !0, n);
-                        if (!u)return;
-                        f[u] = {item_type: 0}, d.enqueue({page: "tweet", section: "conversation", component: "tweet", action: "results"}, {client_version: v, widget_origin: h.url(), widget_frame: h.frameUrl(), message: t, item_ids: [u], item_details: f, associations: {4: {association_id: s, association_type: 4}}}, !0, n)
-                    }
-
-                    function E(e, t, n) {
-                        var r = {};
-                        if (!e)return;
-                        r[e] = {item_type: 0}, d.enqueue({page: "tweet", section: "subject", component: "rawembedcode", action: "no_results"}, {client_version: v, widget_origin: h.url(), widget_frame: h.frameUrl(), message: t, item_ids: [e], item_details: r}, !0, n)
-                    }
-
-                    function S(e, t, n, r) {
-                        g[e] = g[e] || [], g[e].push({s: n, f: r, lang: t})
-                    }
-
-                    function x() {
-                        twttr.widgets.load(b)
-                    }
-
-                    function T(e) {
-                        if (!e)return;
-                        var t, r, i;
-                        this.a11yTitle = this._("Embedded Tweet"), n.apply(this, [e]), t = this.params(), r = this.srcEl && this.srcEl.getElementsByTagName("A"), i = r && r[r.length - 1], this.hideThread = (t.conversation || this.dataAttr("conversation")) == "none" || ~f.indexOf(this.classAttr, "tw-hide-thread"), this.hideCard = (t.cards || this.dataAttr("cards")) == "hidden" || ~f.indexOf(this.classAttr, "tw-hide-media");
-                        if ((t.align || this.attr("align")) == "left" || ~f.indexOf(this.classAttr, "tw-align-left"))this.align = "left"; else if ((t.align || this.attr("align")) == "right" || ~f.indexOf(this.classAttr, "tw-align-right"))this.align = "right"; else if ((t.align || this.attr("align")) == "center" || ~f.indexOf(this.classAttr, "tw-align-center"))this.align = "center", this.containerWidth > this.dimensions.MIN_WIDTH * (1 / .7) && this.width > this.containerWidth * .7 && (this.width = this.containerWidth * .7);
-                        this.narrow = t.narrow || this.width <= this.dimensions.NARROW_WIDTH, this.narrow && this.classAttr.push("var-narrow"), this.tweetId = t.tweetId || i && c.status(i.href)
-                    }
-
-                    var v = "2.0", m = "tweetembed", g = {}, y = [], b = [];
-                    T.prototype = new n, f.aug(T.prototype, {renderedClassNames: "twitter-tweet twitter-tweet-rendered", dimensions: {DEFAULT_HEIGHT: "0", DEFAULT_WIDTH: "500", NARROW_WIDTH: "350", MIN_WIDTH: "220", MIN_HEIGHT: "0", WIDE_MEDIA_PADDING: 32, NARROW_MEDIA_PADDING: 32}, create: function (e) {
-                        var t = this.sandbox.createElement("div"), r;
-                        t.innerHTML = e, r = t.children[0] || !1;
-                        if (!r)return;
-                        return this.theme == "dark" && this.classAttr.push("thm-dark"), this.linkColor && this.addSiteStyles(), s.present(r, "media-forward") && (this.fullBleedPhoto = !0), this.augmentWidgets(r), n.retinize(r), r.id = this.id, r.className += " " + this.classAttr.join(" "), r.lang = this.lang, this.sandbox.appendChild(r), this.sandbox.style({cssText: "", display: "block", maxWidth: "99%", minWidth: this.dimensions.MIN_WIDTH + "px", padding: "0", borderRadius: "5px", margin: "10px 0", border: "#ddd 1px solid", borderTopColor: "#eee", borderBottomColor: "#bbb", boxShadow: "0 1px 3px rgba(0,0,0,0.15)", position: "absolute", visibility: "hidden"}), this.layout(f.bind(function () {
-                            this.predefinedWidth = this.width, this.width = this.sandbox.width(this.width)
-                        }, this), "Insert Sandbox"), this.setNarrow().then(f.bind(function () {
-                            this.constrainMedia(r, this.contentWidth(this.width)), this.renderResolver.fulfill(this.sandbox)
-                        }, this)), w(r, this.partner, this.dnt), r
-                    }, render: function (e, n) {
-                        var r = "", i = this.tweetId, s, o;
-                        return i ? (o = new a(function (e) {
-                            s = e
-                        }), this.hideCard && (r += "c"), this.hideThread && (r += "t"), r && (i += "-" + r), this.rendered().then(f.bind(function (e) {
-                            this.srcEl && this.srcEl.parentNode && this.layout(f.bind(function () {
-                                this.srcEl.parentNode.removeChild(this.srcEl)
-                            }, this), "Remove Embed Code"), this.align == "center" ? e.style({margin: "7px auto", cssFloat: "none"}) : this.align && (this.width == this.dimensions.DEFAULT_WIDTH && (this.predefinedWidth = this.width = this.dimensions.NARROW_WIDTH), e.style({cssFloat: this.align})), this.layout(f.bind(function () {
-                                this.height = this.sandbox.height(this.element.offsetHeight)
-                            }, this)).then(f.bind(function () {
-                                return t.doLayoutAsync(), this.layout(f.bind(function () {
-                                    this.height = this.sandbox.height(this.element.offsetHeight)
-                                }, this))
-                            }, this)).then(f.bind(function () {
-                                e.onresize(f.bind(this.handleResize, this))
-                            }, this)), e.style({position: "static", visibility: "visible"}), t.doLayoutAsync()
-                        }, this)), S(i, this.lang, f.bind(function (n) {
-                            this.ready().then(f.bind(function () {
-                                this.element = this.create(n), this.readTimestampTranslations(), this.updateTimeStamps(), this.bindIntentHandlers(), t.doLayoutAsync(), s.fulfill(this.sandbox.element())
-                            }, this))
-                        }, this), f.bind(function () {
-                            E(this.tweetId, this.partner, this.dnt), s.fulfill(this.srcEl)
-                        }, this)), y.push(o), n && o.then(n), o) : a.fulfill(this.srcEl)
-                    }, augmentWidgets: function (e) {
-                        var t = o.one("twitter-follow-button", e, "A");
-                        if (!t)return;
-                        t.setAttribute("data-related", this.related), t.setAttribute("data-partner", this.partner), t.setAttribute("data-dnt", this.dnt), t.setAttribute("data-show-screen-name", "false"), b.push(t.parentNode)
-                    }, addUrlParams: function (e) {
-                        var t = this, n = {related: this.related, partner: this.partner, original_referer: h.url(), tw_p: m};
-                        return this.addUrlParams = i(n, function (e) {
-                            var n = o.ancestor(".tweet", e, t.element);
-                            return{tw_i: n.getAttribute("data-tweet-id")}
-                        }), this.addUrlParams(e)
-                    }, handleResize: function (e) {
-                        var n = Math.min(this.dimensions.DEFAULT_WIDTH, Math.max(this.dimensions.MIN_WIDTH, Math.min(this.predefinedWidth || this.dimensions.DEFAULT_WIDTH, e)));
-                        if (n == this.width)return;
-                        this.width = n, this.setNarrow(), this.constrainMedia(this.element, this.contentWidth(n)), this.layout(f.bind(function () {
-                            this.height = this.element.offsetHeight, this.sandbox.height(this.height)
-                        }, this), "Embed Resize"), t.doLayoutAsync()
-                    }, readTimestampTranslations: function () {
-                        var e = this.element, t = "data-dt-", n = e.getAttribute(t + "months") || "";
-                        this.datetime = new r(f.compact({phrases: {AM: e.getAttribute(t + "am"), PM: e.getAttribute(t + "pm")}, months: n.split("|"), formats: {full: e.getAttribute(t + "full")}}))
-                    }, updateTimeStamps: function () {
-                        var e = o.one("long-permalink", this.element, "A"), n = e.getAttribute("data-datetime"), r = n && this.datetime.localTimeStamp(n), i = e.getElementsByTagName("TIME")[0];
-                        if (!r)return;
-                        this.layout(function () {
-                            if (i && i.innerHTML) {
-                                i.innerHTML = r;
-                                return
-                            }
-                            e.innerHTML = r
-                        }, "Update Timestamp"), t.doLayoutAsync()
-                    }}), T.fetchAndRender = function () {
-                        var e = g, n = [], r, i;
-                        g = {};
-                        if (e.keys)n = e.keys(); else for (r in e)e.hasOwnProperty(r) && n.push(r);
-                        if (!n.length)return;
-                        d.initPostLogging(), i = e[n[0]][0].lang, p.tweets({ids: n.sort(), lang: i, complete: function (n) {
-                            f.forIn(n, function (t, n) {
-                                var r = e[t];
-                                f.forEach(r, function (e) {
-                                    e.s && e.s.call(this, n)
-                                }), delete e[t]
-                            }), t.doLayout(), f.forIn(e, function (e, t) {
-                                f.forEach(t, function (t) {
-                                    t.f && t.f.call(this, e)
-                                })
-                            }), t.doLayout()
-                        }}), a.every.apply(null, y).then(function () {
-                            x(), d.flush()
-                        })
-                    }, t.afterLoad(T.fetchAndRender), e(T)
-                })
-            });
-            provide("dom/textsize", function (e) {
-                function n(e, t, n) {
-                    var r = [], i = 0, s;
-                    for (; s = n[i]; i++)r.push(s[0]), r.push(s[1]);
-                    return e + t + r.join(":")
-                }
-
-                function r(e) {
-                    var t = e || "";
-                    return t.replace(/([A-Z])/g, function (e) {
-                        return"-" + e.toLowerCase()
-                    })
-                }
-
-                var t = {};
-                e(function (e, i, s) {
-                    var o = document.createElement("span"), u = {}, a = "", f, l = 0, c = 0, h = [];
-                    s = s || [], i = i || "", a = n(e, i, s);
-                    if (t[a])return t[a];
-                    o.className = i + " twitter-measurement";
-                    try {
-                        for (; f = s[l]; l++)o.style[f[0]] = f[1]
-                    } catch (p) {
-                        for (; f = s[c]; c++)h.push(r(f[0]) + ":" + f[1]);
-                        o.setAttribute("style", h.join(";") + ";")
-                    }
-                    return o.innerHTML = e, document.body.appendChild(o), u.width = o.clientWidth || o.offsetWidth, u.height = o.clientHeight || o.offsetHeight, document.body.removeChild(o), delete o, t[a] = u
-                })
-            });
-            provide("tfw/widget/tweetbase", function (e) {
-                using("util/util", "tfw/widget/base", "util/querystring", "util/twitter", function (t, n, r, i) {
-                    function s(e) {
-                        if (!e)return;
-                        var t;
-                        n.apply(this, [e]), t = this.params(), this.text = t.text || this.dataAttr("text"), this.text && /\+/.test(this.text) && !/ /.test(this.text) && (this.text = this.text.replace(/\+/g, " ")), this.align = t.align || this.dataAttr("align") || "", this.via = t.via || this.dataAttr("via"), this.placeid = t.placeid || this.dataAttr("placeid"), this.hashtags = t.hashtags || this.dataAttr("hashtags"), this.screen_name = i.screenName(t.screen_name || t.screenName || this.dataAttr("button-screen-name")), this.url = t.url || this.dataAttr("url")
-                    }
-
-                    s.prototype = new n, t.aug(s.prototype, {parameters: function () {
-                        var e = {text: this.text, url: this.url, related: this.related, lang: this.lang, placeid: this.placeid, original_referer: location.href, id: this.id, screen_name: this.screen_name, hashtags: this.hashtags, partner: this.partner, dnt: this.dnt, _: +(new Date)};
-                        return t.compact(e), r.encode(e)
-                    }}), e(s)
-                })
-            });
-            provide("tfw/widget/tweetbutton", function (e) {
-                using("tfw/widget/tweetbase", "util/util", "util/querystring", "util/uri", "util/twitter", "dom/textsize", function (t, n, r, i, s, o) {
-                    function l(e) {
-                        t.apply(this, [e]);
-                        var r = this.params(), o = r.count || this.dataAttr("count"), l = r.size || this.dataAttr("size"), c = i.getScreenNameFromPage();
-                        this.classAttr.push("twitter-tweet-button");
-                        if (r.type == "hashtag" || ~n.indexOf(this.classAttr, "twitter-hashtag-button"))this.type = "hashtag", this.classAttr.push("twitter-hashtag-button"); else if (r.type == "mention" || ~n.indexOf(this.classAttr, "twitter-mention-button"))this.type = "mention", this.classAttr.push("twitter-mention-button");
-                        this.counturl = r.counturl || this.dataAttr("counturl"), this.searchlink = r.searchlink || this.dataAttr("searchlink"), this.button_hashtag = s.hashTag(r.button_hashtag || r.hashtag || this.dataAttr("button-hashtag"), !1), this.size = l == "large" ? "l" : "m", this.type ? (this.count = "none", c && (this.related = this.related ? c + "," + this.related : c)) : (this.text = this.text || u, this.url = this.url || i.getCanonicalURL() || a, this.count = ~n.indexOf(f, o) ? o : "horizontal", this.count = this.count == "vertical" && this.size == "l" ? "none" : this.count, this.via = this.via || c)
-                    }
-
-                    var u = document.title, a = encodeURI(location.href), f = ["vertical", "horizontal", "none"];
-                    l.prototype = new t, n.aug(l.prototype, {parameters: function () {
-                        var e = {text: this.text, url: this.url, via: this.via, related: this.related, count: this.count, lang: this.lang, counturl: this.counturl, searchlink: this.searchlink, placeid: this.placeid, original_referer: location.href, id: this.id, size: this.size, type: this.type, screen_name: this.screen_name, button_hashtag: this.button_hashtag, hashtags: this.hashtags, align: this.align, partner: this.partner, dnt: this.dnt, _: +(new Date)};
-                        return n.compact(e), r.encode(e)
-                    }, height: function () {
-                        return this.count == "vertical" ? 62 : this.size == "m" ? 20 : 28
-                    }, width: function () {
-                        var e = {ver: 8, cnt: 14, btn: 24, xlcnt: 18, xlbtn: 38}, t = this.count == "vertical", r = this.type == "hashtag" && this.button_hashtag ? "Tweet %{hashtag}" : this.type == "mention" && this.screen_name ? "Tweet to %{name}" : "Tweet", i = this._(r, {name: "@" + this.screen_name, hashtag: "#" + this.button_hashtag}), s = this._("K"), u = this._("100K+"), a = (t ? "8888" : "88888") + s, f = 0, l = 0, c = 0, h = 0, p = this.styles.base, d = p;
-                        return~n.indexOf(["ja", "ko"], this.lang) ? a += this._("10k unit") : a = a.length > u.length ? a : u, t ? (d = p.concat(this.styles.vbubble), h = e.ver, c = e.btn) : this.size == "l" ? (p = d = p.concat(this.styles.large), c = e.xlbtn, h = e.xlcnt) : (c = e.btn, h = e.cnt), this.count != "none" && (l = o(a, "", d).width + h), f = o(i, "", p.concat(this.styles.button)).width + c, t ? f > l ? f : l : this.calculatedWidth = f + l
-                    }, render: function (e, t) {
-                        var r = twttr.widgets.config.assetUrl() + "/widgets/tweet_button.1380844203.html#" + this.parameters(), i;
-                        return this.count && this.classAttr.push("twitter-count-" + this.count), i = this.create(r, this.dimensions(), {title: this._("Twitter Tweet Button")}).then(n.bind(function (e) {
-                            return this.element = e
-                        }, this)), t && i.then(t), i
-                    }}), e(l)
-                })
-            });
-            provide("tfw/widget/follow", function (e) {
-                using("util/util", "tfw/widget/base", "util/querystring", "util/uri", "util/twitter", "util/promise", "dom/textsize", function (t, n, r, i, s, o, u) {
-                    function a(e) {
-                        if (!e)return;
-                        var t, r, i, o;
-                        n.apply(this, [e]), t = this.params(), r = t.size || this.dataAttr("size"), i = t.showScreenName || this.dataAttr("show-screen-name"), o = t.count || this.dataAttr("count"), this.classAttr.push("twitter-follow-button"), this.showScreenName = i != "false", this.showCount = t.showCount !== !1 && this.dataAttr("show-count") != "false", o == "none" && (this.showCount = !1), this.explicitWidth = t.width || this.dataAttr("width") || "", this.screenName = t.screen_name || t.screenName || s.screenName(this.attr("href")), this.preview = t.preview || this.dataAttr("preview") || "", this.align = t.align || this.dataAttr("align") || "", this.size = r == "large" ? "l" : "m"
-                    }
-
-                    a.prototype = new n, t.aug(a.prototype, {parameters: function () {
-                        var e = {screen_name: this.screenName, lang: this.lang, show_count: this.showCount, show_screen_name: this.showScreenName, align: this.align, id: this.id, preview: this.preview, size: this.size, partner: this.partner, dnt: this.dnt, _: +(new Date)};
-                        return t.compact(e), r.encode(e)
-                    }, width: function () {
-                        if (this.calculatedWidth)return this.calculatedWidth;
-                        if (this.explicitWidth)return this.explicitWidth;
-                        var e = {cnt: 13, btn: 24, xlcnt: 22, xlbtn: 38}, n = this.showScreenName ? "Follow %{screen_name}" : "Follow", r = this._(n, {screen_name: "@" + this.screenName}), i = ~t.indexOf(["ja", "ko"], this.lang) ? this._("10k unit") : this._("M"), s = this._("%{followers_count} followers", {followers_count: "88888" + i}), o = 0, a = 0, f, l, c = this.styles.base;
-                        return this.size == "l" ? (c = c.concat(this.styles.large), f = e.xlbtn, l = e.xlcnt) : (f = e.btn, l = e.cnt), this.showCount && (a = u(s, "", c).width + l), o = u(r, "", c.concat(this.styles.button)).width + f, this.calculatedWidth = o + a
-                    }, render: function (e, n) {
-                        if (!this.screenName)return o.reject("Missing Screen Name").then(n);
-                        var r = twttr.widgets.config.assetUrl() + "/widgets/follow_button.1380844203.html#" + this.parameters(), i = this.create(r, this.dimensions(), {title: this._("Twitter Follow Button")}).then(t.bind(function (e) {
-                            return this.element = e
-                        }, this));
-                        return n && i.then(n), i
-                    }}), e(a)
-                })
-            });
-            !function () {
-                window.twttr = window.twttr || {}, twttr.host = twttr.host || "platform.twitter.com", using("util/domready", "util/env", function (e, t) {
-                    function n(e) {
-                        return(e || !/^http\:$/.test(window.location.protocol)) && !twttr.ignoreSSL ? "https" : "http"
-                    }
-
-                    if (t.ie6())return;
-                    if (twttr.widgets && twttr.widgets.loaded)return twttr.widgets.load(), !1;
-                    if (twttr.init)return!1;
-                    twttr.init = !0, twttr._e = twttr._e || [], twttr.ready = twttr.ready || function (e) {
-                        twttr.widgets && twttr.widgets.loaded ? e(twttr) : twttr._e.push(e)
-                    }, using.path.length || (using.path = n() + "://" + twttr.host + "/js"), twttr.ignoreSSL = twttr.ignoreSSL || !1;
-                    var r = [];
-                    twttr.events = {bind: function (e, t) {
-                        return r.push([e, t])
-                    }}, e(function () {
-                        using("tfw/widget/base", "tfw/widget/follow", "tfw/widget/tweetbutton", "tfw/widget/embed", "tfw/widget/timeline", "tfw/widget/intent", "tfw/util/article", "util/events", "util/util", function (e, t, i, s, o, u, a, f, l) {
-                            function m(e) {
-                                var t = twttr.host;
-                                return n(e) == "https" && twttr.secureHost && (t = twttr.secureHost), n(e) + "://" + t
-                            }
-
-                            function g() {
-                                using("tfw/hub/client", function (e) {
-                                    twttr.events.hub = e.init(p), e.init(p, !0)
-                                })
-                            }
-
-                            var c, h, p = {widgets: {"a.twitter-share-button": i, "a.twitter-mention-button": i, "a.twitter-hashtag-button": i, "a.twitter-follow-button": t, "blockquote.twitter-tweet": s, "a.twitter-timeline": o, "div.twitter-timeline": o, body: u}}, d = twttr.events && twttr.events.hub ? twttr.events : {}, v;
-                            p.assetUrl = m, twttr.widgets = twttr.widgets || {}, l.aug(twttr.widgets, {config: {assetUrl: m}, load: function (t) {
-                                e.init(p), e.embed(t), twttr.widgets.loaded = !0
-                            }, createShareButton: function (t, n, r, s) {
-                                if (!t || !n)return r && r(!1);
-                                s = l.aug({}, s || {}, {url: t, targetEl: n});
-                                var o = new i(s);
-                                e.doLayout(), o.render(p, r)
-                            }, createHashtagButton: function (t, n, r, s) {
-                                if (!t || !n)return r && r(!1);
-                                s = l.aug({}, s || {}, {hashtag: t, targetEl: n, type: "hashtag"});
-                                var o = new i(s);
-                                e.doLayout(), o.render(p, r)
-                            }, createMentionButton: function (t, n, r, s) {
-                                if (!t || !n)return r && r(!1);
-                                s = l.aug({}, s || {}, {screenName: t, targetEl: n, type: "mention"});
-                                var o = new i(s);
-                                e.doLayout(), o.render(p, r)
-                            }, createFollowButton: function (n, r, i, s) {
-                                if (!n || !r)return i && i(!1);
-                                s = l.aug({}, s || {}, {screenName: n, targetEl: r});
-                                var o = new t(s);
-                                e.doLayout(), o.render(p, i)
-                            }, createTweet: function (t, n, r, i) {
-                                if (!t || !n)return r && r(!1);
-                                i = l.aug({}, i || {}, {tweetId: t, targetEl: n});
-                                var o = new s(i);
-                                e.doLayout(), o.render(p, r), s.fetchAndRender()
-                            }, createTimeline: function (t, n, r, i) {
-                                if (!t || !n)return r && r(!1);
-                                i = l.aug({}, i || {}, {widgetId: t, targetEl: n});
-                                var s = new o(i);
-                                e.doLayout(), s.render(p, r)
-                            }}), l.aug(twttr.events, d, f.Emitter), v = twttr.events.bind, twttr.events.bind = function (e, t) {
-                                g(), this.bind = v, this.bind(e, t)
                             };
-                            for (c = 0; h = r[c]; c++)twttr.events.bind(h[0], h[1]);
-                            for (c = 0; h = twttr._e[c]; c++)h(twttr);
-                            twttr.ready = function (e) {
-                                e(twttr)
-                            }, /twitter\.com(\:\d+)?$/.test(document.location.host) && (twttr.widgets.createTimelinePreview = function (t, n, r) {
-                                if (!p || !n)return r && r(!1);
-                                var i = new o({previewParams: t, targetEl: n, linkColor: t.link_color, theme: t.theme, height: t.height});
-                                e.doLayout(), i.render(p, r)
-                            }), twttr.widgets.createTweetEmbed = twttr.widgets.createTweet, twttr.widgets.load()
+                            this.resolve = p(h, "resolve"), this.fulfill = p(l, "fulfill"), this.reject = p(c, "reject"), this.cancel = function () {
+                                f.reject(new Error("Cancel"))
+                            }, this.timeout = function () {
+                                f.reject(new Error("Timeout"))
+                            }, u("pending")
+                        }, u = function (e) {
+                            var t = new s, n = new s, r, i, u = "pending";
+                            this._addAcceptCallback = function (e) {
+                                t.push(e), u == "fulfilled" && t.pump(r)
+                            }, this._addRejectCallback = function (e) {
+                                n.push(e), u == "rejected" && n.pump(i)
+                            };
+                            var a = new o(this, t, n, function (e) {
+                                r = e
+                            }, function (e) {
+                                i = e
+                            }, function (e) {
+                                u = e
+                            });
+                            try {
+                                e && e(a)
+                            } catch (f) {
+                                a.reject(f)
+                            }
+                        }, a = function (e) {
+                            return typeof e == "function"
+                        }, f = function (e, n, r) {
+                            return a(e) ? function () {
+                                try {
+                                    var t = e.apply(null, arguments);
+                                    n.resolve(t)
+                                } catch (r) {
+                                    n.reject(r)
+                                }
+                            } : t.bind(n[r], n)
+                        }, l = function (e, t, n) {
+                            return a(e) && n._addAcceptCallback(e), a(t) && n._addRejectCallback(t), n
+                        };
+                        t.aug(u.prototype, {then: function (e, t) {
+                            var n = this;
+                            return new u(function (r) {
+                                l(f(e, r, "resolve"), f(t, r, "reject"), n)
+                            })
+                        }, "catch": function (e) {
+                            var t = this;
+                            return new u(function (n) {
+                                l(null, f(e, n, "reject"), t)
+                            })
+                        }}), u.isThenable = r;
+                        var c = function (e) {
+                            return t.map(e, u.resolve)
+                        };
+                        u.any = function () {
+                            var e = c(arguments);
+                            return new u(function (n) {
+                                if (!e.length)n.reject("No futures passed to Promise.any()"); else {
+                                    var r = !1, i = function (e) {
+                                        if (r)return;
+                                        r = !0, n.resolve(e)
+                                    }, s = function (e) {
+                                        if (r)return;
+                                        r = !0, n.reject(e)
+                                    };
+                                    t.forEach(e, function (e, t) {
+                                        e.then(i, s)
+                                    })
+                                }
+                            })
+                        }, u.every = function () {
+                            var e = c(arguments);
+                            return new u(function (n) {
+                                if (!e.length)n.reject("No futures passed to Promise.every()"); else {
+                                    var r = new Array(e.length), i = 0, s = function (t, s) {
+                                        i++, r[t] = s, i == e.length && n.resolve(r)
+                                    };
+                                    t.forEach(e, function (e, r) {
+                                        e.then(t.bind(s, null, [r]), n.reject)
+                                    })
+                                }
+                            })
+                        }, u.some = function () {
+                            var e = c(arguments);
+                            return new u(function (n) {
+                                if (!e.length)n.reject("No futures passed to Promise.some()"); else {
+                                    var r = 0, i = function (t) {
+                                        r++, r == e.length && n.reject()
+                                    };
+                                    t.forEach(e, function (e, t) {
+                                        e.then(n.resolve, i)
+                                    })
+                                }
+                            })
+                        }, u.fulfill = function (e) {
+                            return new u(function (t) {
+                                t.fulfill(e)
+                            })
+                        }, u.resolve = function (e) {
+                            return new u(function (t) {
+                                t.resolve(e)
+                            })
+                        }, u.reject = function (e) {
+                            return new u(function (t) {
+                                t.reject(e)
+                            })
+                        }, e(u)
+                    })
+                });
+                provide("util/layout", function (e) {
+                    using("util/promise", "util/logger", function (t, n) {
+                        function s() {
+                        }
+
+                        var r = [], i;
+                        s.prototype.enqueue = function (e, n) {
+                            return new t(function (t) {
+                                r.push({action: e, resolver: t, note: n})
+                            })
+                        }, s.prototype.exec = function () {
+                            var e = r, t;
+                            if (!e.length)return;
+                            r = [];
+                            while (e.length)t = e.shift(), t && t.action ? t.resolver.fulfill(t.action()) : t.resolver.reject()
+                        }, s.prototype.delayedExec = function () {
+                            i && window.clearTimeout(i), i = window.setTimeout(this.exec, 100)
+                        }, e(s)
+                    })
+                });
+                provide("util/iframe", function (e) {
+                    using("util/util", function (t) {
+                        e(function (e, n, r) {
+                            var i;
+                            r = r || document, e = e || {}, n = n || {};
+                            if (e.name) {
+                                try {
+                                    i = r.createElement('<iframe name="' + e.name + '"></iframe>')
+                                } catch (s) {
+                                    i = r.createElement("iframe"), i.name = e.name
+                                }
+                                delete e.name
+                            } else i = r.createElement("iframe");
+                            return e.id && (i.id = e.id, delete e.id), i.allowtransparency = "true", i.scrolling = "no", i.setAttribute("frameBorder", 0), i.setAttribute("allowTransparency", !0), t.forIn(e, function (e, t) {
+                                i.setAttribute(e, t)
+                            }), t.forIn(n, function (e, t) {
+                                i.style[e] = t
+                            }), i
                         })
                     })
-                })
-            }()
-        })
+                });
+                provide("dom/get", function (e) {
+                    using("util/util", function (t) {
+                        function n(e, n, r, i) {
+                            var s, o, u = [], a, f, l, c, h, p;
+                            n = n || document;
+                            if (t.isNative(n.getElementsByClassName))return u = t.filter(n.getElementsByClassName(e), function (e) {
+                                return!r || e.tagName.toLowerCase() == r.toLowerCase()
+                            }), [].slice.call(u, 0, i || u.length);
+                            a = e.split(" "), c = a.length, s = n.getElementsByTagName(r || "*"), p = s.length;
+                            for (l = 0; l < c && p > 0; l++) {
+                                u = [], f = a[l];
+                                for (h = 0; h < p; h++) {
+                                    o = s[h], ~t.indexOf(o.className.split(" "), f) && u.push(o);
+                                    if (l + 1 == c && u.length === i)break
+                                }
+                                s = u, p = s.length
+                            }
+                            return u
+                        }
+
+                        function r(e, t, r) {
+                            return n(e, t, r, 1)[0]
+                        }
+
+                        function i(e, n, r) {
+                            var s = n && n.parentNode, o;
+                            if (!s || s === r)return;
+                            return s.tagName == e ? s : (o = s.className.split(" "), 0 === e.indexOf(".") && ~t.indexOf(o, e.slice(1)) ? s : i(e, s, r))
+                        }
+
+                        e({all: n, one: r, ancestor: i})
+                    })
+                });
+                provide("tfw/widget/base", function (e) {
+                    using("dom/get", "util/domready", "util/iframe", "util/layout", "util/promise", "util/querystring", "util/typevalidator", "util/util", "tfw/util/globals", function (t, n, r, i, s, o, u, a, f) {
+                        function g(e) {
+                            var t;
+                            if (!e)return;
+                            e.ownerDocument ? (this.srcEl = e, this.classAttr = e.className.split(" ")) : (this.srcOb = e, this.classAttr = []), t = this.params(), this.id = this.generateId(), this.setLanguage(), this.related = t.related || this.dataAttr("related"), this.partner = t.partner || this.dataAttr("partner") || f.val("partner"), this.dnt = t.dnt || this.dataAttr("dnt") || f.dnt() || "", this.styleAttr = [], this.targetEl = e.targetEl
+                        }
+
+                        function y() {
+                            a.forEach(p, function (e) {
+                                e()
+                            }), g.doLayout()
+                        }
+
+                        function b(e) {
+                            if (!e)return;
+                            return e.lang ? e.lang : b(e.parentNode)
+                        }
+
+                        var l = 0, c, h = {list: [], byId: {}}, p = [], d = new i, v = "data-twttr-rendered", m = {ar: {"%{followers_count} followers": "عدد المتابعين %{followers_count}", "100K+": "+100 ألف", "10k unit": "10 آلاف وحدة", Follow: "تابِع", "Follow %{screen_name}": "تابِع %{screen_name}", K: "ألف", M: "مليون", Tweet: "غرِّد", "Tweet %{hashtag}": "غرِّد %{hashtag}", "Tweet to %{name}": "غرِّد لـ %{name}", "Twitter Stream": "خطّ تويتر الزمنيّ"}, da: {"%{followers_count} followers": "%{followers_count} følgere", "10k unit": "10k enhed", Follow: "Følg", "Follow %{screen_name}": "Følg %{screen_name}", "Tweet to %{name}": "Tweet til %{name}", "Twitter Stream": "Twitter-strøm"}, de: {"%{followers_count} followers": "%{followers_count} Follower", "100K+": "100Tsd+", "10k unit": "10tsd-Einheit", Follow: "Folgen", "Follow %{screen_name}": "%{screen_name} folgen", K: "Tsd", Tweet: "Twittern", "Tweet to %{name}": "Tweet an %{name}"}, es: {"%{followers_count} followers": "%{followers_count} seguidores", "10k unit": "10k unidad", Follow: "Seguir", "Follow %{screen_name}": "Seguir a %{screen_name}", Tweet: "Twittear", "Tweet %{hashtag}": "Twittear %{hashtag}", "Tweet to %{name}": "Twittear a %{name}", "Twitter Stream": "Cronología de Twitter"}, fa: {"%{followers_count} followers": "%{followers_count} دنبال‌کننده", "100K+": ">۱۰۰هزار", "10k unit": "۱۰هزار واحد", Follow: "دنبال کردن", "Follow %{screen_name}": "دنبال کردن %{screen_name}", K: "هزار", M: "میلیون", Tweet: "توییت", "Tweet %{hashtag}": "توییت کردن %{hashtag}", "Tweet to %{name}": "به %{name} توییت کنید", "Twitter Stream": "جریان توییت‌ها"}, fi: {"%{followers_count} followers": "%{followers_count} seuraajaa", "100K+": "100 000+", "10k unit": "10 000 yksikköä", Follow: "Seuraa", "Follow %{screen_name}": "Seuraa käyttäjää %{screen_name}", K: "tuhatta", M: "milj.", Tweet: "Twiittaa", "Tweet %{hashtag}": "Twiittaa %{hashtag}", "Tweet to %{name}": "Twiittaa käyttäjälle %{name}", "Twitter Stream": "Twitter-virta"}, fil: {"%{followers_count} followers": "%{followers_count} mga tagasunod", "10k unit": "10k yunit", Follow: "Sundan", "Follow %{screen_name}": "Sundan si %{screen_name}", Tweet: "I-tweet", "Tweet %{hashtag}": "I-tweet ang %{hashtag}", "Tweet to %{name}": "Mag-Tweet kay %{name}", "Twitter Stream": "Stream ng Twitter"}, fr: {"%{followers_count} followers": "%{followers_count} abonnés", "10k unit": "unité de 10k", Follow: "Suivre", "Follow %{screen_name}": "Suivre %{screen_name}", Tweet: "Tweeter", "Tweet %{hashtag}": "Tweeter %{hashtag}", "Tweet to %{name}": "Tweeter à %{name}", "Twitter Stream": "Flux Twitter"}, he: {"%{followers_count} followers": "%{followers_count} עוקבים", "100K+": "מאות אלפים", "10k unit": "עשרות אלפים", Follow: "מעקב", "Follow %{screen_name}": "לעקוב אחר %{screen_name}", K: "אלף", M: "מיליון", Tweet: "ציוץ", "Tweet %{hashtag}": "צייצו %{hashtag}", "Tweet to %{name}": "ציוץ אל %{name}", "Twitter Stream": "התזרים של טוויטר"}, hi: {"%{followers_count} followers": "%{followers_count} फ़ॉलोअर्स", "100K+": "1 लाख+", "10k unit": "10 हजार इकाईयां", Follow: "फ़ॉलो", "Follow %{screen_name}": "%{screen_name} को फ़ॉलो करें", K: "हजार", M: "मिलियन", Tweet: "ट्वीट", "Tweet %{hashtag}": "ट्वीट %{hashtag}", "Tweet to %{name}": "%{name} को ट्वीट करें", "Twitter Stream": "ट्विटर स्ट्रीम"}, hu: {"%{followers_count} followers": "%{followers_count} követő", "100K+": "100E+", "10k unit": "10E+", Follow: "Követés", "Follow %{screen_name}": "%{screen_name} követése", K: "E", "Tweet %{hashtag}": "%{hashtag} tweetelése", "Tweet to %{name}": "Tweet küldése neki: %{name}", "Twitter Stream": "Twitter Hírfolyam"}, id: {"%{followers_count} followers": "%{followers_count} pengikut", "100K+": "100 ribu+", "10k unit": "10 ribu unit", Follow: "Ikuti", "Follow %{screen_name}": "Ikuti %{screen_name}", K: "&nbsp;ribu", M: "&nbsp;juta", "Tweet to %{name}": "Tweet ke %{name}", "Twitter Stream": "Aliran Twitter"}, it: {"%{followers_count} followers": "%{followers_count} follower", "10k unit": "10k unità", Follow: "Segui", "Follow %{screen_name}": "Segui %{screen_name}", "Tweet %{hashtag}": "Twitta %{hashtag}", "Tweet to %{name}": "Twitta a %{name}"}, ja: {"%{followers_count} followers": "%{followers_count}人のフォロワー", "100K+": "100K以上", "10k unit": "万", Follow: "フォローする", "Follow %{screen_name}": "%{screen_name}さんをフォロー", Tweet: "ツイート", "Tweet %{hashtag}": "%{hashtag} をツイートする", "Tweet to %{name}": "%{name}さんへツイートする", "Twitter Stream": "Twitterストリーム"}, ko: {"%{followers_count} followers": "%{followers_count}명의 팔로워", "100K+": "100만 이상", "10k unit": "만 단위", Follow: "팔로우", "Follow %{screen_name}": "%{screen_name} 님 팔로우하기", K: "천", M: "백만", Tweet: "트윗", "Tweet %{hashtag}": "%{hashtag} 관련 트윗하기", "Tweet to %{name}": "%{name}님에게 트윗하기", "Twitter Stream": "트위터 스트림"}, msa: {"%{followers_count} followers": "%{followers_count} pengikut", "100K+": "100 ribu+", "10k unit": "10 ribu unit", Follow: "Ikut", "Follow %{screen_name}": "Ikut %{screen_name}", K: "ribu", M: "juta", "Tweet to %{name}": "Tweet kepada %{name}", "Twitter Stream": "Strim Twitter"}, nl: {"%{followers_count} followers": "%{followers_count} volgers", "100K+": "100k+", "10k unit": "10k-eenheid", Follow: "Volgen", "Follow %{screen_name}": "%{screen_name} volgen", K: "k", M: " mln.", Tweet: "Tweeten", "Tweet %{hashtag}": "%{hashtag} tweeten", "Tweet to %{name}": "Tweeten naar %{name}"}, no: {"%{followers_count} followers": "%{followers_count} følgere", "100K+": "100 K+", "10k unit": "10 K-enhet", Follow: "Følg", "Follow %{screen_name}": "Følg %{screen_name}", "Tweet to %{name}": "Send en tweet til %{name}", "Twitter Stream": "Twitter-strøm"}, pl: {"%{followers_count} followers": "%{followers_count} obserwujących", "100K+": "100 tys.+", "10k unit": "10 tys.", Follow: "Obserwuj", "Follow %{screen_name}": "Obserwuj %{screen_name}", K: "tys.", M: "mln", Tweet: "Tweetnij", "Tweet %{hashtag}": "Tweetnij %{hashtag}", "Tweet to %{name}": "Tweetnij do %{name}", "Twitter Stream": "Strumień Twittera"}, pt: {"%{followers_count} followers": "%{followers_count} seguidores", "100K+": "+100 mil", "10k unit": "10 mil unidades", Follow: "Seguir", "Follow %{screen_name}": "Seguir %{screen_name}", K: "Mil", Tweet: "Tweetar", "Tweet %{hashtag}": "Tweetar %{hashtag}", "Tweet to %{name}": "Tweetar para %{name}", "Twitter Stream": "Transmissões do Twitter"}, ru: {"%{followers_count} followers": "Читатели: %{followers_count} ", "100K+": "100 тыс.+", "10k unit": "блок 10k", Follow: "Читать", "Follow %{screen_name}": "Читать %{screen_name}", K: "тыс.", M: "млн.", Tweet: "Твитнуть", "Tweet %{hashtag}": "Твитнуть %{hashtag}", "Tweet to %{name}": "Твитнуть %{name}", "Twitter Stream": "Поток в Твиттере"}, sv: {"%{followers_count} followers": "%{followers_count} följare", "10k unit": "10k", Follow: "Följ", "Follow %{screen_name}": "Följ %{screen_name}", Tweet: "Tweeta", "Tweet %{hashtag}": "Tweeta %{hashtag}", "Tweet to %{name}": "Tweeta till %{name}", "Twitter Stream": "Twitterflöde"}, th: {"%{followers_count} followers": "%{followers_count} ผู้ติดตาม", "100K+": "100พัน+", "10k unit": "หน่วย 10พัน", Follow: "ติดตาม", "Follow %{screen_name}": "ติดตาม %{screen_name}", K: "พัน", M: "ล้าน", Tweet: "ทวีต", "Tweet %{hashtag}": "ทวีต %{hashtag}", "Tweet to %{name}": "ทวีตถึง %{name}", "Twitter Stream": "ทวิตเตอร์สตรีม"}, tr: {"%{followers_count} followers": "%{followers_count} takipçi", "100K+": "+100 bin", "10k unit": "10 bin birim", Follow: "Takip et", "Follow %{screen_name}": "Takip et: %{screen_name}", K: "bin", M: "milyon", Tweet: "Tweetle", "Tweet %{hashtag}": "Tweetle: %{hashtag}", "Tweet to %{name}": "Tweetle: %{name}", "Twitter Stream": "Twitter Akışı"}, ur: {"%{followers_count} followers": "%{followers_count} فالورز", "100K+": "ایک لاکھ سے زیادہ", "10k unit": "دس ہزار یونٹ", Follow: "فالو کریں", "Follow %{screen_name}": "%{screen_name} کو فالو کریں", K: "ہزار", M: "ملین", Tweet: "ٹویٹ کریں", "Tweet %{hashtag}": "%{hashtag} ٹویٹ کریں", "Tweet to %{name}": "%{name} کو ٹویٹ کریں", "Twitter Stream": "ٹوئٹر سٹریم"}, "zh-cn": {"%{followers_count} followers": "%{followers_count} 关注者", "100K+": "10万+", "10k unit": "1万单元", Follow: "关注", "Follow %{screen_name}": "关注 %{screen_name}", K: "千", M: "百万", Tweet: "发推", "Tweet %{hashtag}": "以 %{hashtag} 发推", "Tweet to %{name}": "发推给 %{name}", "Twitter Stream": "Twitter 信息流"}, "zh-tw": {"%{followers_count} followers": "%{followers_count} 位跟隨者", "100K+": "超過十萬", "10k unit": "1萬 單位", Follow: "跟隨", "Follow %{screen_name}": "跟隨 %{screen_name}", K: "千", M: "百萬", Tweet: "推文", "Tweet %{hashtag}": "推文%{hashtag}", "Tweet to %{name}": "推文給%{name}", "Twitter Stream": "Twitter 資訊流"}};
+                        a.aug(g.prototype, {setLanguage: function (e) {
+                            var t;
+                            e || (e = this.params().lang || this.dataAttr("lang") || b(this.srcEl)), e = e && e.toLowerCase();
+                            if (!e)return this.lang = "en";
+                            if (m[e])return this.lang = e;
+                            t = e.replace(/[\-_].*/, "");
+                            if (m[t])return this.lang = t;
+                            this.lang = "en"
+                        }, _: function (e, t) {
+                            var n = this.lang;
+                            t = t || {};
+                            if (!n || !m.hasOwnProperty(n))n = this.lang = "en";
+                            return e = m[n] && m[n][e] || e, this.ringo(e, t, /%\{([\w_]+)\}/g)
+                        }, ringo: function (e, t, n) {
+                            return n = n || /\{\{([\w_]+)\}\}/g, e.replace(n, function (e, n) {
+                                return t[n] !== undefined ? t[n] : e
+                            })
+                        }, add: function (e) {
+                            h.list.push(this), h.byId[this.id] = e
+                        }, create: function (e, t, n) {
+                            var i = this, o;
+                            return n[v] = !0, o = r(a.aug({id: this.id, src: e, "class": this.classAttr.join(" ")}, n), t, this.targetEl && this.targetEl.ownerDocument), this.srcEl ? this.layout(function () {
+                                return i.srcEl.parentNode.replaceChild(o, i.srcEl), o
+                            }) : this.targetEl ? this.layout(function () {
+                                return i.targetEl.appendChild(o), o
+                            }) : s.reject("Did not append widget")
+                        }, params: function () {
+                            var e, t;
+                            return this.srcOb ? t = this.srcOb : (e = this.srcEl && this.srcEl.href && this.srcEl.href.split("?")[1], t = e ? o.decode(e) : {}), this.params = function () {
+                                return t
+                            }, t
+                        }, dataAttr: function (e) {
+                            return this.srcEl && this.srcEl.getAttribute("data-" + e)
+                        }, attr: function (e) {
+                            return this.srcEl && this.srcEl.getAttribute(e)
+                        }, layout: function (e) {
+                            return d.enqueue(e)
+                        }, styles: {base: [
+                            ["font", "normal normal normal 11px/18px 'Helvetica Neue', Arial, sans-serif"],
+                            ["margin", "0"],
+                            ["padding", "0"],
+                            ["whiteSpace", "nowrap"]
+                        ], button: [
+                            ["fontWeight", "bold"],
+                            ["textShadow", "0 1px 0 rgba(255,255,255,.5)"]
+                        ], large: [
+                            ["fontSize", "13px"],
+                            ["lineHeight", "26px"]
+                        ], vbubble: [
+                            ["fontSize", "16px"]
+                        ]}, width: function () {
+                            throw new Error(name + " not implemented")
+                        }, height: function () {
+                            return this.size == "m" ? 20 : 28
+                        }, minWidth: function () {
+                        }, maxWidth: function () {
+                        }, minHeight: function () {
+                        }, maxHeight: function () {
+                        }, dimensions: function () {
+                            function e(e) {
+                                switch (typeof e) {
+                                    case"string":
+                                        return e;
+                                    case"undefined":
+                                        return;
+                                    default:
+                                        return e + "px"
+                                }
+                            }
+
+                            var t = {width: this.width(), height: this.height()};
+                            return this.minWidth() && (t["min-width"] = this.minWidth()), this.maxWidth() && (t["max-width"] = this.maxWidth()), this.minHeight() && (t["min-height"] = this.minHeight()), this.maxHeight() && (t["max-height"] = this.maxHeight()), a.forIn(t, function (n, r) {
+                                t[n] = e(r)
+                            }), t
+                        }, generateId: function () {
+                            return this.srcEl && this.srcEl.id || "twitter-widget-" + l++
+                        }}), g.afterLoad = function (e) {
+                            p.push(e)
+                        }, g.doLayout = function () {
+                            d.exec()
+                        }, g.doLayoutAsync = function () {
+                            d.delayedExec()
+                        }, g.init = function (e) {
+                            c = e
+                        }, g.find = function (e) {
+                            return e && h.byId[e] ? h.byId[e].element : null
+                        }, g.embed = function (e) {
+                            var n = c.widgets, r = [];
+                            u.isArray(e) || (e = [e || document]), a.forEach(e, function (e) {
+                                a.forIn(n, function (n, i) {
+                                    var s, o;
+                                    n.match(/\./) ? (s = n.split("."), o = t.all(s[1], e, s[0])) : o = e.getElementsByTagName(n), a.forEach(o, function (e) {
+                                        if (e.getAttribute(v))return;
+                                        e.setAttribute(v, "true"), r.push(new i(e))
+                                    })
+                                })
+                            }), g.doLayout(), a.forEach(r, function (e) {
+                                h.byId[e.id] = e, h.list.push(e), e.render(c)
+                            }), g.doLayoutAsync(), y()
+                        }, window.setInterval(function () {
+                            g.doLayout()
+                        }, 500), e(g)
+                    })
+                });
+                provide("tfw/widget/intent", function (e) {
+                    using("tfw/widget/base", "util/util", "util/querystring", "util/uri", function (t, n, r, i) {
+                        function h(e) {
+                            var t = Math.round(l / 2 - u / 2), n = 0;
+                            f > a && (n = Math.round(f / 2 - a / 2)), window.open(e, undefined, [o, "width=" + u, "height=" + a, "left=" + t, "top=" + n].join(","))
+                        }
+
+                        function p(e, t) {
+                            using("tfw/hub/client", function (n) {
+                                n.openIntent(e, t)
+                            })
+                        }
+
+                        function d(e) {
+                            var t = "original_referer=" + location.href;
+                            return[e, t].join(e.indexOf("?") == -1 ? "?" : "&")
+                        }
+
+                        function v(e) {
+                            var t, r, i, o;
+                            e = e || window.event, t = e.target || e.srcElement;
+                            if (e.altKey || e.metaKey || e.shiftKey)return;
+                            while (t) {
+                                if (~n.indexOf(["A", "AREA"], t.nodeName))break;
+                                t = t.parentNode
+                            }
+                            t && t.href && (r = t.href.match(s), r && (o = d(t.href), o = o.replace(/^http[:]/, "https:"), o = o.replace(/^\/\//, "https://"), m(o, t), e.returnValue = !1, e.preventDefault && e.preventDefault()))
+                        }
+
+                        function m(e, t) {
+                            if (twttr.events.hub && t) {
+                                var n = new g(c.generateId(), t);
+                                c.add(n), p(e, t), twttr.events.trigger("click", {target: t, region: "intent", type: "click", data: {}})
+                            } else h(e)
+                        }
+
+                        function g(e, t) {
+                            this.id = e, this.element = this.srcEl = t
+                        }
+
+                        function y(e) {
+                            this.srcEl = [], this.element = e
+                        }
+
+                        var s = /twitter\.com(\:\d{2,4})?\/intent\/(\w+)/, o = "scrollbars=yes,resizable=yes,toolbar=no,location=yes", u = 550, a = 520, f = screen.height, l = screen.width, c;
+                        y.prototype = new t, n.aug(y.prototype, {render: function (e) {
+                            c = this, window.__twitterIntentHandler || (document.addEventListener ? document.addEventListener("click", v, !1) : document.attachEvent && document.attachEvent("onclick", v), window.__twitterIntentHandler = !0)
+                        }}), y.open = m, e(y)
+                    })
+                });
+                provide("dom/classname", function (e) {
+                    function t(e) {
+                        return new RegExp("\\b" + e + "\\b", "g")
+                    }
+
+                    function n(e, n) {
+                        if (e.classList) {
+                            e.classList.add(n);
+                            return
+                        }
+                        t(n).test(e.className) || (e.className += " " + n)
+                    }
+
+                    function r(e, n) {
+                        if (e.classList) {
+                            e.classList.remove(n);
+                            return
+                        }
+                        e.className = e.className.replace(t(n), " ")
+                    }
+
+                    function i(e, t, i) {
+                        return e.classList && e.classList.toggle ? e.classList.toggle(t, i) : (i ? n(e, t) : r(e, t), i)
+                    }
+
+                    function s(e, i, s) {
+                        if (e.classList && o(e, i)) {
+                            r(e, i), n(e, s);
+                            return
+                        }
+                        e.className = e.className.replace(t(i), s)
+                    }
+
+                    function o(e, n) {
+                        return e.classList ? e.classList.contains(n) : t(n).test(e.className)
+                    }
+
+                    e({add: n, remove: r, replace: s, toggle: i, present: o})
+                });
+                provide("util/throttle", function (e) {
+                    function t(e, t, n) {
+                        function o() {
+                            var n = +(new Date);
+                            window.clearTimeout(s);
+                            if (n - i > t) {
+                                i = n, e.call(r);
+                                return
+                            }
+                            s = window.setTimeout(o, t)
+                        }
+
+                        var r = n || this, i = 0, s;
+                        return o
+                    }
+
+                    e(t)
+                });
+                provide("util/css", function (e) {
+                    using("util/util", function (t) {
+                        e({sanitize: function (e, n, r) {
+                            var i = /^[\w ,%\/"'\-_#]+$/, s = e && t.map(e.split(";"), function (e) {
+                                return t.map(e.split(":").slice(0, 2), function (e) {
+                                    return t.trim(e)
+                                })
+                            }), o = 0, u, a = [], f = r ? "!important" : "";
+                            n = n || /^(font|text\-|letter\-|color|line\-)[\w\-]*$/;
+                            for (; s && (u = s[o]); o++)u[0].match(n) && u[1].match(i) && a.push(u.join(":") + f);
+                            return a.join(";")
+                        }})
+                    })
+                });
+                provide("tfw/util/params", function (e) {
+                    using("util/querystring", "util/twitter", function (t, n) {
+                        e(function (e, r) {
+                            return function (i) {
+                                var s, o = "data-tw-params", u, a = i.innerHTML;
+                                if (!i)return;
+                                if (!n.isTwitterURL(i.href))return;
+                                if (i.getAttribute(o))return;
+                                i.setAttribute(o, !0);
+                                if (typeof r == "function") {
+                                    s = r.call(this, i);
+                                    for (u in s)s.hasOwnProperty(u) && (e[u] = s[u])
+                                }
+                                i.href = t.url(i.href, e), i.innerHTML = a
+                            }
+                        })
+                    })
+                });
+                provide("$xd/json2.js", function (exports) {
+                    window.JSON || (window.JSON = {}), function () {
+                        function f(e) {
+                            return e < 10 ? "0" + e : e
+                        }
+
+                        function quote(e) {
+                            return escapable.lastIndex = 0, escapable.test(e) ? '"' + e.replace(escapable, function (e) {
+                                var t = meta[e];
+                                return typeof t == "string" ? t : "\\u" + ("0000" + e.charCodeAt(0).toString(16)).slice(-4)
+                            }) + '"' : '"' + e + '"'
+                        }
+
+                        function str(e, t) {
+                            var n, r, i, s, o = gap, u, a = t[e];
+                            a && typeof a == "object" && typeof a.toJSON == "function" && (a = a.toJSON(e)), typeof rep == "function" && (a = rep.call(t, e, a));
+                            switch (typeof a) {
+                                case"string":
+                                    return quote(a);
+                                case"number":
+                                    return isFinite(a) ? String(a) : "null";
+                                case"boolean":
+                                case"null":
+                                    return String(a);
+                                case"object":
+                                    if (!a)return"null";
+                                    gap += indent, u = [];
+                                    if (Object.prototype.toString.apply(a) === "[object Array]") {
+                                        s = a.length;
+                                        for (n = 0; n < s; n += 1)u[n] = str(n, a) || "null";
+                                        return i = u.length === 0 ? "[]" : gap ? "[\n" + gap + u.join(",\n" + gap) + "\n" + o + "]" : "[" + u.join(",") + "]", gap = o, i
+                                    }
+                                    if (rep && typeof rep == "object") {
+                                        s = rep.length;
+                                        for (n = 0; n < s; n += 1)r = rep[n], typeof r == "string" && (i = str(r, a), i && u.push(quote(r) + (gap ? ": " : ":") + i))
+                                    } else for (r in a)Object.hasOwnProperty.call(a, r) && (i = str(r, a), i && u.push(quote(r) + (gap ? ": " : ":") + i));
+                                    return i = u.length === 0 ? "{}" : gap ? "{\n" + gap + u.join(",\n" + gap) + "\n" + o + "}" : "{" + u.join(",") + "}", gap = o, i
+                            }
+                        }
+
+                        typeof Date.prototype.toJSON != "function" && (Date.prototype.toJSON = function (e) {
+                            return isFinite(this.valueOf()) ? this.getUTCFullYear() + "-" + f(this.getUTCMonth() + 1) + "-" + f(this.getUTCDate()) + "T" + f(this.getUTCHours()) + ":" + f(this.getUTCMinutes()) + ":" + f(this.getUTCSeconds()) + "Z" : null
+                        }, String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function (e) {
+                            return this.valueOf()
+                        });
+                        var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, gap, indent, meta = {"\b": "\\b", "	": "\\t", "\n": "\\n", "\f": "\\f", "\r": "\\r", '"': '\\"', "\\": "\\\\"}, rep;
+                        typeof JSON.stringify != "function" && (JSON.stringify = function (e, t, n) {
+                            var r;
+                            gap = "", indent = "";
+                            if (typeof n == "number")for (r = 0; r < n; r += 1)indent += " "; else typeof n == "string" && (indent = n);
+                            rep = t;
+                            if (!t || typeof t == "function" || typeof t == "object" && typeof t.length == "number")return str("", {"": e});
+                            throw new Error("JSON.stringify")
+                        }), typeof JSON.parse != "function" && (JSON.parse = function (text, reviver) {
+                            function walk(e, t) {
+                                var n, r, i = e[t];
+                                if (i && typeof i == "object")for (n in i)Object.hasOwnProperty.call(i, n) && (r = walk(i, n), r !== undefined ? i[n] = r : delete i[n]);
+                                return reviver.call(e, t, i)
+                            }
+
+                            var j;
+                            cx.lastIndex = 0, cx.test(text) && (text = text.replace(cx, function (e) {
+                                return"\\u" + ("0000" + e.charCodeAt(0).toString(16)).slice(-4)
+                            }));
+                            if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, "")))return j = eval("(" + text + ")"), typeof reviver == "function" ? walk({"": j}, "") : j;
+                            throw new SyntaxError("JSON.parse")
+                        })
+                    }();
+                    exports();
+                    loadrunner.Script.loaded.push("$xd/json2.js")
+                });
+                provide("util/params", function (e) {
+                    using("util/querystring", function (t) {
+                        var n = function (e) {
+                            var n = e.search.substr(1);
+                            return t.decode(n)
+                        }, r = function (e) {
+                            var n = e.href, r = n.indexOf("#"), i = r < 0 ? "" : n.substring(r + 1);
+                            return t.decode(i)
+                        }, i = function (e) {
+                            var t = {}, i = n(e), s = r(e);
+                            for (var o in i)i.hasOwnProperty(o) && (t[o] = i[o]);
+                            for (var o in s)s.hasOwnProperty(o) && (t[o] = s[o]);
+                            return t
+                        };
+                        e({combined: i, fromQuery: n, fromFragment: r})
+                    })
+                });
+                provide("tfw/util/env", function (e) {
+                    using("util/params", function (t) {
+                        function r() {
+                            var e = 36e5, r = t.combined(document.location)._;
+                            return n !== undefined ? n : (n = !1, r && /^\d+$/.test(r) && (n = +(new Date) - parseInt(r) < e), n)
+                        }
+
+                        var n;
+                        e({isDynamicWidget: r})
+                    })
+                });
+                provide("util/decider", function (e) {
+                    function n(e) {
+                        var n = t[e] || !1;
+                        if (!n)return!1;
+                        if (n === !0 || n === 100)return!0;
+                        var r = Math.random() * 100, i = n >= r;
+                        return t[e] = i, i
+                    }
+
+                    var t = {force_new_cookie: 100, rufous_pixel: 100, decider_fixture: 12.34};
+                    e({isAvailable: n})
+                });
+                provide("dom/cookie", function (e) {
+                    using("util/util", function (t) {
+                        e(function (e, n, r) {
+                            var i = t.aug({}, r);
+                            if (arguments.length > 1 && String(n) !== "[object Object]") {
+                                if (n === null || n === undefined)i.expires = -1;
+                                if (typeof i.expires == "number") {
+                                    var s = i.expires, o = new Date((new Date).getTime() + s * 60 * 1e3);
+                                    i.expires = o
+                                }
+                                return n = String(n), document.cookie = [encodeURIComponent(e), "=", i.raw ? n : encodeURIComponent(n), i.expires ? "; expires=" + i.expires.toUTCString() : "", i.path ? "; path=" + i.path : "", i.domain ? "; domain=" + i.domain : "", i.secure ? "; secure" : ""].join("")
+                            }
+                            i = n || {};
+                            var u, a = i.raw ? function (e) {
+                                return e
+                            } : decodeURIComponent;
+                            return(u = (new RegExp("(?:^|; )" + encodeURIComponent(e) + "=([^;]*)")).exec(document.cookie)) ? a(u[1]) : null
+                        })
+                    })
+                });
+                provide("util/donottrack", function (e) {
+                    using("dom/cookie", function (t) {
+                        e(function (e) {
+                            var n = /\.(gov|mil)(:\d+)?$/i, r = /https?:\/\/([^\/]+).*/i;
+                            return e = e || document.referrer, e = r.test(e) && r.exec(e)[1], t("dnt") ? !0 : n.test(document.location.host) ? !0 : e && n.test(e) ? !0 : document.navigator ? document.navigator["doNotTrack"] == 1 : navigator ? navigator["doNotTrack"] == 1 || navigator["msDoNotTrack"] == 1 : !1
+                        })
+                    })
+                });
+                provide("tfw/util/guest_cookie", function (e) {
+                    using("dom/cookie", "util/donottrack", "util/decider", function (t, n, r) {
+                        function s() {
+                            var e = t(i) || !1;
+                            if (!e)return;
+                            e.match(/^v3\:/) || o()
+                        }
+
+                        function o() {
+                            t(i) && t(i, null, {domain: ".twitter.com", path: "/"})
+                        }
+
+                        function u() {
+                            n() && o()
+                        }
+
+                        var i = "pid";
+                        e({set: u, destroy: o, forceNewCookie: s, guest_id_cookie: i})
+                    })
+                });
+                provide("sandbox/baseframe", function (e) {
+                    using("util/domready", "util/env", "util/iframe", "util/promise", "util/util", function (t, n, r, i, s) {
+                        function u(e, t, n, o) {
+                            var u;
+                            this.readyPromise = new i(s.bind(function (e) {
+                                this.resolver = e
+                            }, this)), this.attrs = e || {}, this.styles = t || {}, this.appender = n || function (e) {
+                                document.body.appendChild(e)
+                            }, this.layout = o || function (e) {
+                                return new i(function (t) {
+                                    return t.fulfill(e())
+                                })
+                            }, this.frame = u = r(this.attrs, this.styles), u.onreadystatechange = u.onload = this.getCallback(this.onLoad), this.layout(s.bind(function () {
+                                this.appender(u)
+                            }, this))
+                        }
+
+                        var o = 0;
+                        window.twttr = window.twttr || {}, window.twttr.sandbox = window.twttr.sandbox || {}, u.prototype.getCallback = function (e) {
+                            var t = this, n = !1;
+                            return function () {
+                                n || (n = !0, e.call(t))
+                            }
+                        }, u.prototype.registerCallback = function (e) {
+                            var t = "cb" + o++;
+                            return window.twttr.sandbox[t] = e, t
+                        }, u.prototype.onLoad = function () {
+                            try {
+                                this.document = this.frame.contentWindow.document
+                            } catch (e) {
+                                this.setDocDomain();
+                                return
+                            }
+                            this.writeStandardsDoc(), this.resolver.fulfill(this)
+                        }, u.prototype.ready = function () {
+                            return this.readyPromise
+                        }, u.prototype.setDocDomain = function () {
+                            var e = r(this.attrs, this.styles), t = this.registerCallback(this.getCallback(this.onLoad));
+                            e.src = ["javascript:", 'document.write("");', "try { window.parent.document; }", "catch (e) {", 'document.domain="' + document.domain + '";', "}", 'window.parent.twttr.sandbox["' + t + '"]();'].join(""), this.layout(s.bind(function () {
+                                this.frame.parentNode.removeChild(this.frame), this.frame = null, this.appender ? this.appender(e) : document.body.appendChild(e), this.frame = e
+                            }, this))
+                        }, u.prototype.writeStandardsDoc = function () {
+                            if (!n.anyIE() || n.cspEnabled())return;
+                            var e = ["<!DOCTYPE html>", "<html>", "<head>", "<scr", "ipt>", "try { window.parent.document; }", 'catch (e) {document.domain="' + document.domain + '";}', "</scr", "ipt>", "</head>", "<body></body>", "</html>"].join("");
+                            this.document.write(e), this.document.close()
+                        }, e(u)
+                    })
+                });
+                provide("sandbox/minimal", function (e) {
+                    using("sandbox/baseframe", "util/env", "util/promise", "util/util", function (t, n, r, i) {
+                        function s(e, t) {
+                            if (!e)return;
+                            this._frame = e, this._win = e.contentWindow, this._doc = this._win.document, this._body = this._doc.body, this._head = this._body.parentNode.children[0], this.layout = t
+                        }
+
+                        i.aug(s.prototype, {createElement: function (e) {
+                            return this._doc.createElement(e)
+                        }, createDocumentFragment: function () {
+                            return this._doc.createDocumentFragment()
+                        }, appendChild: function (e) {
+                            return this.layout(i.bind(function () {
+                                return this._body.appendChild(e)
+                            }, this))
+                        }, setBaseTarget: function (e) {
+                            var t = this._doc.createElement("base");
+                            return t.target = e, this.layout(i.bind(function () {
+                                return this._head.appendChild(t)
+                            }, this))
+                        }, element: function () {
+                            return this._frame
+                        }, document: function () {
+                            return this._doc
+                        }}), s.createSandbox = function (e, n, r, i) {
+                            var o = new t(e, n, r, i);
+                            return o.ready().then(function (e) {
+                                return new s(e.frame, e.layout)
+                            })
+                        }, e(s)
+                    })
+                });
+                provide("tfw/util/tracking", function (e) {
+                    using("dom/cookie", "dom/delegate", "sandbox/minimal", "util/donottrack", "util/promise", "tfw/util/guest_cookie", "tfw/util/env", "util/iframe", "util/util", "$xd/json2.js", function (t, n, r, i, s, o, u, a, f) {
+                        function S() {
+                            return b ? b : b = r.createSandbox({id: "rufous-sandbox"}, {display: "none"}).then(f.bind(function (e) {
+                                y = e, d = D(), v = P();
+                                while (m[0])k.apply(this, m.shift());
+                                return g ? L() : [d, v]
+                            }, this))
+                        }
+
+                        function x(e, t, n, r) {
+                            var i = !f.isObject(e), s = t ? !f.isObject(t) : !1, o, u;
+                            if (i || s)return;
+                            if (/Firefox/.test(navigator.userAgent))return;
+                            o = O(e), u = M(t, !!n, !!r), C(o, u, !0)
+                        }
+
+                        function T(e, n, r, s) {
+                            var a = c[n], l, h, p = o.guest_id_cookie;
+                            if (!a)return;
+                            e = e || {}, s = !!s, r = !!r, h = e.original_redirect_referrer || document.referrer, s = s || i(h), l = f.aug({}, e), r || (N(l, "referrer", h), N(l, "widget", +u.isDynamicWidget()), N(l, "hask", +!!t("k")), N(l, "li", +!!t("twid")), N(l, p, t(p) || "")), s && (N(l, "dnt", 1), B(l)), H(a + "?" + _(l))
+                        }
+
+                        function N(e, t, n) {
+                            var r = l + t;
+                            if (!e)return;
+                            return e[r] = n, e
+                        }
+
+                        function C(e, t, n) {
+                            var r, i, s, o, u = w + "?";
+                            if (!f.isObject(e) || !f.isObject(t))return;
+                            s = f.aug({}, t, {event_namespace: e}), n ? (u += _({l: j(s)}), H(u)) : (r = d.firstChild, r.value = +r.value || +s.dnt, o = j(s), i = y.createElement("input"), i.type = "hidden", i.name = "l", i.value = o, d.appendChild(i))
+                        }
+
+                        function k(e, t, n, r) {
+                            var i = !f.isObject(e), s = t ? !f.isObject(t) : !1, o, u;
+                            if (i || s)return;
+                            if (!y || !d) {
+                                m.push([e, t, n, r]);
+                                return
+                            }
+                            o = O(e), u = M(t, !!n, !!r), C(o, u)
+                        }
+
+                        function L() {
+                            if (!d)return g = !0, b || s.reject();
+                            if (d.children.length <= 2)return s.reject();
+                            var e = s.every(y.appendChild(d), y.appendChild(v)).then(function (e) {
+                                var t = e[0], r = e[1];
+                                return n.on(r, "load", function () {
+                                    window.setTimeout(A(t, r), 0)
+                                }), t.submit(), e
+                            });
+                            return d = D(), v = P(), e
+                        }
+
+                        function A(e, t) {
+                            return function () {
+                                var n = e.parentNode;
+                                if (!n)return;
+                                n.removeChild(e), n.removeChild(t)
+                            }
+                        }
+
+                        function O(e) {
+                            return f.aug({client: "tfw"}, e || {})
+                        }
+
+                        function M(e, t, n) {
+                            var r = {_category_: "tfw_client_event"}, s, o;
+                            return t = !!t, n = !!n, s = f.aug(r, e || {}), o = s.widget_origin || document.referrer, s.format_version = 1, s.dnt = n = n || i(o), s.triggered_on = s.triggered_on || +(new Date), t || (s.widget_origin = o), n && B(s), s
+                        }
+
+                        function _(e) {
+                            var t = [], n, r, i;
+                            for (n in e)e.hasOwnProperty(n) && (r = encodeURIComponent(n), i = encodeURIComponent(e[n]), i = i.replace(/'/g, "%27"), t.push(r + "=" + i));
+                            return t.join("&")
+                        }
+
+                        function D() {
+                            var e = y.createElement("form"), t = y.createElement("input"), n = y.createElement("input");
+                            return p++, e.action = w, e.method = "POST", e.target = "rufous-frame-" + p, e.id = "rufous-form-" + p, t.type = "hidden", t.name = "dnt", t.value = 0, n.type = "hidden", n.name = "tfw_redirect", n.value = E, e.appendChild(t), e.appendChild(n), e
+                        }
+
+                        function P() {
+                            var e = "rufous-frame-" + p;
+                            return a({id: e, name: e, width: 0, height: 0, border: 0}, {display: "none"}, y.document())
+                        }
+
+                        function H(e) {
+                            var t = document.createElement("img");
+                            t.src = e, t.alt = "", t.style.position = "absolute", t.style.height = "1px", t.style.width = "1px", t.style.top = "-9999px", t.style.left = "-9999px", document.body.appendChild(t)
+                        }
+
+                        function B(e) {
+                            f.forIn(e, function (t) {
+                                ~f.indexOf(h, t) && delete e[t]
+                            })
+                        }
+
+                        function j(e) {
+                            var t = Array.prototype.toJSON, n;
+                            return delete Array.prototype.toJSON, n = JSON.stringify(e), t && (Array.prototype.toJSON = t), n
+                        }
+
+                        var l = "twttr_", c = {tweetbutton: "//p.twitter.com/t.gif", followbutton: "//p.twitter.com/f.gif", tweetembed: "//p.twitter.com/e.gif"}, h = ["hask", "li", "logged_in", "pid", "user_id", o.guest_id_cookie, l + "hask", l + "li", l + o.guest_id_cookie], p = 0, d, v, m = [], g, y, b, w = "https://twitter.com/i/jot", E = "https://platform.twitter.com/jot.html";
+                        o.forceNewCookie(), e({enqueue: k, flush: L, initPostLogging: S, addPixel: x, addLegacyPixel: T, addVar: N})
+                    })
+                });
+                provide("tfw/util/data", function (e) {
+                    using("util/logger", "util/util", "util/querystring", function (t, n, r) {
+                        function c(e) {
+                            return function (n) {
+                                n.error ? e.error && e.error(n) : n.headers && n.headers.status != 200 ? (e.error && e.error(n), t.warn(n.headers.message)) : e.success && e.success(n), e.complete && e.complete(n), h(e)
+                            }
+                        }
+
+                        function h(e) {
+                            var t = e.script;
+                            t && (t.onload = t.onreadystatechange = null, t.parentNode && t.parentNode.removeChild(t), e.script = undefined, t = undefined), e.callbackName && twttr.tfw.callbacks[e.callbackName] && delete twttr.tfw.callbacks[e.callbackName]
+                        }
+
+                        function p(e) {
+                            var t = {};
+                            return e.success && n.isType("function", e.success) && (t.success = e.success), e.error && n.isType("function", e.error) && (t.error = e.error), e.complete && n.isType("function", e.complete) && (t.complete = e.complete), t
+                        }
+
+                        window.twttr = window.twttr || {}, twttr.tfw = twttr.tfw || {}, twttr.tfw.callbacks = twttr.tfw.callbacks || {};
+                        var i = "twttr.tfw.callbacks", s = twttr.tfw.callbacks, o = "cb", u = 0, a = !1, f = {}, l = {tweets: "https://syndication.twitter.com/tweets.json", timeline: "https://cdn.syndication.twimg.com/widgets/timelines/", timelinePoll: "https://syndication.twimg.com/widgets/timelines/paged/", timelinePreview: "https://syndication.twimg.com/widgets/timelines/preview/"};
+                        twttr.widgets && twttr.widgets.endpoints && n.aug(l, twttr.widgets.endpoints), f.jsonp = function (e, t, n) {
+                            var f = n || o + u, l = i + "." + f, h = document.createElement("script"), p = {callback: l, suppress_response_codes: !0};
+                            s[f] = c(t);
+                            if (a || !/^https?\:$/.test(window.location.protocol))e = e.replace(/^\/\//, "https://");
+                            h.src = r.url(e, p), h.async = "async", document.body.appendChild(h), t.script = h, t.callbackName = f, n || u++
+                        }, f.config = function (e) {
+                            if (e.forceSSL === !0 || e.forceSSL === !1)a = e.forceSSL
+                        }, f.tweets = function (e) {
+                            var t = arguments[0], n = p(t), i = {ids: e.ids.join(","), lang: e.lang}, s = r.url(l.tweets, i);
+                            this.jsonp(s, n)
+                        }, f.timeline = function (e) {
+                            var t = arguments[0], i = p(t), s, o = 9e5, u = Math.floor(+(new Date) / o), a = {lang: e.lang, t: u, domain: window.location.host, dnt: e.dnt, override_type: e.overrideType, override_id: e.overrideId, override_name: e.overrideName, override_owner_id: e.overrideOwnerId, override_owner_name: e.overrideOwnerName, with_replies: e.withReplies};
+                            n.compact(a), s = r.url(l.timeline + e.id, a), this.jsonp(s, i, "tl_" + e.id + "_" + e.instanceId)
+                        }, f.timelinePoll = function (e) {
+                            var t = arguments[0], i = p(t), s = {lang: e.lang, since_id: e.sinceId, max_id: e.maxId, min_position: e.minPosition, max_position: e.maxPosition, domain: window.location.host, dnt: e.dnt, override_type: e.overrideType, override_id: e.overrideId, override_name: e.overrideName, override_owner_id: e.overrideOwnerId, override_owner_name: e.overrideOwnerName, with_replies: e.withReplies}, o;
+                            n.compact(s), o = r.url(l.timelinePoll + e.id, s), this.jsonp(o, i, "tlPoll_" + e.id + "_" + e.instanceId + "_" + (e.sinceId || e.maxId || e.maxPosition || e.minPosition))
+                        }, f.timelinePreview = function (e) {
+                            var t = arguments[0], n = p(t), i = e.params, s = r.url(l.timelinePreview, i);
+                            this.jsonp(s, n)
+                        }, e(f)
+                    })
+                });
+                provide("anim/transition", function (e) {
+                    function t(e, t) {
+                        var n;
+                        return t = t || window, n = t.requestAnimationFrame || t.webkitRequestAnimationFrame || t.mozRequestAnimationFrame || t.msRequestAnimationFrame || t.oRequestAnimationFrame || function (n) {
+                            t.setTimeout(function () {
+                                e(+(new Date))
+                            }, 1e3 / 60)
+                        }, n(e)
+                    }
+
+                    function n(e, t) {
+                        return Math.sin(Math.PI / 2 * t) * e
+                    }
+
+                    function r(e, n, r, i, s) {
+                        function a() {
+                            var u = +(new Date), f = u - o, l = Math.min(f / r, 1), c = i ? i(n, l) : n * l;
+                            e(c);
+                            if (l == 1)return;
+                            t(a, s)
+                        }
+
+                        var o = +(new Date), u;
+                        t(a)
+                    }
+
+                    e({animate: r, requestAnimationFrame: t, easeOut: n})
+                });
+                provide("util/datetime", function (e) {
+                    using("util/util", function (t) {
+                        function h(e) {
+                            return e < 10 ? "0" + e : e
+                        }
+
+                        function p(e) {
+                            function i(e, n) {
+                                return t && t[e] && (e = t[e]), e.replace(/%\{([\w_]+)\}/g, function (e, t) {
+                                    return n[t] !== undefined ? n[t] : e
+                                })
+                            }
+
+                            var t = e && e.phrases, n = e && e.months || s, r = e && e.formats || o;
+                            this.timeAgo = function (e) {
+                                var t = p.parseDate(e), s = +(new Date), o = s - t, h;
+                                return t ? isNaN(o) || o < u * 2 ? i("now") : o < a ? (h = Math.floor(o / u), i(r.abbr, {number: h, symbol: i(c, {abbr: i("s"), expanded: h > 1 ? i("seconds") : i("second")})})) : o < f ? (h = Math.floor(o / a), i(r.abbr, {number: h, symbol: i(c, {abbr: i("m"), expanded: h > 1 ? i("minutes") : i("minute")})})) : o < l ? (h = Math.floor(o / f), i(r.abbr, {number: h, symbol: i(c, {abbr: i("h"), expanded: h > 1 ? i("hours") : i("hour")})})) : o < l * 365 ? i(r.shortdate, {day: t.getDate(), month: i(n[t.getMonth()])}) : i(r.longdate, {day: t.getDate(), month: i(n[t.getMonth()]), year: t.getFullYear().toString().slice(2)}) : ""
+                            }, this.localTimeStamp = function (e) {
+                                var t = p.parseDate(e), s = t && t.getHours();
+                                return t ? i(r.full, {day: t.getDate(), month: i(n[t.getMonth()]), year: t.getFullYear(), hours24: h(s), hours12: s < 13 ? s ? s : "12" : s - 12, minutes: h(t.getMinutes()), seconds: h(t.getSeconds()), amPm: s < 12 ? i("AM") : i("PM")}) : ""
+                            }
+                        }
+
+                        var n = /(\d{4})-?(\d{2})-?(\d{2})T(\d{2}):?(\d{2}):?(\d{2})(Z|[\+\-]\d{2}:?\d{2})/, r = /[a-z]{3,4} ([a-z]{3}) (\d{1,2}) (\d{1,2}):(\d{2}):(\d{2}) ([\+\-]\d{2}:?\d{2}) (\d{4})/i, i = /^\d+$/, s = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], o = {abbr: "%{number}%{symbol}", shortdate: "%{day} %{month}", longdate: "%{day} %{month} %{year}", full: "%{hours12}:%{minutes} %{amPm} - %{day} %{month} %{year}"}, u = 1e3, a = u * 60, f = a * 60, l = f * 24, c = '<abbr title="%{expanded}">%{abbr}</abbr>';
+                        p.parseDate = function (e) {
+                            var o = e || "", u = o.toString(), a, f;
+                            return a = function () {
+                                var e;
+                                if (i.test(u))return parseInt(u, 10);
+                                if (e = u.match(r))return Date.UTC(e[7], t.indexOf(s, e[1]), e[2], e[3], e[4], e[5]);
+                                if (e = u.match(n))return Date.UTC(e[1], e[2] - 1, e[3], e[4], e[5], e[6])
+                            }(), a ? (f = new Date(a), !isNaN(f.getTime()) && f) : !1
+                        }, e(p)
+                    })
+                });
+                provide("sandbox/frame", function (e) {
+                    using("sandbox/baseframe", "sandbox/minimal", "util/env", "util/promise", "util/util", function (t, n, r, i, s) {
+                        function h() {
+                            var e, t;
+                            a = {};
+                            if (f)return;
+                            e = document.body.offsetHeight, t = document.body.offsetWidth;
+                            if (e == c && t == l)return;
+                            s.forEach(u, function (e) {
+                                e.dispatchFrameResize(l, c)
+                            }), c = e, l = t
+                        }
+
+                        function p(e) {
+                            var t;
+                            return e.id ? e.id : (t = e.getAttribute("data-twttr-id")) ? t : (t = "twttr-sandbox-" + o++, e.setAttribute("data-twttr-id", t), t)
+                        }
+
+                        function d(e, t) {
+                            n.apply(this, [e, t]), this._resizeHandlers = [], u.push(this), this._win.addEventListener ? this._win.addEventListener("resize", s.bind(function () {
+                                this.dispatchFrameResize()
+                            }, this), !0) : this._win.attachEvent("onresize", s.bind(function () {
+                                this.dispatchFrameResize(this._win.event)
+                            }, this))
+                        }
+
+                        var o = 0, u = [], a = {}, f, l = 0, c = 0;
+                        window.addEventListener ? window.addEventListener("resize", h, !0) : document.body.attachEvent("onresize", function () {
+                            h(window.event)
+                        }), d.prototype = new n, s.aug(d.prototype, {dispatchFrameResize: function () {
+                            var e = this._frame.parentNode, t = p(e), n = a[t];
+                            f = !0;
+                            if (!this._resizeHandlers.length)return;
+                            n || (n = a[t] = {w: this._frame.offsetWidth, h: this._frame.offsetHeight});
+                            if (this._frameWidth == n.w && this._frameHeight == n.h)return;
+                            this._frameWidth = n.w, this._frameHeight = n.h, s.forEach(this._resizeHandlers, function (e) {
+                                e(n.w, n.h)
+                            }), window.setTimeout(function () {
+                                a = {}
+                            }, 50)
+                        }, appendStyleSheet: function (e) {
+                            var t = this._doc.createElement("link");
+                            return t.type = "text/css", t.rel = "stylesheet", t.href = e, this.layout(s.bind(function () {
+                                return this._head.appendChild(t)
+                            }, this))
+                        }, appendCss: function (e) {
+                            var t;
+                            return r.cspEnabled() ? i.reject("CSP enabled; cannot embed inline styles.") : (t = this._doc.createElement("style"), t.type = "text/css", t.styleSheet ? t.styleSheet.cssText = e : t.appendChild(this._doc.createTextNode(e)), this.layout(s.bind(function () {
+                                return this._head.appendChild(t)
+                            }, this)))
+                        }, style: function (e) {
+                            return this.layout(s.bind(function () {
+                                s.forIn(e, s.bind(function (e, t) {
+                                    this._frame.style[e] = t
+                                }, this))
+                            }, this))
+                        }, onresize: function (e) {
+                            this._resizeHandlers.push(e)
+                        }, width: function (e) {
+                            return e !== undefined && (this._frame.width = e), this._frame.offsetWidth
+                        }, height: function (e) {
+                            return e !== undefined && (this._frame.height = e), this._frame.offsetHeight
+                        }}), d.createSandbox = function (e, n, r, i) {
+                            var s = new t(e, n, r, i);
+                            return s.ready().then(function (e) {
+                                return new d(e.frame, e.layout)
+                            })
+                        }, e(d)
+                    })
+                });
+                provide("tfw/util/assets", function (e) {
+                    using("util/env", function (t) {
+                        function r(e, r) {
+                            var i = n[e], s;
+                            return t.retina() ? s = "2x" : t.ie6() || t.ie7() ? s = "gif" : s = "default", r && (s += ".rtl"), i[s]
+                        }
+
+                        var n = {"embed/timeline.css": {"default": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.default.css", "2x": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.2x.css", gif: "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.gif.css", "default.rtl": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.default.rtl.css", "2x.rtl": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.2x.rtl.css", "gif.rtl": "embed/timeline.5e1325f111fbc177d1261f5d81cceeeb.gif.rtl.css"}};
+                        e(r)
+                    })
+                });
+                provide("tfw/widget/syndicatedbase", function (e) {
+                    using("tfw/widget/base", "tfw/widget/intent", "tfw/util/assets", "tfw/util/globals", "dom/classname", "dom/get", "dom/delegate", "sandbox/frame", "util/env", "util/promise", "util/twitter", "util/util", function (t, n, r, i, s, o, u, a, f, l, c, h) {
+                        function w() {
+                            g = E.VALID_COLOR.test(i.val("widgets:link-color")) && RegExp.$1, b = E.VALID_COLOR.test(i.val("widgets:border-color")) && RegExp.$1, y = i.val("widgets:theme")
+                        }
+
+                        function E(e) {
+                            if (!e)return;
+                            var n;
+                            this.readyPromise = new l(h.bind(function (e) {
+                                this.readyResolver = e
+                            }, this)), this.renderedPromise = new l(h.bind(function (e) {
+                                this.renderResolver = e
+                            }, this)), t.apply(this, [e]), n = this.params(), this.targetEl = this.srcEl && this.srcEl.parentNode || n.targetEl || document.body, this.predefinedWidth = E.VALID_UNIT.test(n.width || this.attr("width")) && RegExp.$1, this.layout(h.bind(function () {
+                                    return this.containerWidth = this.targetEl && this.targetEl.offsetWidth
+                                }, this)).then(h.bind(function (e) {
+                                    var t = this.predefinedWidth || e || this.dimensions.DEFAULT_WIDTH;
+                                    this.height = E.VALID_UNIT.test(n.height || this.attr("height")) && RegExp.$1, this.width = Math.max(this.dimensions.MIN_WIDTH, Math.min(t, this.dimensions.DEFAULT_WIDTH))
+                                }, this)), E.VALID_COLOR.test(n.linkColor || this.dataAttr("link-color")) ? this.linkColor = RegExp.$1 : this.linkColor = g, E.VALID_COLOR.test(n.borderColor || this.dataAttr("border-color")) ? this.borderColor = RegExp.$1 : this.borderColor = b, this.theme = n.theme || this.attr("data-theme") || y, this.theme = /(dark|light)/.test(this.theme) ? this.theme : "", this.classAttr.push(f.touch() ? "is-touch" : "not-touch"), a.createSandbox({"class": this.renderedClassNames, id: this.id, title: this.a11yTitle}, {width: "1px", height: "0px", border: "none", position: "absolute", visibility: "hidden"}, h.bind(function (e) {
+                                this.srcEl ? this.targetEl.insertBefore(e, this.srcEl) : this.targetEl.appendChild(e)
+                            }, this), this.layout).then(h.bind(function (e) {
+                                    this.setupSandbox(e)
+                                }, this))
+                        }
+
+                        var p = [".customisable", ".customisable:link", ".customisable:visited", ".customisable:hover", ".customisable:focus", ".customisable:active", ".customisable-highlight:hover", ".customisable-highlight:focus", "a:hover .customisable-highlight", "a:focus .customisable-highlight"], d = ["a:hover .ic-mask", "a:focus .ic-mask"], v = [".customisable-border"], m = [".timeline-header h1.summary", ".timeline-header h1.summary a:link", ".timeline-header h1.summary a:visited"], g, y, b;
+                        E.prototype = new t, h.aug(E.prototype, {setupSandbox: function (e) {
+                            this.sandbox = e, l.some(e.appendCss("body{display:none}"), e.setBaseTarget("_blank"), e.appendStyleSheet(twttr.widgets.config.assetUrl() + "/" + r("embed/timeline.css"))).then(h.bind(function () {
+                                this.readyResolver.fulfill(e)
+                            }, this))
+                        }, ready: function () {
+                            return this.readyPromise
+                        }, rendered: function () {
+                            return this.renderedPromise
+                        }, contentWidth: function (e) {
+                            var t = this.dimensions, n = this.fullBleedPhoto ? 0 : this.chromeless && this.narrow ? t.NARROW_MEDIA_PADDING_CL : this.chromeless ? t.WIDE_MEDIA_PADDING_CL : this.narrow ? t.NARROW_MEDIA_PADDING : t.WIDE_MEDIA_PADDING;
+                            return(e || this.width) - n
+                        }, addSiteStyles: function () {
+                            var e = h.bind(function (e) {
+                                return(this.theme == "dark" ? ".thm-dark " : "") + e
+                            }, this), t = [];
+                            this.headingStyle && t.push(h.map(m, e).join(",") + "{" + this.headingStyle + "}"), this.linkColor && (t.push(h.map(p, e).join(",") + "{color:" + this.linkColor + "}"), t.push(h.map(d, e).join(",") + "{background-color:" + this.linkColor + "}")), this.borderColor && t.push(h.map(v, e).concat(this.theme == "dark" ? [".thm-dark.customisable-border"] : []).join(",") + "{border-color:" + this.borderColor + "}");
+                            if (!t.length)return;
+                            return this.sandbox.appendCss(t.join(""))
+                        }, setNarrow: function () {
+                            var e = this.narrow;
+                            return this.narrow = this.width < this.dimensions.NARROW_WIDTH, e != this.narrow ? this.layout(h.bind(function () {
+                                return s.toggle(this.element, "var-narrow", this.narrow)
+                            }, this)) : l.fulfill(this.narrow)
+                        }, bindIntentHandlers: function () {
+                            var e = this, t = this.element;
+                            u.delegate(t, "click", ".profile", function (t) {
+                                var r;
+                                e.addUrlParams(this), r = c.intentForProfileURL(this.href);
+                                if (t.altKey || t.metaKey || t.shiftKey)return;
+                                r && (n.open(r, e.sandbox.frame), u.preventDefault(t))
+                            }), u.delegate(t, "click", ".web-intent", function (t) {
+                                e.addUrlParams(this);
+                                if (t.altKey || t.metaKey || t.shiftKey)return;
+                                n.open(this.href, e.sandbox.frame), u.preventDefault(t)
+                            })
+                        }, constrainMedia: function (e, t) {
+                            var n = 0, r = this.fullBleedPhoto ? 500 : 375;
+                            e = e || this.element, t = t || this.contentWidth();
+                            if (!e)return;
+                            return h.forEach(o.all("autosized-media", e), h.bind(function (e) {
+                                var i = E.scaleDimensions(e.getAttribute("data-width"), e.getAttribute("data-height"), t, r);
+                                this.layout(function () {
+                                    i.width > 0 && (e.width = i.width), i.height > 0 && (e.height = i.height)
+                                }), n = i.height > n ? i.height : n
+                            }, this)), n
+                        }}), E.VALID_UNIT = /^([0-9]+)( ?px)?$/, E.VALID_COLOR = /^(#(?:[0-9a-f]{3}|[0-9a-f]{6}))$/i, E.retinize = function (e) {
+                            if (!f.retina())return;
+                            h.forEach(e.getElementsByTagName("IMG"), function (e) {
+                                var t = e.getAttribute("data-src-2x");
+                                t && (e.src = t)
+                            })
+                        }, E.scaleDimensions = function (e, t, n, r) {
+                            return t > e && t > r && (e *= r / t, t = r), e > n && (t *= n / e, e = n, t > r && (e *= r / t, t = r)), {width: Math.ceil(e), height: Math.ceil(t)}
+                        }, w(), e(E)
+                    })
+                });
+                provide("tfw/widget/timeline", function (e) {
+                    using("tfw/widget/base", "tfw/widget/syndicatedbase", "util/datetime", "util/promise", "anim/transition", "tfw/util/article", "tfw/util/data", "tfw/util/tracking", "tfw/util/params", "util/css", "util/env", "util/throttle", "util/twitter", "util/querystring", "util/typevalidator", "util/util", "dom/delegate", "dom/classname", "dom/get", function (t, n, r, i, s, o, u, a, f, l, c, h, p, d, v, m, g, y, b) {
+                        function I(e) {
+                            if (!e)return;
+                            var t, r, i, s, o, u, a, f;
+                            this.a11yTitle = this._("Twitter Timeline Widget"), n.apply(this, [e]), t = this.params(), r = (t.chrome || this.dataAttr("chrome") || "").split(" "), this.preview = t.previewParams, this.widgetId = t.widgetId || this.dataAttr("widget-id"), this.instanceId = ++F, this.cursors = {maxPosition: 0, minPosition: 0}, (s = t.screenName || this.dataAttr("screen-name")) || (o = t.userId || this.dataAttr("user-id")) ? this.override = {overrideType: "user", overrideId: o, overrideName: s, withReplies: v.asBoolean(t.showReplies || this.dataAttr("show-replies")) ? "true" : "false"} : (s = t.favoritesScreenName || this.dataAttr("favorites-screen-name")) || (o = t.favoritesUserId || this.dataAttr("favorites-user-id")) ? this.override = {overrideType: "favorites", overrideId: o, overrideName: s} : ((s = t.listOwnerScreenName || this.dataAttr("list-owner-screen-name")) || (o = t.listOwnerId || this.dataAttr("list-owner-id"))) && ((u = t.listId || this.dataAttr("list-id")) || (a = t.listSlug || this.dataAttr("list-slug"))) ? this.override = {overrideType: "list", overrideOwnerId: o, overrideOwnerName: s, overrideId: u, overrideName: a} : (f = t.customTimelineId || this.dataAttr("custom-timeline-id")) ? this.override = {overrideType: "custom", overrideId: f} : this.override = {}, this.tweetLimit = v.asInt(t.tweetLimit || this.dataAttr("tweet-limit")), this.staticTimeline = this.tweetLimit > 0, r.length && (i = ~m.indexOf(r, "none"), this.chromeless = i || ~m.indexOf(r, "transparent"), this.headerless = i || ~m.indexOf(r, "noheader"), this.footerless = i || ~m.indexOf(r, "nofooter"), this.borderless = i || ~m.indexOf(r, "noborders"), this.noscrollbar = ~m.indexOf(r, "noscrollbar")), this.headingStyle = l.sanitize(t.headingStyle || this.dataAttr("heading-style"), undefined, !0), this.classAttr.push("twitter-timeline-rendered"), this.ariaPolite = t.ariaPolite || this.dataAttr("aria-polite")
+                        }
+
+                        var w = "1.0", E = {CLIENT_SIDE_USER: 0, CLIENT_SIDE_APP: 2}, S = "timeline", x = "new-tweets-bar", T = "timeline-header", N = "timeline-footer", C = "stream", k = "h-feed", L = "tweet", A = "expanded", O = "detail-expander", M = "expand", _ = "permalink", D = "twitter-follow-button", P = "no-more-pane", H = "pending-scroll-in", B = "pending-new-tweet", j = "pending-new-tweet-display", F = 0;
+                        I.prototype = new n, m.aug(I.prototype, {renderedClassNames: "twitter-timeline twitter-timeline-rendered", dimensions: {DEFAULT_HEIGHT: "600", DEFAULT_WIDTH: "520", NARROW_WIDTH: "320", MIN_WIDTH: "180", MIN_HEIGHT: "200", WIDE_MEDIA_PADDING: 81, NARROW_MEDIA_PADDING: 16, WIDE_MEDIA_PADDING_CL: 60, NARROW_MEDIA_PADDING_CL: 12}, create: function (e) {
+                            var t = this.sandbox.createElement("div"), r, i, s = [], u;
+                            t.innerHTML = e.body, r = t.children[0] || !1;
+                            if (!r)return;
+                            return this.reconfigure(e.config), this.discardStaticOverflow(r), this.augmentWidgets(r), n.retinize(r), this.constrainMedia(r), this.searchQuery = r.getAttribute("data-search-query"), this.profileId = r.getAttribute("data-profile-id"), u = this.getTweetDetails(t), m.forIn(u, function (e) {
+                                s.push(e)
+                            }), a.enqueue({page: "timeline", component: "timeline", element: "initial", action: s.length ? "results" : "no_results"}, {widget_id: this.widgetId, widget_origin: o.url(), item_ids: s, item_details: u, client_version: w, message: this.partner, query: this.searchQuery, profile_id: this.profileId}, !0, this.dnt), a.flush(), this.ariaPolite == "assertive" && (i = b.one(x, r, "DIV"), i.setAttribute("aria-polite", "assertive")), r.id = this.id, r.className += " " + this.classAttr.join(" "), r.lang = this.lang, twttr.widgets.load(r), this.ready().then(m.bind(function (e) {
+                                e.appendChild(r), e.style({cssText: "", border: "none", maxWidth: "100%", minWidth: this.dimensions.MIN_WIDTH + "px"}), this.layout(m.bind(function () {
+                                    this.srcEl && this.srcEl.parentNode && this.srcEl.parentNode.removeChild(this.srcEl), this.predefinedWidth = this.width, this.width = e.width(this.width), this.predefinedHeight = this.height, this.height = e.height(this.height)
+                                }, this)), this.setNarrow().then(m.bind(function () {
+                                    this.sandbox.onresize(m.bind(this.handleResize, this)), this.renderResolver.fulfill(this.sandbox)
+                                }, this))
+                            }, this)), r
+                        }, render: function (e, n) {
+                            var r, s;
+                            return!this.preview && !this.widgetId ? i.reject(400) : (s = new i(function (e) {
+                                r = e
+                            }), this.staticTimeline ? this.rendered().then(m.bind(function (e) {
+                                this.layout(m.bind(function () {
+                                    e.height(this.height = this.element.offsetHeight)
+                                }, this)), t.doLayoutAsync()
+                            }, this)) : this.rendered().then(m.bind(function () {
+                                this.recalculateStreamHeight(), t.doLayoutAsync()
+                            }, this)), this.preview ? this.getPreviewTimeline(r) : this.getTimeline(r), n && s.then(n), s)
+                        }, getPreviewTimeline: function (e) {
+                            u.timelinePreview({success: m.bind(function (n) {
+                                this.ready().then(m.bind(function () {
+                                    this.element = this.create(n), this.readTranslations(), this.bindInteractions(), this.updateCursors(n.headers, {initial: !0}), t.doLayoutAsync(), e.fulfill(this.element)
+                                }, this))
+                            }, this), error: function (t) {
+                                if (!t || !t.headers)return;
+                                e.reject(t.headers.status)
+                            }, params: this.preview})
+                        }, getTimeline: function (e) {
+                            a.initPostLogging(), u.timeline(m.aug({id: this.widgetId, instanceId: this.instanceId, dnt: this.dnt, lang: this.lang, success: m.bind(function (n) {
+                                this.ready().then(m.bind(function () {
+                                    this.element = this.create(n), this.readTranslations(), this.bindInteractions(), this.updateTimeStamps(), this.updateCursors(n.headers, {initial: !0}), n.headers.xPolling && /\d/.test(n.headers.xPolling) && (this.pollInterval = n.headers.xPolling * 1e3), this.staticTimeline || this.schedulePolling(), t.doLayoutAsync(), e.fulfill(this.sandbox.element())
+                                }, this))
+                            }, this), error: function (t) {
+                                if (!t || !t.headers)return;
+                                e.reject(t.headers.status)
+                            }}, this.override))
+                        }, reconfigure: function (e) {
+                            this.lang = e.lang, this.theme || (this.theme = e.theme), this.theme == "dark" && this.classAttr.push("thm-dark"), this.chromeless && this.classAttr.push("var-chromeless"), this.borderless && this.classAttr.push("var-borderless"), this.headerless && this.classAttr.push("var-headerless"), this.footerless && this.classAttr.push("var-footerless"), this.staticTimeline && this.classAttr.push("var-static"), !this.linkColor && e.linkColor && n.VALID_COLOR.test(e.linkColor) && (this.linkColor = RegExp.$1), !this.height && n.VALID_UNIT.test(e.height) && (this.height = RegExp.$1), this.height = Math.max(this.dimensions.MIN_HEIGHT, this.height ? this.height : this.dimensions.DEFAULT_HEIGHT), this.preview && this.classAttr.push("var-preview"), this.narrow = this.width <= this.dimensions.NARROW_WIDTH, this.narrow && this.classAttr.push("var-narrow"), this.addSiteStyles()
+                        }, getTweetDetails: function (e) {
+                            var t = b.one(k, e), n, r = {}, i, s, o, u, a = {TWEET: 0, RETWEET: 10}, f = 0;
+                            n = t && t.children || [];
+                            for (; i = n[f]; f++)s = b.one(_, i, "A"), o = i.getAttribute("data-rendered-tweet-id") || p.status(s.href), u = i.getAttribute("data-tweet-id"), o === u ? r[o] = {item_type: a.TWEET} : r[o] = {item_type: a.RETWEET, target_type: a.TWEET, target_id: u};
+                            return r
+                        }, bindInteractions: function () {
+                            var e = this, t = this.element, n = !0;
+                            this.bindIntentHandlers(), g.delegate(t, "click", ".load-tweets", function (t) {
+                                n && (n = !1, e.forceLoad(), g.stop(t))
+                            }), g.delegate(t, "click", ".display-sensitive-image", function (n) {
+                                e.showNSFW(b.ancestor("." + L, this, t)), g.stop(n)
+                            }), g.delegate(t, "mouseover", "." + S, function () {
+                                e.mouseOver = !0
+                            }), g.delegate(t, "mouseout", "." + S, function () {
+                                e.mouseOver = !1
+                            }), g.delegate(t, "mouseover", "." + x, function () {
+                                e.mouseOverNotifier = !0
+                            }), g.delegate(t, "mouseout", "." + x, function () {
+                                e.mouseOverNotifier = !1, window.setTimeout(function () {
+                                    e.hideNewTweetNotifier()
+                                }, 3e3)
+                            });
+                            if (this.staticTimeline)return;
+                            g.delegate(t, "click", "." + M, function (n) {
+                                if (n.altKey || n.metaKey || n.shiftKey)return;
+                                e.toggleExpando(b.ancestor("." + L, this, t)), g.stop(n)
+                            }), g.delegate(t, "click", "A", function (e) {
+                                g.stopPropagation(e)
+                            }), g.delegate(t, "click", ".with-expansion", function (t) {
+                                e.toggleExpando(this), g.stop(t)
+                            }), g.delegate(t, "click", ".load-more", function () {
+                                e.loadMore()
+                            }), g.delegate(t, "click", "." + x, function () {
+                                e.scrollToTop(), e.hideNewTweetNotifier(!0)
+                            })
+                        }, scrollToTop: function () {
+                            var e = b.one(C, this.element, "DIV");
+                            e.scrollTop = 0, e.focus()
+                        }, update: function () {
+                            var e = this, t = b.one(L, this.element, "LI"), n = t && t.getAttribute("data-tweet-id");
+                            this.updateTimeStamps(), this.requestTweets(n, !0, function (t) {
+                                t.childNodes.length > 0 && e.insertNewTweets(t)
+                            })
+                        }, loadMore: function () {
+                            var e = this, t = b.all(L, this.element, "LI").pop(), n = t && t.getAttribute("data-tweet-id");
+                            this.requestTweets(n, !1, function (t) {
+                                var r = b.one(P, e.element, "P"), i = t.childNodes[0];
+                                r.style.cssText = "", i && i.getAttribute("data-tweet-id") == n && t.removeChild(i);
+                                if (t.childNodes.length > 0) {
+                                    e.appendTweets(t);
+                                    return
+                                }
+                                y.add(e.element, "no-more"), r.focus()
+                            })
+                        }, forceLoad: function () {
+                            var e = this, t = !!b.all(k, this.element, "OL").length;
+                            this.requestTweets(1, !0, function (n) {
+                                n.childNodes.length && (e[t ? "insertNewTweets" : "appendTweets"](n), y.add(e.element, "has-tweets"))
+                            })
+                        }, schedulePolling: function (e) {
+                            var t = this;
+                            if (this.pollInterval === null)return;
+                            e = twttr.widgets.poll || e || this.pollInterval || 1e4, e > -1 && window.setTimeout(function () {
+                                this.isUpdating || t.update(), t.schedulePolling()
+                            }, e)
+                        }, updateCursors: function (e, t) {
+                            (t || {}).initial ? (this.cursors.maxPosition = e.maxPosition, this.cursors.minPosition = e.minPosition) : (t || {}).newer ? this.cursors.maxPosition = e.maxPosition || this.cursors.maxPosition : this.cursors.minPosition = e.minPosition || this.cursors.minPosition
+                        }, requestTweets: function (e, t, r) {
+                            var i = this, s = {id: this.widgetId, instanceId: this.instanceId, screenName: this.widgetScreenName, userId: this.widgetUserId, withReplies: this.widgetShowReplies, dnt: this.dnt, lang: this.lang};
+                            t && this.cursors.maxPosition ? s.minPosition = this.cursors.maxPosition : !t && this.cursors.minPosition ? s.maxPosition = this.cursors.minPosition : t ? s.sinceId = e : s.maxId = e, s.complete = function () {
+                                this.isUpdating = !1
+                            }, s.error = function (e) {
+                                if (e && e.headers) {
+                                    if (e.headers.status == "404") {
+                                        i.pollInterval = null;
+                                        return
+                                    }
+                                    if (e.headers.status == "503") {
+                                        i.pollInterval *= 1.5;
+                                        return
+                                    }
+                                }
+                            }, s.success = function (e) {
+                                var s = i.sandbox.createDocumentFragment(), u = i.sandbox.createElement("div"), f = [], l, c;
+                                i.updateCursors(e.headers, {newer: t}), e && e.headers && e.headers.xPolling && /\d+/.test(e.headers.xPolling) && (i.pollInterval = e.headers.xPolling * 1e3);
+                                if (e && e.body !== undefined) {
+                                    u.innerHTML = e.body;
+                                    if (u.children[0] && u.children[0].tagName != "LI")return;
+                                    l = i.getTweetDetails(u);
+                                    for (c in l)l.hasOwnProperty(c) && f.push(c);
+                                    f.length && (a.enqueue({page: "timeline", component: "timeline", element: t ? "newer" : "older", action: "results"}, {widget_id: i.widgetId, widget_origin: o.url(), item_ids: f, item_details: l, client_version: w, message: i.partner, query: i.searchQuery, profile_id: i.profileId, event_initiator: t ? E.CLIENT_SIDE_APP : E.CLIENT_SIDE_USER}, !0, i.dnt), a.flush()), n.retinize(u), i.constrainMedia(u);
+                                    while (u.children[0])s.appendChild(u.children[0]);
+                                    r(s)
+                                }
+                            }, u.timelinePoll(m.aug(s, this.override))
+                        }, insertNewTweets: function (e) {
+                            var t = this, n = b.one(C, this.element, "DIV"), r = b.one(k, n, "OL"), i = r.offsetHeight, o;
+                            this.updateTimeStamps(), r.insertBefore(e, r.firstChild), o = r.offsetHeight - i;
+                            if (n.scrollTop > 40 || this.mouseIsOver()) {
+                                n.scrollTop = n.scrollTop + o, this.showNewTweetNotifier();
+                                return
+                            }
+                            y.remove(this.element, H), r.style.cssText = "margin-top: -" + o + "px", window.setTimeout(function () {
+                                n.scrollTop = 0, y.add(t.element, H), c.cssTransitions() ? r.style.cssText = "" : s.animate(function (e) {
+                                    e < o ? r.style.cssText = "margin-top: -" + (o - e) + "px" : r.style.cssText = ""
+                                }, o, 500, s.easeOut)
+                            }, 500), this.gcTweets(50)
+                        }, appendTweets: function (e) {
+                            var t = b.one(C, this.element, "DIV"), n = b.one(k, t, "OL");
+                            this.updateTimeStamps(), n.appendChild(e)
+                        }, gcTweets: function (e) {
+                            var t = b.one(k, this.element, "OL"), n = t.children.length, r;
+                            e = e || 50;
+                            for (; n > e && (r = t.children[n - 1]); n--)t.removeChild(r)
+                        }, showNewTweetNotifier: function () {
+                            var e = this, t = b.one(x, this.element, "DIV"), n = t.children[0];
+                            t.style.cssText = "", t.removeChild(n), t.appendChild(n), y.add(this.element, j), window.setTimeout(function () {
+                                y.add(e.element, B)
+                            }, 10), this.newNoticeDisplayTime = +(new Date), window.setTimeout(function () {
+                                e.hideNewTweetNotifier()
+                            }, 5e3)
+                        }, hideNewTweetNotifier: function (e) {
+                            var t = this;
+                            if (!e && this.mouseOverNotifier)return;
+                            y.remove(this.element, B), window.setTimeout(function () {
+                                y.remove(t.element, j)
+                            }, 500)
+                        }, augmentWidgets: function (e) {
+                            var t = b.all(D, e, "A"), n = 0, r;
+                            for (; r = t[n]; n++)r.setAttribute("data-related", this.related), r.setAttribute("data-partner", this.partner), r.setAttribute("data-dnt", this.dnt), r.setAttribute("data-search-query", this.searchQuery), r.setAttribute("data-profile-id", this.profileId), this.width < 250 && r.setAttribute("data-show-screen-name", "false")
+                        }, discardStaticOverflow: function (e) {
+                            var t = b.one(k, e, "OL"), n;
+                            if (this.staticTimeline) {
+                                this.height = 0;
+                                while (n = t.children[this.tweetLimit])t.removeChild(n)
+                            }
+                        }, hideStreamScrollBar: function () {
+                            var e = b.one(C, this.element, "DIV"), t = b.one(k, this.element, "OL"), n;
+                            e.style.width = "", n = this.element.offsetWidth - t.offsetWidth, n > 0 && (e.style.width = this.element.offsetWidth + n + "px")
+                        }, readTranslations: function () {
+                            var e = this.element, t = "data-dt-";
+                            this.datetime = new r(m.compact({phrases: {now: e.getAttribute(t + "now"), s: e.getAttribute(t + "s"), m: e.getAttribute(t + "m"), h: e.getAttribute(t + "h"), second: e.getAttribute(t + "second"), seconds: e.getAttribute(t + "seconds"), minute: e.getAttribute(t + "minute"), minutes: e.getAttribute(t + "minutes"), hour: e.getAttribute(t + "hour"), hours: e.getAttribute(t + "hours")}, months: e.getAttribute(t + "months").split("|"), formats: {abbr: e.getAttribute(t + "abbr"), shortdate: e.getAttribute(t + "short"), longdate: e.getAttribute(t + "long")}}))
+                        }, updateTimeStamps: function () {
+                            var e = b.all(_, this.element, "A"), t, n, r = 0, i, s;
+                            for (; t = e[r]; r++) {
+                                i = t.getAttribute("data-datetime"), s = i && this.datetime.timeAgo(i, this.i18n), n = t.getElementsByTagName("TIME")[0];
+                                if (!s)continue;
+                                if (n && n.innerHTML) {
+                                    n.innerHTML = s;
+                                    continue
+                                }
+                                t.innerHTML = s
+                            }
+                        }, mouseIsOver: function () {
+                            return this.mouseOver
+                        }, addUrlParams: function (e) {
+                            var t = this, n = {tw_w: this.widgetId, related: this.related, partner: this.partner, query: this.searchQuery, profile_id: this.profileId, original_referer: o.url(), tw_p: "embeddedtimeline"};
+                            return this.addUrlParams = f(n, function (e) {
+                                var n = b.ancestor("." + L, e, t.element);
+                                return n && {tw_i: n.getAttribute("data-tweet-id")}
+                            }), this.addUrlParams(e)
+                        }, showNSFW: function (e) {
+                            var t = b.one("nsfw", e, "DIV"), r, i, s = 0, o, u, a, f;
+                            if (!t)return;
+                            i = n.scaleDimensions(t.getAttribute("data-width"), t.getAttribute("data-height"), this.contentWidth(), t.getAttribute("data-height")), r = !!(u = t.getAttribute("data-player")), r ? a = this.sandbox.createElement("iframe") : (a = this.sandbox.createElement("img"), u = t.getAttribute(c.retina() ? "data-image-2x" : "data-image"), a.alt = t.getAttribute("data-alt"), f = this.sandbox.createElement("a"), f.href = t.getAttribute("data-href"), f.appendChild(a)), a.title = t.getAttribute("data-title"), a.src = u, a.width = i.width, a.height = i.height, o = b.ancestor("." + O, t, e), s = i.height - t.offsetHeight, t.parentNode.replaceChild(r ? a : f, t), o.style.cssText = "height:" + (o.offsetHeight + s) + "px"
+                        }, toggleExpando: function (e) {
+                            var r = b.one(O, e, "DIV"), i = r && r.children[0], s = i && i.getAttribute("data-expanded-media"), o, u = 0, a = b.one(M, e, "A"), f = a && a.getElementsByTagName("B")[0], l = f && (f.innerText || f.textContent), c;
+                            if (!f)return;
+                            this.layout(function () {
+                                f.innerHTML = a.getAttribute("data-toggled-text"), a.setAttribute("data-toggled-text", l)
+                            });
+                            if (y.present(e, A)) {
+                                this.layout(function () {
+                                    y.remove(e, A)
+                                });
+                                if (!r) {
+                                    t.doLayout();
+                                    return
+                                }
+                                this.layout(function () {
+                                    r.style.cssText = "", i.innerHTML = ""
+                                }), t.doLayout();
+                                return
+                            }
+                            s && (o = this.sandbox.createElement("DIV"), o.innerHTML = s, n.retinize(o), u = this.constrainMedia(o), this.layout(function () {
+                                i.appendChild(o)
+                            })), r && this.layout(function () {
+                                c = Math.max(i.offsetHeight, u), r.style.cssText = "height:" + c + "px"
+                            }), this.layout(function () {
+                                y.add(e, A)
+                            }), t.doLayout()
+                        }, recalculateStreamHeight: function (e) {
+                            var t = b.one(T, this.element, "DIV"), n = b.one(N, this.element, "DIV"), r = b.one(C, this.element, "DIV");
+                            this.layout(m.bind(function () {
+                                var i = t.offsetHeight + (n ? n.offsetHeight : 0), s = e || this.sandbox.height();
+                                r.style.cssText = "height:" + (s - i - 2) + "px", this.noscrollbar && this.hideStreamScrollBar()
+                            }, this))
+                        }, handleResize: function (e, n) {
+                            var r = Math.min(this.dimensions.DEFAULT_WIDTH, Math.max(this.dimensions.MIN_WIDTH, Math.min(this.predefinedWidth || this.dimensions.DEFAULT_WIDTH, e)));
+                            if (r == this.width && n == this.height)return;
+                            this.width = r, this.height = n, this.setNarrow(), this.constrainMedia(this.element, this.contentWidth(r)), this.staticTimeline ? this.layout(m.bind(function () {
+                                this.height = this.element.offsetHeight, this.sandbox.height(this.height)
+                            }, this)) : this.recalculateStreamHeight(n), t.doLayoutAsync()
+                        }}), e(I)
+                    })
+                });
+                provide("tfw/widget/embed", function (e) {
+                    using("tfw/widget/base", "tfw/widget/syndicatedbase", "util/datetime", "tfw/util/params", "dom/classname", "dom/get", "util/env", "util/promise", "util/util", "util/throttle", "util/twitter", "tfw/util/article", "tfw/util/data", "tfw/util/tracking", function (t, n, r, i, s, o, u, a, f, l, c, h, p, d) {
+                        function w(e, t, n) {
+                            var r = o.one("subject", e, "BLOCKQUOTE"), i = o.one("reply", e, "BLOCKQUOTE"), s = r && r.getAttribute("data-tweet-id"), u = i && i.getAttribute("data-tweet-id"), a = {}, f = {};
+                            if (!s)return;
+                            a[s] = {item_type: 0}, d.enqueue({page: "tweet", section: "subject", component: "tweet", action: "results"}, {client_version: v, widget_origin: h.url(), widget_frame: h.frameUrl(), message: t, item_ids: [s], item_details: a}, !0, n);
+                            if (!u)return;
+                            f[u] = {item_type: 0}, d.enqueue({page: "tweet", section: "conversation", component: "tweet", action: "results"}, {client_version: v, widget_origin: h.url(), widget_frame: h.frameUrl(), message: t, item_ids: [u], item_details: f, associations: {4: {association_id: s, association_type: 4}}}, !0, n)
+                        }
+
+                        function E(e, t, n) {
+                            var r = {};
+                            if (!e)return;
+                            r[e] = {item_type: 0}, d.enqueue({page: "tweet", section: "subject", component: "rawembedcode", action: "no_results"}, {client_version: v, widget_origin: h.url(), widget_frame: h.frameUrl(), message: t, item_ids: [e], item_details: r}, !0, n)
+                        }
+
+                        function S(e, t, n, r) {
+                            g[e] = g[e] || [], g[e].push({s: n, f: r, lang: t})
+                        }
+
+                        function x() {
+                            twttr.widgets.load(b)
+                        }
+
+                        function T(e) {
+                            if (!e)return;
+                            var t, r, i;
+                            this.a11yTitle = this._("Embedded Tweet"), n.apply(this, [e]), t = this.params(), r = this.srcEl && this.srcEl.getElementsByTagName("A"), i = r && r[r.length - 1], this.hideThread = (t.conversation || this.dataAttr("conversation")) == "none" || ~f.indexOf(this.classAttr, "tw-hide-thread"), this.hideCard = (t.cards || this.dataAttr("cards")) == "hidden" || ~f.indexOf(this.classAttr, "tw-hide-media");
+                            if ((t.align || this.attr("align")) == "left" || ~f.indexOf(this.classAttr, "tw-align-left"))this.align = "left"; else if ((t.align || this.attr("align")) == "right" || ~f.indexOf(this.classAttr, "tw-align-right"))this.align = "right"; else if ((t.align || this.attr("align")) == "center" || ~f.indexOf(this.classAttr, "tw-align-center"))this.align = "center", this.containerWidth > this.dimensions.MIN_WIDTH * (1 / .7) && this.width > this.containerWidth * .7 && (this.width = this.containerWidth * .7);
+                            this.narrow = t.narrow || this.width <= this.dimensions.NARROW_WIDTH, this.narrow && this.classAttr.push("var-narrow"), this.tweetId = t.tweetId || i && c.status(i.href)
+                        }
+
+                        var v = "2.0", m = "tweetembed", g = {}, y = [], b = [];
+                        T.prototype = new n, f.aug(T.prototype, {renderedClassNames: "twitter-tweet twitter-tweet-rendered", dimensions: {DEFAULT_HEIGHT: "0", DEFAULT_WIDTH: "500", NARROW_WIDTH: "350", MIN_WIDTH: "220", MIN_HEIGHT: "0", WIDE_MEDIA_PADDING: 32, NARROW_MEDIA_PADDING: 32}, create: function (e) {
+                            var t = this.sandbox.createElement("div"), r;
+                            t.innerHTML = e, r = t.children[0] || !1;
+                            if (!r)return;
+                            return this.theme == "dark" && this.classAttr.push("thm-dark"), this.linkColor && this.addSiteStyles(), s.present(r, "media-forward") && (this.fullBleedPhoto = !0), this.augmentWidgets(r), n.retinize(r), r.id = this.id, r.className += " " + this.classAttr.join(" "), r.lang = this.lang, this.sandbox.appendChild(r), this.sandbox.style({cssText: "", display: "block", maxWidth: "99%", minWidth: this.dimensions.MIN_WIDTH + "px", padding: "0", borderRadius: "5px", margin: "10px 0", border: "#ddd 1px solid", borderTopColor: "#eee", borderBottomColor: "#bbb", boxShadow: "0 1px 3px rgba(0,0,0,0.15)", position: "absolute", visibility: "hidden"}), this.layout(f.bind(function () {
+                                this.predefinedWidth = this.width, this.width = this.sandbox.width(this.width)
+                            }, this), "Insert Sandbox"), this.setNarrow().then(f.bind(function () {
+                                this.constrainMedia(r, this.contentWidth(this.width)), this.renderResolver.fulfill(this.sandbox)
+                            }, this)), w(r, this.partner, this.dnt), r
+                        }, render: function (e, n) {
+                            var r = "", i = this.tweetId, s, o;
+                            return i ? (o = new a(function (e) {
+                                s = e
+                            }), this.hideCard && (r += "c"), this.hideThread && (r += "t"), r && (i += "-" + r), this.rendered().then(f.bind(function (e) {
+                                this.srcEl && this.srcEl.parentNode && this.layout(f.bind(function () {
+                                    this.srcEl.parentNode.removeChild(this.srcEl)
+                                }, this), "Remove Embed Code"), this.align == "center" ? e.style({margin: "7px auto", cssFloat: "none"}) : this.align && (this.width == this.dimensions.DEFAULT_WIDTH && (this.predefinedWidth = this.width = this.dimensions.NARROW_WIDTH), e.style({cssFloat: this.align})), this.layout(f.bind(function () {
+                                        this.height = this.sandbox.height(this.element.offsetHeight)
+                                    }, this)).then(f.bind(function () {
+                                        return t.doLayoutAsync(), this.layout(f.bind(function () {
+                                            this.height = this.sandbox.height(this.element.offsetHeight)
+                                        }, this))
+                                    }, this)).then(f.bind(function () {
+                                        e.onresize(f.bind(this.handleResize, this))
+                                    }, this)), e.style({position: "static", visibility: "visible"}), t.doLayoutAsync()
+                            }, this)), S(i, this.lang, f.bind(function (n) {
+                                this.ready().then(f.bind(function () {
+                                    this.element = this.create(n), this.readTimestampTranslations(), this.updateTimeStamps(), this.bindIntentHandlers(), t.doLayoutAsync(), s.fulfill(this.sandbox.element())
+                                }, this))
+                            }, this), f.bind(function () {
+                                E(this.tweetId, this.partner, this.dnt), s.fulfill(this.srcEl)
+                            }, this)), y.push(o), n && o.then(n), o) : a.fulfill(this.srcEl)
+                        }, augmentWidgets: function (e) {
+                            var t = o.one("twitter-follow-button", e, "A");
+                            if (!t)return;
+                            t.setAttribute("data-related", this.related), t.setAttribute("data-partner", this.partner), t.setAttribute("data-dnt", this.dnt), t.setAttribute("data-show-screen-name", "false"), b.push(t.parentNode)
+                        }, addUrlParams: function (e) {
+                            var t = this, n = {related: this.related, partner: this.partner, original_referer: h.url(), tw_p: m};
+                            return this.addUrlParams = i(n, function (e) {
+                                var n = o.ancestor(".tweet", e, t.element);
+                                return{tw_i: n.getAttribute("data-tweet-id")}
+                            }), this.addUrlParams(e)
+                        }, handleResize: function (e) {
+                            var n = Math.min(this.dimensions.DEFAULT_WIDTH, Math.max(this.dimensions.MIN_WIDTH, Math.min(this.predefinedWidth || this.dimensions.DEFAULT_WIDTH, e)));
+                            if (n == this.width)return;
+                            this.width = n, this.setNarrow(), this.constrainMedia(this.element, this.contentWidth(n)), this.layout(f.bind(function () {
+                                this.height = this.element.offsetHeight, this.sandbox.height(this.height)
+                            }, this), "Embed Resize"), t.doLayoutAsync()
+                        }, readTimestampTranslations: function () {
+                            var e = this.element, t = "data-dt-", n = e.getAttribute(t + "months") || "";
+                            this.datetime = new r(f.compact({phrases: {AM: e.getAttribute(t + "am"), PM: e.getAttribute(t + "pm")}, months: n.split("|"), formats: {full: e.getAttribute(t + "full")}}))
+                        }, updateTimeStamps: function () {
+                            var e = o.one("long-permalink", this.element, "A"), n = e.getAttribute("data-datetime"), r = n && this.datetime.localTimeStamp(n), i = e.getElementsByTagName("TIME")[0];
+                            if (!r)return;
+                            this.layout(function () {
+                                if (i && i.innerHTML) {
+                                    i.innerHTML = r;
+                                    return
+                                }
+                                e.innerHTML = r
+                            }, "Update Timestamp"), t.doLayoutAsync()
+                        }}), T.fetchAndRender = function () {
+                            var e = g, n = [], r, i;
+                            g = {};
+                            if (e.keys)n = e.keys(); else for (r in e)e.hasOwnProperty(r) && n.push(r);
+                            if (!n.length)return;
+                            d.initPostLogging(), i = e[n[0]][0].lang, p.tweets({ids: n.sort(), lang: i, complete: function (n) {
+                                f.forIn(n, function (t, n) {
+                                    var r = e[t];
+                                    f.forEach(r, function (e) {
+                                        e.s && e.s.call(this, n)
+                                    }), delete e[t]
+                                }), t.doLayout(), f.forIn(e, function (e, t) {
+                                    f.forEach(t, function (t) {
+                                        t.f && t.f.call(this, e)
+                                    })
+                                }), t.doLayout()
+                            }}), a.every.apply(null, y).then(function () {
+                                x(), d.flush()
+                            })
+                        }, t.afterLoad(T.fetchAndRender), e(T)
+                    })
+                });
+                provide("dom/textsize", function (e) {
+                    function n(e, t, n) {
+                        var r = [], i = 0, s;
+                        for (; s = n[i]; i++)r.push(s[0]), r.push(s[1]);
+                        return e + t + r.join(":")
+                    }
+
+                    function r(e) {
+                        var t = e || "";
+                        return t.replace(/([A-Z])/g, function (e) {
+                            return"-" + e.toLowerCase()
+                        })
+                    }
+
+                    var t = {};
+                    e(function (e, i, s) {
+                        var o = document.createElement("span"), u = {}, a = "", f, l = 0, c = 0, h = [];
+                        s = s || [], i = i || "", a = n(e, i, s);
+                        if (t[a])return t[a];
+                        o.className = i + " twitter-measurement";
+                        try {
+                            for (; f = s[l]; l++)o.style[f[0]] = f[1]
+                        } catch (p) {
+                            for (; f = s[c]; c++)h.push(r(f[0]) + ":" + f[1]);
+                            o.setAttribute("style", h.join(";") + ";")
+                        }
+                        return o.innerHTML = e, document.body.appendChild(o), u.width = o.clientWidth || o.offsetWidth, u.height = o.clientHeight || o.offsetHeight, document.body.removeChild(o), delete o, t[a] = u
+                    })
+                });
+                provide("tfw/widget/tweetbase", function (e) {
+                    using("util/util", "tfw/widget/base", "util/querystring", "util/twitter", function (t, n, r, i) {
+                        function s(e) {
+                            if (!e)return;
+                            var t;
+                            n.apply(this, [e]), t = this.params(), this.text = t.text || this.dataAttr("text"), this.text && /\+/.test(this.text) && !/ /.test(this.text) && (this.text = this.text.replace(/\+/g, " ")), this.align = t.align || this.dataAttr("align") || "", this.via = t.via || this.dataAttr("via"), this.placeid = t.placeid || this.dataAttr("placeid"), this.hashtags = t.hashtags || this.dataAttr("hashtags"), this.screen_name = i.screenName(t.screen_name || t.screenName || this.dataAttr("button-screen-name")), this.url = t.url || this.dataAttr("url")
+                        }
+
+                        s.prototype = new n, t.aug(s.prototype, {parameters: function () {
+                            var e = {text: this.text, url: this.url, related: this.related, lang: this.lang, placeid: this.placeid, original_referer: location.href, id: this.id, screen_name: this.screen_name, hashtags: this.hashtags, partner: this.partner, dnt: this.dnt, _: +(new Date)};
+                            return t.compact(e), r.encode(e)
+                        }}), e(s)
+                    })
+                });
+                provide("tfw/widget/tweetbutton", function (e) {
+                    using("tfw/widget/tweetbase", "util/util", "util/querystring", "util/uri", "util/twitter", "dom/textsize", function (t, n, r, i, s, o) {
+                        function l(e) {
+                            t.apply(this, [e]);
+                            var r = this.params(), o = r.count || this.dataAttr("count"), l = r.size || this.dataAttr("size"), c = i.getScreenNameFromPage();
+                            this.classAttr.push("twitter-tweet-button");
+                            if (r.type == "hashtag" || ~n.indexOf(this.classAttr, "twitter-hashtag-button"))this.type = "hashtag", this.classAttr.push("twitter-hashtag-button"); else if (r.type == "mention" || ~n.indexOf(this.classAttr, "twitter-mention-button"))this.type = "mention", this.classAttr.push("twitter-mention-button");
+                            this.counturl = r.counturl || this.dataAttr("counturl"), this.searchlink = r.searchlink || this.dataAttr("searchlink"), this.button_hashtag = s.hashTag(r.button_hashtag || r.hashtag || this.dataAttr("button-hashtag"), !1), this.size = l == "large" ? "l" : "m", this.type ? (this.count = "none", c && (this.related = this.related ? c + "," + this.related : c)) : (this.text = this.text || u, this.url = this.url || i.getCanonicalURL() || a, this.count = ~n.indexOf(f, o) ? o : "horizontal", this.count = this.count == "vertical" && this.size == "l" ? "none" : this.count, this.via = this.via || c)
+                        }
+
+                        var u = document.title, a = encodeURI(location.href), f = ["vertical", "horizontal", "none"];
+                        l.prototype = new t, n.aug(l.prototype, {parameters: function () {
+                            var e = {text: this.text, url: this.url, via: this.via, related: this.related, count: this.count, lang: this.lang, counturl: this.counturl, searchlink: this.searchlink, placeid: this.placeid, original_referer: location.href, id: this.id, size: this.size, type: this.type, screen_name: this.screen_name, button_hashtag: this.button_hashtag, hashtags: this.hashtags, align: this.align, partner: this.partner, dnt: this.dnt, _: +(new Date)};
+                            return n.compact(e), r.encode(e)
+                        }, height: function () {
+                            return this.count == "vertical" ? 62 : this.size == "m" ? 20 : 28
+                        }, width: function () {
+                            var e = {ver: 8, cnt: 14, btn: 24, xlcnt: 18, xlbtn: 38}, t = this.count == "vertical", r = this.type == "hashtag" && this.button_hashtag ? "Tweet %{hashtag}" : this.type == "mention" && this.screen_name ? "Tweet to %{name}" : "Tweet", i = this._(r, {name: "@" + this.screen_name, hashtag: "#" + this.button_hashtag}), s = this._("K"), u = this._("100K+"), a = (t ? "8888" : "88888") + s, f = 0, l = 0, c = 0, h = 0, p = this.styles.base, d = p;
+                            return~n.indexOf(["ja", "ko"], this.lang) ? a += this._("10k unit") : a = a.length > u.length ? a : u, t ? (d = p.concat(this.styles.vbubble), h = e.ver, c = e.btn) : this.size == "l" ? (p = d = p.concat(this.styles.large), c = e.xlbtn, h = e.xlcnt) : (c = e.btn, h = e.cnt), this.count != "none" && (l = o(a, "", d).width + h), f = o(i, "", p.concat(this.styles.button)).width + c, t ? f > l ? f : l : this.calculatedWidth = f + l
+                        }, render: function (e, t) {
+                            var r = twttr.widgets.config.assetUrl() + "/widgets/tweet_button.1380844203.html#" + this.parameters(), i;
+                            return this.count && this.classAttr.push("twitter-count-" + this.count), i = this.create(r, this.dimensions(), {title: this._("Twitter Tweet Button")}).then(n.bind(function (e) {
+                                return this.element = e
+                            }, this)), t && i.then(t), i
+                        }}), e(l)
+                    })
+                });
+                provide("tfw/widget/follow", function (e) {
+                    using("util/util", "tfw/widget/base", "util/querystring", "util/uri", "util/twitter", "util/promise", "dom/textsize", function (t, n, r, i, s, o, u) {
+                        function a(e) {
+                            if (!e)return;
+                            var t, r, i, o;
+                            n.apply(this, [e]), t = this.params(), r = t.size || this.dataAttr("size"), i = t.showScreenName || this.dataAttr("show-screen-name"), o = t.count || this.dataAttr("count"), this.classAttr.push("twitter-follow-button"), this.showScreenName = i != "false", this.showCount = t.showCount !== !1 && this.dataAttr("show-count") != "false", o == "none" && (this.showCount = !1), this.explicitWidth = t.width || this.dataAttr("width") || "", this.screenName = t.screen_name || t.screenName || s.screenName(this.attr("href")), this.preview = t.preview || this.dataAttr("preview") || "", this.align = t.align || this.dataAttr("align") || "", this.size = r == "large" ? "l" : "m"
+                        }
+
+                        a.prototype = new n, t.aug(a.prototype, {parameters: function () {
+                            var e = {screen_name: this.screenName, lang: this.lang, show_count: this.showCount, show_screen_name: this.showScreenName, align: this.align, id: this.id, preview: this.preview, size: this.size, partner: this.partner, dnt: this.dnt, _: +(new Date)};
+                            return t.compact(e), r.encode(e)
+                        }, width: function () {
+                            if (this.calculatedWidth)return this.calculatedWidth;
+                            if (this.explicitWidth)return this.explicitWidth;
+                            var e = {cnt: 13, btn: 24, xlcnt: 22, xlbtn: 38}, n = this.showScreenName ? "Follow %{screen_name}" : "Follow", r = this._(n, {screen_name: "@" + this.screenName}), i = ~t.indexOf(["ja", "ko"], this.lang) ? this._("10k unit") : this._("M"), s = this._("%{followers_count} followers", {followers_count: "88888" + i}), o = 0, a = 0, f, l, c = this.styles.base;
+                            return this.size == "l" ? (c = c.concat(this.styles.large), f = e.xlbtn, l = e.xlcnt) : (f = e.btn, l = e.cnt), this.showCount && (a = u(s, "", c).width + l), o = u(r, "", c.concat(this.styles.button)).width + f, this.calculatedWidth = o + a
+                        }, render: function (e, n) {
+                            if (!this.screenName)return o.reject("Missing Screen Name").then(n);
+                            var r = twttr.widgets.config.assetUrl() + "/widgets/follow_button.1380844203.html#" + this.parameters(), i = this.create(r, this.dimensions(), {title: this._("Twitter Follow Button")}).then(t.bind(function (e) {
+                                return this.element = e
+                            }, this));
+                            return n && i.then(n), i
+                        }}), e(a)
+                    })
+                });
+                !function () {
+                    window.twttr = window.twttr || {}, twttr.host = twttr.host || "platform.twitter.com", using("util/domready", "util/env", function (e, t) {
+                        function n(e) {
+                            return(e || !/^http\:$/.test(window.location.protocol)) && !twttr.ignoreSSL ? "https" : "http"
+                        }
+
+                        if (t.ie6())return;
+                        if (twttr.widgets && twttr.widgets.loaded)return twttr.widgets.load(), !1;
+                        if (twttr.init)return!1;
+                        twttr.init = !0, twttr._e = twttr._e || [], twttr.ready = twttr.ready || function (e) {
+                            twttr.widgets && twttr.widgets.loaded ? e(twttr) : twttr._e.push(e)
+                        }, using.path.length || (using.path = n() + "://" + twttr.host + "/js"), twttr.ignoreSSL = twttr.ignoreSSL || !1;
+                        var r = [];
+                        twttr.events = {bind: function (e, t) {
+                            return r.push([e, t])
+                        }}, e(function () {
+                            using("tfw/widget/base", "tfw/widget/follow", "tfw/widget/tweetbutton", "tfw/widget/embed", "tfw/widget/timeline", "tfw/widget/intent", "tfw/util/article", "util/events", "util/util", function (e, t, i, s, o, u, a, f, l) {
+                                function m(e) {
+                                    var t = twttr.host;
+                                    return n(e) == "https" && twttr.secureHost && (t = twttr.secureHost), n(e) + "://" + t
+                                }
+
+                                function g() {
+                                    using("tfw/hub/client", function (e) {
+                                        twttr.events.hub = e.init(p), e.init(p, !0)
+                                    })
+                                }
+
+                                var c, h, p = {widgets: {"a.twitter-share-button": i, "a.twitter-mention-button": i, "a.twitter-hashtag-button": i, "a.twitter-follow-button": t, "blockquote.twitter-tweet": s, "a.twitter-timeline": o, "div.twitter-timeline": o, body: u}}, d = twttr.events && twttr.events.hub ? twttr.events : {}, v;
+                                p.assetUrl = m, twttr.widgets = twttr.widgets || {}, l.aug(twttr.widgets, {config: {assetUrl: m}, load: function (t) {
+                                    e.init(p), e.embed(t), twttr.widgets.loaded = !0
+                                }, createShareButton: function (t, n, r, s) {
+                                    if (!t || !n)return r && r(!1);
+                                    s = l.aug({}, s || {}, {url: t, targetEl: n});
+                                    var o = new i(s);
+                                    e.doLayout(), o.render(p, r)
+                                }, createHashtagButton: function (t, n, r, s) {
+                                    if (!t || !n)return r && r(!1);
+                                    s = l.aug({}, s || {}, {hashtag: t, targetEl: n, type: "hashtag"});
+                                    var o = new i(s);
+                                    e.doLayout(), o.render(p, r)
+                                }, createMentionButton: function (t, n, r, s) {
+                                    if (!t || !n)return r && r(!1);
+                                    s = l.aug({}, s || {}, {screenName: t, targetEl: n, type: "mention"});
+                                    var o = new i(s);
+                                    e.doLayout(), o.render(p, r)
+                                }, createFollowButton: function (n, r, i, s) {
+                                    if (!n || !r)return i && i(!1);
+                                    s = l.aug({}, s || {}, {screenName: n, targetEl: r});
+                                    var o = new t(s);
+                                    e.doLayout(), o.render(p, i)
+                                }, createTweet: function (t, n, r, i) {
+                                    if (!t || !n)return r && r(!1);
+                                    i = l.aug({}, i || {}, {tweetId: t, targetEl: n});
+                                    var o = new s(i);
+                                    e.doLayout(), o.render(p, r), s.fetchAndRender()
+                                }, createTimeline: function (t, n, r, i) {
+                                    if (!t || !n)return r && r(!1);
+                                    i = l.aug({}, i || {}, {widgetId: t, targetEl: n});
+                                    var s = new o(i);
+                                    e.doLayout(), s.render(p, r)
+                                }}), l.aug(twttr.events, d, f.Emitter), v = twttr.events.bind, twttr.events.bind = function (e, t) {
+                                    g(), this.bind = v, this.bind(e, t)
+                                };
+                                for (c = 0; h = r[c]; c++)twttr.events.bind(h[0], h[1]);
+                                for (c = 0; h = twttr._e[c]; c++)h(twttr);
+                                twttr.ready = function (e) {
+                                    e(twttr)
+                                }, /twitter\.com(\:\d+)?$/.test(document.location.host) && (twttr.widgets.createTimelinePreview = function (t, n, r) {
+                                    if (!p || !n)return r && r(!1);
+                                    var i = new o({previewParams: t, targetEl: n, linkColor: t.link_color, theme: t.theme, height: t.height});
+                                    e.doLayout(), i.render(p, r)
+                                }), twttr.widgets.createTweetEmbed = twttr.widgets.createTweet, twttr.widgets.load()
+                            })
+                        })
+                    })
+                }()
+            })
+        }
+        catch (e) {
+            console.log(e.message);
+        }
     }
+
 });
 
 module.exports = TwitterView;
