@@ -1,7 +1,9 @@
 <ul class="lector-list">
     {{#each}}
-        <li>
+        {{#link-to 'lector' this tagName="li" href=false class="lector-list__item"}}
+
             {{render "lector" this}}
-        </li>
+
+        {{/link-to}}
     {{/each}}
 </ul>
