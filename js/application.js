@@ -55,6 +55,7 @@ module.exports = DS.Store.extend({
 },{"../vendor/localstorage_adapter":29}],4:[function(require,module,exports){
 var LectorController = Ember.ObjectController.extend({
     isSelected: false,
+    lessons: '',
     actions: {
         select: function() {
             var lector = this.get('model');
@@ -309,6 +310,15 @@ module.exports = IndexRoute;
 
 },{}],18:[function(require,module,exports){
 var LectorRoute = Ember.Route.extend({
+    setupController: function (controller, lector) {
+        var lessonsId = lector.get('all_lectures');
+        var lessons = [];
+        for (var i = 0; i < lessonsId.length; i++) {
+            lessons.push(this.store.find('lesson', lessonsId[i]));
+        }
+        controller.set('lessons', lessons);
+        controller.set('model', lector);
+    },
     model: function (params) {
         return this.store.find('lector', params.lector_id);
     },
@@ -577,7 +587,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   hashTypes = {};
   hashContexts = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "name", {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data})));
-  data.buffer.push("</span>\n        <span class=\"lesson__location\">Яндекс</span>\n        <span class=\"lesson__date\">");
+  data.buffer.push("</span>\n        <span class=\"lesson__date\">");
   hashTypes = {};
   hashContexts = {};
   options = {hash:{},contexts:[depth0],types:["ID"],hashContexts:hashContexts,hashTypes:hashTypes,data:data};

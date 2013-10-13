@@ -1,5 +1,6 @@
 var LectorController = Ember.ObjectController.extend({
     isSelected: false,
+    lessons: '',
     actions: {
         select: function() {
             var lector = this.get('model');
