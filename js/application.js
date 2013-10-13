@@ -57420,6 +57420,7 @@ module.exports = DisqusView;
 var LectorView = Ember.View.extend({
     click: function (evt) {
         this.get('controller').send('select');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
     }
 });
 
@@ -57438,6 +57439,7 @@ module.exports = LectorsView;
 var LessonView = Ember.View.extend({
     click: function (evt) {
         this.get('controller').send('select');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
     }
 });
 
@@ -57457,6 +57459,7 @@ var StudentView = Ember.View.extend({
 
     click: function (evt) {
         this.get('controller').send('select');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
     }
 });
 
