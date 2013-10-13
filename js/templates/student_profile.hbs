@@ -1,8 +1,21 @@
 <div class='student student__student-expand'>
+
+
+
+
+{{#if isEditing}}
+<div class="student__edit-controls">
+
+        {{partial 'student/edit'}}
+        <button
+            {{action 'doneEditing'}}>Сохранить</button>
+</div>
+    {{else}}
     <div class="student__photo">
         <img {{bind-attr src="link_photo" alt="first_name last_name"}}></img>
     </div>
     <div class="student__info">
+
         <span class="student__name">{{first_name}} {{last_name}}</span>
         <span class="student__location">{{city}}</span>
         <ul class="student__social">
@@ -21,14 +34,9 @@
         </ul>
     </div>
     <p class="student__about">{{about}}</p>
-</div>
-<div class="student__edit-controls">
-    {{#if isEditing}}
-        {{partial 'student/edit'}}
-        <button
-            {{action 'doneEditing'}}>Сохранить</button>
-    {{else}}
         <button
             {{action 'edit'}}>Редактировать</button>
-    {{/if}}
+
+
+{{/if}}
 </div>

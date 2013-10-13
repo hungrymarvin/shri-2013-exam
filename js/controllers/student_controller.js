@@ -11,6 +11,7 @@ var StudentController = Ember.ObjectController.extend({
         doneEditing: function () {
             this.set('isEditing', false);
             this.get('model').save();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
         },
 
         select: function () {

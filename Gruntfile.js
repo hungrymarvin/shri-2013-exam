@@ -5,7 +5,7 @@ module.exports = function (grunt) {
         cssmin: {
             combine: {
                 files: {
-                    'css/compile.css': ['css/**/*.css']
+                    'css/compiled/compile.css': ['css/*.css']
                 }
             },
             add_banner: {
@@ -13,23 +13,34 @@ module.exports = function (grunt) {
                     banner: '/* SHRI Exam */'
                 },
                 files: {
-                    'css/compile.css': ['css/compile.css']
+                    'css/compiled/compile.css': ['css/compiled/compile.css']
                 }
             },
             minify: {
                 expand: true,
-                cwd: 'css/',
+                cwd: 'css/compiled/',
                 src: ['compile.css'],
-                dest: 'css/',
+                dest: 'assets/',
                 ext: '.min.css'
+            }
+        },
+        uglify: {
+            minify: {
+                files: {
+                    'assets/compile.min.js': ['js/application.js']
+                }
             }
         },
 
         watch: {
-            files: ['css/*.css'],
-            jasmine: {
+            files: ['css/*.css', 'js/application.js'],
+            cssmin: {
                 files: ['css/*.css'],
                 tasks: ['cssmin']
+            },
+            uglify:{
+                files: ['js/application.js'],
+                tasks: ['uglify']
             },
             grunt: {
                 files: ['Gruntfile.js'],
@@ -40,8 +51,9 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     // Default task(s).
-        grunt.registerTask('default', ['cssmin', 'watch']);
+        grunt.registerTask('default', ['cssmin', 'watch', 'uglify']);
 
 };
 

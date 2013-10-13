@@ -1,9 +1,11 @@
 {
-    "name": "SHRI_Exam",
-    "version": "0.0.1",
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "grunt-contrib-cssmin": "~0.6.2",
-        "grunt-contrib-watch": "~0.5.3"
-    }
+  "name": "SHRI_Exam",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-cssmin": "~0.6.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "ember-tools": "~0.2.8",
+    "grunt-contrib-uglify": "~0.2.4"
+  }
 }

@@ -41,12 +41,11 @@
     min-height: 250px;
 }
 
-.student__edit-controls button
+.student__edit-controls input
 {
-    background-color: white;
-    border: 1px solid #d4d4d4;
-    padding: 5px;
+    width: 100%;
 }
+
 
 .student__edit-controls button:hover
 {
