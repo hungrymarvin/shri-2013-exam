@@ -1,4 +1,5 @@
-# Второе задание для ШРИ
+# Экзаменационное задание для ШРИ
+## Выпускной альбом
 
 Продакшн версия лежит в ветке [gh-pages](https://github.com/hungrymarvin/shri-2013-exam/tree/gh-pages),
 посмотреть можно, соответственно, тут: [http://hungrymarvin.github.io/shri-2013-exam/](http://hungrymarvin.github.io/shri-2013-exam/)
@@ -8,7 +9,7 @@
 
 * [Багтрекер](https://trello.com/b/SwHdYmqB/shri-exam)
 * Редакторы:
-    * [Intellij WebStorm](http://www.jetbrains.com/webstorm/)
+    * [WebStorm](http://www.jetbrains.com/webstorm/)
     * [Sublime Text 2](sublimetext.com/2)
 * Фреймворки/библиотеки:
     * [emberjs](http://emberjs.com/)
