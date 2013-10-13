@@ -1,62 +1,60 @@
 .lesson {
-    border: 1px solid #c0c0c0;
-    min-height: 50px;
-    margin-bottom: 10px;
-    cursor: pointer;
+  border: 1px solid #c0c0c0;
+  min-height: 50px;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
-
-
 .lesson:hover {
-    background: #f5f5f5;
+  background: #f5f5f5;
 }
 
 .lesson_lesson-selected {
-    background: #f6f6f6;
+  background: #f6f6f6;
 }
 
 .lesson_lesson-expand {
-    height: auto;
+  height: auto;
 }
 
 .lesson__name {
-    display: block;
+  display: block;
 }
 
 .lesson__location {
-    color: #d6d6d6;
-    font-size: 12px;
+  color: #d6d6d6;
+  font-size: 12px;
 }
 
 .lesson__info {
-    display: inline-block;
-    vertical-align: top;
-    padding: 5px;
+  display: inline-block;
+  vertical-align: top;
+  padding: 5px;
 }
 
 .lesson__date {
-    color: #d6d6d6;
-    font-size: 12px;
+  color: #d6d6d6;
+  font-size: 12px;
 }
 
 .lesson-expand__info {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .lesson-expand__slides {
-    width: 100%;
-    min-height: 430px;
+  width: 100%;
+  min-height: 430px;
 }
 
 .lesson-expand__name {
-    font-size: 35px;
+  font-size: 35px;
 }
 
 .lesson-expand__date {
-    color: #d6d6d6;
-    font-size: 12px;
+  color: #d6d6d6;
+  font-size: 12px;
 }
 
 .lesson-expand__lector-name {
-    display: block;
+  display: block;
 }
