@@ -1,11 +1,13 @@
 .header {
-    text-align: center;
+  text-align: center;
 }
+
 .header__text {
-    font-size: 100px;
-    line-height: 100px;
+  font-size: 100px;
+  line-height: 100px;
 }
+
 .header__annotation {
-    color: #AAA;
-    font-size: 14px;
+  color: #AAA;
+  font-size: 14px;
 }

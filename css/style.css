@@ -1,75 +1,75 @@
-html, body {
-    margin: 20px;
-    font-family: 'Roboto Slab', serif;
+html,
+body {
+  margin: 20px;
+  font-family: 'Roboto Slab', serif;
 }
 
 .container {
-    max-width: 960px;
-    margin: 0 auto;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .sidebar {
-    float: left;
-    width: 30%;
+  float: left;
+  width: 30%;
 }
 
 .wrapper:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
 }
 
 .content {
-    float: left;
-    padding-left: 20px;
-    width: 70%;
-    box-sizing: border-box;
+  float: left;
+  padding-left: 20px;
+  width: 70%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-button
-{
-    background-color: white;
-    border: 1px solid #d4d4d4;
-    padding: 5px;
+button {
+  background-color: white;
+  border: 1px solid #d4d4d4;
+  padding: 5px;
 }
 
 @media (max-width: 955px) {
-    .sidebar
-    {
-        width: 40%;
-    }
+  .sidebar {
+    width: 40%;
+  }
 
-    .content
-    {
-        width: 60%;
-    }
+  .content {
+    width: 60%;
+  }
 }
+
 @media (max-width: 750px) {
-    body
-    {
-        margin: 5px;
-    }
-    .lesson-list.active {
-        display: none;
-    }
+  body {
+    margin: 5px;
+  }
 
-    .lector-list.active {
-        display: none;
-    }
+  .lesson-list.active {
+    display: none;
+  }
 
-    .student-list.active {
-        display: none;
-    }
+  .lector-list.active {
+    display: none;
+  }
 
-    .content {
-        width: 100%;
-        padding-left: 0px;
-    }
+  .student-list.active {
+    display: none;
+  }
 
-    .sidebar
-    {
-        width: 100%;
-    }
+  .content {
+    width: 100%;
+    padding-left: 0px;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
 }
