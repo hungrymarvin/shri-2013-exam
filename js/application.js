@@ -11,6 +11,78 @@ var App = Ember.Application.create();
 
 App.Store = require('./store'); // delete if you don't want ember-data
 
+App.initializer({
+    name: "preload_lectors",
+    after: 'store',
+
+    initialize: function (container) {
+        App.deferReadiness();
+
+        var store = container.lookup('store:main');
+        var lectors = store.find('lector');
+
+        Ember.$.getJSON('data/lectors.json').then(function (data) {
+            $(data).each(function () {
+                var lector = store.getById('lector', this.id);
+                if (lector === null || lector.get('isEmpty')) {
+                    lector = store.push('lector', this);
+                    lector.save();
+                }
+            });
+
+            App.advanceReadiness();
+        })
+    }
+})
+
+App.initializer({
+    name: "preload_students",
+    after: 'store',
+
+    initialize: function (container) {
+        App.deferReadiness();
+
+        var store = container.lookup('store:main');
+        var students = store.find('student');
+
+        Ember.$.getJSON('data/students.json').then(function (data) {
+            $(data).each(function () {
+                var student = store.getById('student', this.id);
+                if (student === null || student.get('isEmpty')) {
+                    student = store.push('student', this);
+                    student.save();
+                }
+            })
+
+            App.advanceReadiness();
+        })
+    }
+})
+
+App.initializer({
+    name: "preload_lessons",
+    after: 'store',
+
+    initialize: function (container) {
+        App.deferReadiness();
+
+        var store = container.lookup('store:main');
+        var lectors = store.find('lector');
+
+        Ember.$.getJSON('data/lessons.json').then(function (data) {
+            $(data).each(function () {
+                var lesson = store.getById('lector', this.id);
+                if (lesson === null || lesson.get('isEmpty')) {
+                    lesson = store.push('lesson', this);
+                    lesson.save();
+                }
+            })
+
+            App.advanceReadiness();
+        })
+    }
+})
+
 module.exports = App;
 
 
@@ -74,17 +146,19 @@ module.exports = LectorsController;
 var LessonController = Ember.ObjectController.extend({
     isSelected: false,
     actions: {
-        select: function() {
+        select: function () {
             var lesson = this.get('model');
             this.transitionToRoute('lesson', lesson);
 
-            DISQUS.reset({
-                reload: true,
-                config: function () {
-                    this.page.identifier = "lesson"+lesson.id;
-                    this.page.url = "http://myalin.ru/shri/#!"+lesson.id;
-                }
-            });
+            if (typeof DISQUS !== 'undefined') {
+                DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                        this.page.identifier = "lesson" + lesson.id;
+                        this.page.url = "http://myalin.ru/shri/#!" + lesson.id;
+                    }
+                });
+            }
         }
     }
 });
@@ -246,52 +320,6 @@ module.exports = AboutRoute;
 },{}],16:[function(require,module,exports){
 var ApplicationRoute = Ember.Route.extend({
     model: function () {
-        var store = this.get('store');
-
-        var students = store.find('student');
-        $.getJSON('data/students.json').then(function (data) {
-            $(data).each(function () {
-                var student = store.getById('student', this.id);
-                if (student === null || student.get('isEmpty')) {
-                    student = store.push('student', this);
-                    student.save();
-                }
-            })
-
-        })
-
-        var lectors = store.find('lector');
-        $.getJSON('data/lectors.json').then(function (data) {
-            $(data).each(function () {
-                var lector = store.getById('lector', this.id);
-                if (lector === null || lector.get('isEmpty')) {
-                    lector = store.push('lector', this);
-                    lector.save();
-                }
-            })
-        })
-
-        var lessons = store.find('lesson');
-        $.getJSON('data/lessons.json').then(function (data) {
-            $(data).each(function () {
-                var lesson = store.getById('lesson', this.id);
-                if (lesson === null || lesson.get('isEmpty')) {
-                    lesson = store.push('lesson', this);
-                    lesson.save();
-                }
-            })
-        })
-
-        var lectors = store.find('lector');
-        $.getJSON('data/lectors.json').then(function (data) {
-            $(data).each(function () {
-                var lector = store.getById('lector', this.id);
-                if (lector === null || lector.get('isEmpty')) {
-                    lector = store.createRecord('lector', this);
-                    lector.save();
-                }
-            })
-        })
     }
 });
 
