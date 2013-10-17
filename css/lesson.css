@@ -50,6 +50,12 @@
   font-size: 35px;
 }
 
+@media (max-width: 955px) {
+    .lesson-expand__name {
+        font-size: 25px;
+    }
+}
+
 .lesson-expand__date {
   color: #d6d6d6;
   font-size: 12px;
